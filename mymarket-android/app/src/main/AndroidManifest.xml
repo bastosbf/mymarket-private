@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mymarket.app" >
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <activity
+            android:name="com.mymarket.app.activity.SplashScreenActivity"
+            android:label="@string/title_activity_splash_screen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mymarket.app.activity.MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name="com.mymarket.app.activity.ProductActivity"
+            android:label="@string/title_activity_product"
+            android:parentActivityName=".activity.MainActivity">
+        </activity>
+        <activity
+            android:name="com.mymarket.app.activity.SuggestProductActivity"
+            android:label="@string/title_activity_suggest_product"
+            android:parentActivityName=".activity.MainActivity">
+        </activity>
+        <activity
+            android:name="com.mymarket.app.activity.SuggestMarketActivity"
+            android:label="@string/title_activity_suggest_market"
+            android:parentActivityName=".activity.MainActivity">
+        </activity>
+
+        <service
+            android:name="com.mymarket.app.service.FindPricesService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.FindProductService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.ListPlacesService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.ListMarketsService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.SuggestMarketService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.SuggestProductService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.SuggestPriceService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.ConfirmPriceService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.ResendDataService"
+            android:exported="false" >
+        </service>
+    </application>
+
+</manifest>

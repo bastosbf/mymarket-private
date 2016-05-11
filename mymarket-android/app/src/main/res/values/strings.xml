@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">My Market</string>
+
+    <string name="loading">Loading</string>
+
+
+    <string name="title_activity_main">My Market</string>
+    <string name="places_loading_activity_main">Loading places</string>
+    <string name="markets_loading_activity_main">Loading markets</string>
+    <string name="select_place_msn_activity_main">Please, select a location!</string>
+    <string name="scan_msn_activity_main">Scan product</string>
+    <string name="list_msn_activity_main">This feature will be working soon!</string>
+    <string name="cart_activity_main">Cart</string>
+    <string name="suggest_market_activity_main">Add market</string>
+    <string name="selec_place_msn_activity_main">Please, select a place!</string>
+
+    <string name="title_activity_product">Product</string>
+    <string name="products_loading_activity_product">Loading products</string>
+    <string name="not_found_activity_product">Product not found!</string>
+    <string name="add_activity_product">Add product</string>
+    <string name="currency_activity_product">R$</string>
+    <string name="last_update_activity_product">Last update</string>
+    <string name="update_activity_product">Update price</string>
+
+    <string name="title_activity_suggest_market">Market suggestion</string>
+    <string name="suggest_loading_activity_suggest_market">Sending market suggestion</string>
+    <string name="send_activity_suggest_market">Send</string>
+    <string name="label_name_activity_suggest_market">Name</string>
+    <string name="label_address_activity_suggest_market">Address</string>
+    <string name="error_msn_activity_suggest_market">Inform the name and the address of the market!</string>
+
+    <string name="title_activity_suggest_product">Product collaboration</string>
+    <string name="suggest_product_loading_activity_suggest_product">Sending product suggestion</string>
+    <string name="suggest_price_loading_activity_suggest_product">Sending price update</string>
+    <string name="send_activity_suggest_product">Send</string>
+    <string name="label_price_activity_suggest_product">Price</string>
+    <string name="label_brand_activity_suggest_product">Brand</string>
+    <string name="label_name_activity_suggest_product">Name</string>
+    <string name="market_error_msn_activity_suggest_product">Select the market!</string>
+    <string name="fields_error_msn_activity_suggest_product">Inform the name, brand and the price of the product!</string>
+    <string name="price_error_msn_activity_suggest_product">Inform the price of the product!</string>
+
+    <string name="title_activity_splash_screen">My Market</string>
+
+    <string name="select_market_service_list_market">Select the market...</string>
+
+    <string name="select_place_service_list_places">Select the location...</string>
+
+    <string name="msn_service_suggest_market">Market successfully added!</string>
+
+    <string name="msn_service_suggest_product">Product successfully added!</string>
+
+    <string name="msn_service_suggest_price">Price of the product successfully updated!</string>
+
+    <string name="scan_msn">Scan</string>
+    <string name="product_not_found">NOT FOUND</string>
+    <string name="confirm_price">Confirm Price</string>
+    <string name="place">Place</string>
+    <string name="barcode">Barcode</string>
+    <string name="error_reading_stored_markets">Some error occur reading stored markets</string>
+    <string name="error_connect_using_local_data">Could not connect to the service. Using local data.</string>
+    <string name="some_error_occur">Some Error Occur</string>
+
+
+</resources>
