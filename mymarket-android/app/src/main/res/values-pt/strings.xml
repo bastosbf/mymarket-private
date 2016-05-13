@@ -10,7 +10,7 @@
     <string name="scan_msn_activity_main">Escanear produto</string>
     <string name="list_msn_activity_main">Essa funcionalidade estará funcionando já já!</string>
     <string name="cart_activity_main">Lista de compras</string>
-    <string name="suggest_market_activity_main">Adicionar mercado</string>
+    <string name="suggest_market_activity_main">Sugerir mercado</string>
 
     <string name="title_activity_product">Produto</string>
     <string name="products_loading_activity_product">Carregando produtos</string>

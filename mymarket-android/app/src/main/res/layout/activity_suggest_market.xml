@@ -57,7 +57,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="29dp"
             android:onClick="suggestMarket"
-            android:background="@color/green_300"
+            android:background="@color/blue_400"
             android:text="@string/send_activity_suggest_market" />
 
     </RelativeLayout>

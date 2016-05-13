@@ -1,13 +1,17 @@
 package com.mymarket.app.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,23 +46,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import at.markushi.ui.CircleButton;
+
 public class MainActivity extends AppCompatActivity {
 
+    private final int PERMISSIONS_REQUEST_CAMERA = 112;
     private Spinner placesSpinner;
     private Spinner marketsSpinner;
     private ProgressDialog placesProgress;
     private ProgressDialog marketsProgress;
     private Button sacanButton;
-    private Button reloadPlacesButton;
-    private Button reloadMarketsButton;
+    private CircleButton reloadPlacesButton;
+    private CircleButton reloadMarketsButton;
     private String rootURL;
-
     private Place place;
     private Market market;
     private ArrayList<Place> places;
     private ArrayList<Market> markets;
-
-
     private BroadcastReceiver placesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     int position = adapter.getPosition(place);
                     placesSpinner.setSelection(position);
 
+                    reloadPlacesButton.setColor(getResources().getColor(R.color.grey_300));
                     reloadPlacesButton.setEnabled(false);
                 } else {
                     FileInputStream fis = context.openFileInput("places.list");
@@ -132,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     marketsSpinner.setAdapter(adapter);
 
                     reloadMarketsButton.setEnabled(false);
+                    reloadMarketsButton.setColor(getResources().getColor(R.color.grey_300));
                 } else {
                     FileInputStream fis = context.openFileInput("markets.list");
                     ObjectInputStream is = new ObjectInputStream(fis);
@@ -179,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar != null) {
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_main));
             getSupportActionBar().setHomeButtonEnabled(false);
@@ -195,8 +201,8 @@ public class MainActivity extends AppCompatActivity {
         placesSpinner = (Spinner) findViewById(R.id.placesSpinner);
         marketsSpinner = (Spinner) findViewById(R.id.marketsSpinner);
         sacanButton = (Button) findViewById(R.id.imageButton);
-        reloadPlacesButton = (Button) findViewById(R.id.reloadPlacesButton);
-        reloadMarketsButton = (Button) findViewById(R.id.reloadMarketsButton);
+        reloadPlacesButton = (CircleButton) findViewById(R.id.reloadPlacesButton);
+        reloadMarketsButton = (CircleButton) findViewById(R.id.reloadMarketsButton);
 
         reloadPlacesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
                     stopService(i);
                 }
             });
+
+
         } else {
             place = (Place) savedInstanceState.getSerializable("place");
             market = (Market) savedInstanceState.getSerializable("market");
@@ -276,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                     ArrayAdapter<Place> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, places);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     placesSpinner.setAdapter(adapter);
-
+                    placesSpinner.setOnItemSelectedListener(null);
                     if (place != null) {
                         int position = adapter.getPosition(place);
                         placesSpinner.setSelection(position);
@@ -413,15 +421,27 @@ public class MainActivity extends AppCompatActivity {
 
     public void fakescan(View view) {
         Intent i = new Intent();
-        i.putExtra("SCAN_RESULT", "66666666666");
+        i.putExtra("SCAN_RESULT", "7898231840075");
         onActivityResult(49374, 0, i);
     }
 
     public void scan(View view) {
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    PERMISSIONS_REQUEST_CAMERA);
+        } else {
+            readBarcode();
+        }
+    }
+
+    private void readBarcode() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt(getResources().getString(R.string.scan_msn_activity_main));
-        integrator.setCameraId(0); // Use a specific camera of the device
+        //integrator.setCameraId(0); // Use a specific camera of the device
         integrator.setBeepEnabled(true);
         integrator.initiateScan(IntentIntegrator.ALL_CODE_TYPES);
     }
@@ -443,6 +463,23 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("markets", markets);
 
             startActivity(i);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    readBarcode();
+                } else {
+                    Toast.makeText(this, R.string.some_error_occur, Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
         }
     }
 

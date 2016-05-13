@@ -15,11 +15,13 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ import com.mymarket.app.service.FindProductService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,6 +140,7 @@ public class ProductActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         buttonAction = (Button) findViewById(R.id.button_action);
         buttonConfirm = (Button) findViewById(R.id.button_confirm);
+        frameLayout = (FrameLayout) findViewById(R.id.productFrame);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if(toolbar != null) {
@@ -218,13 +222,11 @@ public class ProductActivity extends AppCompatActivity {
                 Market market = result.getMarket();
                 Date lastUpdate = result.getLastUpdate();
                 Map<String, Object> map = new HashMap<>();
-                map.put("info", market.getName() + " - " + getResources().getString(R.string.currency_activity_product) + " " + result.getPrice());
+                map.put("info", market.getName() + " - "  + NumberFormat.getCurrencyInstance().format(result.getPrice()));
                 map.put("date", getResources().getString(R.string.last_update_activity_product) + ": " + sdf.format(lastUpdate));
 
                 if (selectedMarked != null && selectedMarked.getName().equals(market.getName())) {
                     marketFound = true;
-
-                    frameLayout = (FrameLayout) findViewById(R.id.productFrame);
                     frameLayout.setBackgroundColor(getResources().getColor(R.color.green_100));
 
                     TextView marketFrameTitle = (TextView) findViewById(R.id.marketFrameTitle);
@@ -241,6 +243,24 @@ public class ProductActivity extends AppCompatActivity {
                     android.R.layout.simple_list_item_2,
                     new String[]{"info", "date"},
                     new int[]{android.R.id.text1, android.R.id.text2}) {
+
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    HashMap<String, String> result = (HashMap<String, String>) getItem(position);
+                    View view = super.getView(position, convertView, parent);
+                    RelativeLayout twoLineListItem = (RelativeLayout) view;
+
+                    TextView text1 = (TextView) twoLineListItem.findViewById(android.R.id.text1);
+                    RelativeLayout.LayoutParams layoutParamsText1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    text1.setLayoutParams(layoutParamsText1);
+                    text1.setTextColor(getResources().getColor(R.color.black));
+
+                    TextView text2 = (TextView) twoLineListItem.findViewById(android.R.id.text2);
+                    text2.setTextColor(getResources().getColor(R.color.grey_700));
+
+                    twoLineListItem.setBackgroundColor(getResources().getColor(R.color.blue_100));
+                    return twoLineListItem;
+                }
             };
             listView.setDivider(new ColorDrawable(this.getResources().getColor(R.color.white)));
             Display display = getWindowManager().getDefaultDisplay();
@@ -300,6 +320,8 @@ public class ProductActivity extends AppCompatActivity {
                 }
             });
             Market market = (Market) intent.getSerializableExtra("market");
+            frameLayout.setVisibility(View.VISIBLE);
+
             if (market.getId() == 0) {
                 LinearLayout swipe = (LinearLayout) findViewById(R.id.swipe);
                 FrameLayout frameLayout = (FrameLayout) findViewById(R.id.productFrame);
@@ -337,7 +359,6 @@ public class ProductActivity extends AppCompatActivity {
                 buttonConfirm.setVisibility(View.INVISIBLE);
             }
         }
-        frameLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
