@@ -6,5 +6,8 @@
 		table="place" lazy="false">
 		<id name="id" column="id" />
 		<property name="name" />
+		<property name="latitude" />
+		<property name="longitude" />
+
 	</class>
 </hibernate-mapping>

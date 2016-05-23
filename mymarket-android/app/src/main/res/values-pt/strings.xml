@@ -14,6 +14,7 @@
 
     <string name="title_activity_product">Produto</string>
     <string name="products_loading_activity_product">Carregando produtos</string>
+    <string name="select_place_msn_activity_main">Por favor, selecione uma cidade!</string>
     <string name="not_found_activity_product">Produto não encontrado!</string>
     <string name="add_activity_product">Adicionar produto</string>
     <string name="currency_activity_product">R$</string>

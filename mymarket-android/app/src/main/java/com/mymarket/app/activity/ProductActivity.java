@@ -79,7 +79,7 @@ public class ProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar != null) {
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_product));
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -141,9 +141,11 @@ public class ProductActivity extends AppCompatActivity {
         buttonAction = (Button) findViewById(R.id.button_action);
         buttonConfirm = (Button) findViewById(R.id.button_confirm);
         frameLayout = (FrameLayout) findViewById(R.id.productFrame);
+        TextView marketFrameLastUpdate = (TextView) findViewById(R.id.marketFrameLastUpdate);
+        TextView marketFrameLastUpdateLabel = (TextView) findViewById(R.id.marketFrameLastUpdateLabel);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar != null) {
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_product));
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -164,10 +166,10 @@ public class ProductActivity extends AppCompatActivity {
             } else {
                 Product product = (Product) intent.getSerializableExtra("productResult");
                 final String productName;
-                if(product != null && product.getName() != null){
+                if (product != null && product.getName() != null) {
                     productName = product.getName();
                     textView1.setText(productName);
-                }else {
+                } else {
                     productName = "";
                     textView1.setText(getResources().getString(R.string.not_found_activity_product));
                 }
@@ -185,7 +187,7 @@ public class ProductActivity extends AppCompatActivity {
 
                         Intent i = new Intent(ProductActivity.this, SuggestProductActivity.class);
                         i.putExtra("barcode", barcode);
-                        if(productName != "") {
+                        if (productName != "") {
                             i.putExtra("productName", productName);
                         }
                         i.putExtra("place", place);
@@ -222,7 +224,7 @@ public class ProductActivity extends AppCompatActivity {
                 Market market = result.getMarket();
                 Date lastUpdate = result.getLastUpdate();
                 Map<String, Object> map = new HashMap<>();
-                map.put("info", market.getName() + " - "  + NumberFormat.getCurrencyInstance().format(result.getPrice()));
+                map.put("info", market.getName() + " - " + NumberFormat.getCurrencyInstance().format(result.getPrice()));
                 map.put("date", getResources().getString(R.string.last_update_activity_product) + ": " + sdf.format(lastUpdate));
 
                 if (selectedMarked != null && selectedMarked.getName().equals(market.getName())) {
@@ -233,7 +235,11 @@ public class ProductActivity extends AppCompatActivity {
                     marketFrameTitle.setText(market.getName());
 
                     TextView marketFramePrice = (TextView) findViewById(R.id.marketFramePrice);
-                    marketFramePrice.setText(getResources().getString(R.string.currency_activity_product) + " " + result.getPrice());
+                    marketFramePrice.setText(NumberFormat.getCurrencyInstance().format(result.getPrice()));
+
+                    marketFrameLastUpdate.setVisibility(View.VISIBLE);
+                    marketFrameLastUpdateLabel.setVisibility(View.VISIBLE);
+                    marketFrameLastUpdate.setText(sdf.format(lastUpdate));
                 } else {
                     list.add(map);
                 }
@@ -357,6 +363,8 @@ public class ProductActivity extends AppCompatActivity {
                     }
                 });
                 buttonConfirm.setVisibility(View.INVISIBLE);
+                marketFrameLastUpdate.setVisibility(View.GONE);
+                marketFrameLastUpdateLabel.setVisibility(View.GONE);
             }
         }
     }

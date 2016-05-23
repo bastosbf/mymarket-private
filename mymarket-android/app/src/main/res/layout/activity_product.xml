@@ -103,6 +103,7 @@
                             android:layout_weight="1"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
                             android:text="----"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -111,6 +112,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
                             android:text="@string/product_not_found"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
                     </LinearLayout>
@@ -148,6 +150,38 @@
                             android:background="@color/blue_400"
                             android:textColor="@color/black"
                             android:text="@string/confirm_price" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/marketFrameLastUpdateLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/activity_horizontal_margin"
+                            android:singleLine="true"
+                            android:text="@string/last_update_activity_product"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                        <TextView
+                            android:id="@+id/marketFrameLastUpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:singleLine="true"
+                            android:textStyle=""
+                            android:text="--------"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>

@@ -9,7 +9,8 @@ public class Market implements Serializable {
 
     private Integer id;
     private String name;
-
+    private String longitude;
+    private String latitude;
 
     public Integer getId() {
         return id;
@@ -25,6 +26,22 @@ public class Market implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     @Override

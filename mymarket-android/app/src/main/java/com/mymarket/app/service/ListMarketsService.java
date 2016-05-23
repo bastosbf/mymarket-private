@@ -98,10 +98,14 @@ public class ListMarketsService extends IntentService {
                     JSONObject market = markets.getJSONObject(i);
                     int id = market.getInt("id");
                     String name = market.getString("name");
+                    String latitude = market.getString("latitude");
+                    String longitude = market.getString("longitude");
 
                     Market m = new Market();
                     m.setId(id);
                     m.setName(name);
+                    m.setLatitude(latitude);
+                    m.setLongitude(longitude);
 
                     values.add(m);
                 }
