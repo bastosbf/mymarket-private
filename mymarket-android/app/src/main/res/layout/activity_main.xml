@@ -32,51 +32,61 @@
         tools:context="com.mymarket.app.activity.MainActivity">
 
         <Spinner
+            android:id="@+id/citySpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/abc_edit_text_inset_top_material"
+            android:spinnerMode="dropdown"
+            android:layout_above="@+id/placesSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/imageButton"
+            android:layout_alignEnd="@+id/imageButton"
+            android:layout_marginBottom="19dp" />
+
+        <Spinner
             android:id="@+id/placesSpinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/imageButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/imageButton"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:minHeight="@dimen/abc_edit_text_inset_top_material"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:layout_above="@+id/marketsSpinner"
+            android:layout_alignRight="@+id/imageButton"
+            android:layout_alignEnd="@+id/imageButton"
+            android:layout_marginBottom="21dp" />
 
         <Spinner
             android:id="@+id/marketsSpinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/imageButton"
-            android:layout_alignRight="@+id/imageButton"
-            android:layout_below="@+id/placesSpinner"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:clickable="false"
             android:minHeight="@dimen/abc_edit_text_inset_top_material"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="57dp"
+            android:layout_above="@+id/button1"
+            android:layout_alignRight="@+id/imageButton"
+            android:layout_alignEnd="@+id/imageButton" />
 
         <Button
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/button1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="67dp"
             android:drawableLeft="@drawable/barcodee"
-            android:src="@drawable/barcodee" />
+            android:src="@drawable/barcodee"
+            android:layout_marginTop="28dp"
+            android:layout_below="@+id/button1"
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:id="@+id/button1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/reloadMarketsButton"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@color/blue_400"
             android:onClick="suggestMarket"
-            android:text="@string/suggest_market_activity_main" />
+            android:text="@string/suggest_market_activity_main"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <!--        <Button
                     android:id="@+id/reloadPlacesButton"
@@ -104,6 +114,18 @@
                     android:drawableTop="@drawable/reloadbutton" />-->
 
 
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/reloadCityButton"
+            android:layout_width="64dip"
+            android:layout_height="64dip"
+            android:layout_alignTop="@+id/citySpinner"
+            android:layout_toEndOf="@+id/citySpinner"
+            android:layout_toRightOf="@+id/placesSpinner"
+            android:src="@drawable/reloadbuttonblue"
+            app:cb_color="@color/grey_500"
+            app:cb_pressedRingWidth="8dip" />
+
         <at.markushi.ui.CircleButton
             android:id="@+id/reloadPlacesButton"
             android:layout_width="64dip"
@@ -119,13 +141,12 @@
             android:id="@+id/reloadMarketsButton"
             android:layout_width="64dip"
             android:layout_height="64dip"
-            android:layout_alignTop="@+id/marketsSpinner"
-            android:layout_below="@+id/reloadPlacesButton"
-            android:layout_toEndOf="@+id/marketsSpinner"
-            android:layout_toRightOf="@+id/marketsSpinner"
             android:src="@drawable/reloadbuttonblue"
             app:cb_color="@color/grey_500"
-            app:cb_pressedRingWidth="8dip" />
+            app:cb_pressedRingWidth="8dip"
+            android:layout_below="@+id/placesSpinner"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <!--    <Button
                 style="?android:attr/buttonStyleSmall"

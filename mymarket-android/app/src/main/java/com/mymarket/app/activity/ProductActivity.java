@@ -1,8 +1,10 @@
 package com.mymarket.app.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Point;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -55,6 +59,7 @@ public class ProductActivity extends AppCompatActivity {
     private ListView listView;
     private Button buttonAction;
     private Button buttonConfirm;
+    private Button suggestProductNameButton;
     private ProgressDialog progress;
     private String rootURL;
 
@@ -138,6 +143,7 @@ public class ProductActivity extends AppCompatActivity {
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         listView = (ListView) findViewById(R.id.listView);
+        suggestProductNameButton = (Button) findViewById(R.id.suggestProductNameButton);
         buttonAction = (Button) findViewById(R.id.button_action);
         buttonConfirm = (Button) findViewById(R.id.button_confirm);
         frameLayout = (FrameLayout) findViewById(R.id.productFrame);
@@ -169,9 +175,40 @@ public class ProductActivity extends AppCompatActivity {
                 if (product != null && product.getName() != null) {
                     productName = product.getName();
                     textView1.setText(productName);
+                    suggestProductNameButton.setVisibility(View.VISIBLE);
+                    suggestProductNameButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                            builder.setTitle(getResources().getString(R.string.product_name_suggestion_label));
+
+                            // Set up the input
+                            final EditText input = new EditText(getApplicationContext());
+                            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                            builder.setView(input);
+
+                            // Set up the buttons
+                            builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String suggestionProductName = input.getText().toString();
+                                }
+                            });
+                            builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                            builder.show();
+                        }
+                    });
                 } else {
                     productName = "";
                     textView1.setText(getResources().getString(R.string.not_found_activity_product));
+                    suggestProductNameButton.setVisibility(View.INVISIBLE);
                 }
                 String barcode = intent.getStringExtra("barcode");
                 textView2.setText(barcode);

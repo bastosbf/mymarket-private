@@ -20,7 +20,6 @@
         android:background="?attr/colorPrimary"
         android:title="@string/title_activity_product" />
 
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -31,9 +30,9 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.mymarket.app.activity.ProductActivity">
 
-
-        <TextView
-            android:id="@+id/textView1"
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -41,11 +40,31 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:text="Product Name"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Product Name"
+                android:textAlignment="center"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/suggestProductNameButton"
+                android:layout_width="46dp"
+                android:layout_height="23dp"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@color/blue_400"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="----"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView2"
@@ -55,12 +74,12 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView1"
+            android:layout_below="@+id/linearLayout1"
             android:gravity="center"
             android:text="Barcode"
             android:textAlignment="center"
-            android:textColor="@color/grey_800"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/grey_800" />
 
         <LinearLayout
             android:id="@+id/swipe"
@@ -100,10 +119,10 @@
                             android:id="@+id/marketFrameTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
                             android:layout_weight="1"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
-                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
                             android:text="----"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -111,8 +130,8 @@
                             android:id="@+id/marketFramePrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                            android:layout_weight="1"
                             android:text="@string/product_not_found"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
                     </LinearLayout>
@@ -130,26 +149,26 @@
                             android:id="@+id/button_action"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:layout_marginRight="@dimen/activity_horizontal_margin"
                             android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:layout_weight="1"
+                            android:background="@color/blue_400"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
-                            android:background="@color/blue_400"
-                            android:textColor="@color/black"
-                            android:text="----" />
+                            android:text="----"
+                            android:textColor="@color/black" />
 
                         <Button
                             android:id="@+id/button_confirm"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                            android:layout_weight="1"
+                            android:background="@color/blue_400"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
-                            android:background="@color/blue_400"
-                            android:textColor="@color/black"
-                            android:text="@string/confirm_price" />
+                            android:text="@string/confirm_price"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -164,8 +183,8 @@
                             android:id="@+id/marketFrameLastUpdateLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:layout_weight="1"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
                             android:singleLine="true"
@@ -176,12 +195,12 @@
                             android:id="@+id/marketFrameLastUpdate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:layout_weight="1"
                             android:singleLine="true"
-                            android:textStyle=""
                             android:text="--------"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textStyle="" />
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>

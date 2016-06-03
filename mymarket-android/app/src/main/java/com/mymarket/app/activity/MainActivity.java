@@ -1,6 +1,7 @@
 package com.mymarket.app.activity;
 
 import android.Manifest;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -35,6 +37,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.mymarket.app.R;
+import com.mymarket.app.activity.dialogs.SuggestPlaceDialog;
 import com.mymarket.app.model.Market;
 import com.mymarket.app.model.Place;
 import com.mymarket.app.service.ListMarketsService;
@@ -56,13 +59,17 @@ import java.util.Properties;
 
 import at.markushi.ui.CircleButton;
 
-public class MainActivity extends AppCompatActivity  implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, SuggestPlaceDialog.NoticeDialogListener {
 
     private final int PERMISSIONS_REQUEST_CAMERA = 112;
 
+    private boolean placeFoundByGPS = false;
+
     private Spinner placesSpinner;
     private Spinner marketsSpinner;
+    private int placeSpinnerPosition = 0;
+    private int marketSpinnerPosition = 0;
     private ProgressDialog placesProgress;
     private ProgressDialog marketsProgress;
     private Button sacanButton;
@@ -176,6 +183,28 @@ public class MainActivity extends AppCompatActivity  implements
                 if (marketsProgress != null && marketsProgress.isShowing()) {
                     marketsProgress.dismiss();
                 }
+                if (marketsSpinner.getAdapter() != null && placeFoundByGPS) {
+                    Float marketDistance = null;
+                    Integer marketPosition = null;
+                    for (int count = 1; count < marketsSpinner.getAdapter().getCount(); count++) {
+                        Market market = (Market) marketsSpinner.getItemAtPosition(count);
+                        Location marketLocation = new Location("database");
+                        marketLocation.setLatitude(Double.parseDouble(market.getLatitude()));
+                        marketLocation.setLongitude(Double.parseDouble(market.getLongitude()));
+                        float d = mLastLocation.distanceTo(marketLocation);
+                        if (marketDistance == null || marketDistance > d) {
+                            marketDistance = d;
+                            marketPosition = count;
+                        }
+                    }
+
+                    if (marketPosition != null) {
+                        SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                        dialog.setPlace(((Market) marketsSpinner.getItemAtPosition(marketPosition)).getName());
+                        dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                        marketSpinnerPosition = marketPosition;
+                    }
+                }
             }
         }
     };
@@ -193,6 +222,7 @@ public class MainActivity extends AppCompatActivity  implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         try {
             InputStream is = getBaseContext().getAssets().open("mymarket.properties");
             Properties properties = new Properties();
@@ -220,6 +250,7 @@ public class MainActivity extends AppCompatActivity  implements
         placesSpinner = (Spinner) findViewById(R.id.placesSpinner);
         marketsSpinner = (Spinner) findViewById(R.id.marketsSpinner);
         sacanButton = (Button) findViewById(R.id.imageButton);
+
         reloadPlacesButton = (CircleButton) findViewById(R.id.reloadPlacesButton);
         reloadMarketsButton = (CircleButton) findViewById(R.id.reloadMarketsButton);
 
@@ -272,7 +303,6 @@ public class MainActivity extends AppCompatActivity  implements
                     stopService(i);
                 }
             });
-
 
         } else {
             place = (Place) savedInstanceState.getSerializable("place");
@@ -424,11 +454,13 @@ public class MainActivity extends AppCompatActivity  implements
 
 
         if (mGoogleApiClient == null) {
+            // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
+            // See https://g.co/AppIndexing/AndroidStudio for more information.
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
-                    .build();
+                    .addApi(AppIndex.API).build();
         }
 
     }
@@ -505,12 +537,38 @@ public class MainActivity extends AppCompatActivity  implements
     protected void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
+/*        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.mymarket.app.activity/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(mGoogleApiClient, viewAction);*/
     }
 
     @Override
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    /*    // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.mymarket.app.activity/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(mGoogleApiClient, viewAction);*/
     }
 
     @Override
@@ -562,24 +620,65 @@ public class MainActivity extends AppCompatActivity  implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        if (mLastLocation != null) {
-            Toast.makeText(this, "Latitude: " + mLastLocation.getLatitude() + " / Longitude: " + mLastLocation.getLongitude(), Toast.LENGTH_LONG).show();
-        } else {
-        }
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Float placeDistance = null;
+                Integer placePosition = null;
+                if (mLastLocation != null && placesSpinner.getAdapter() != null) {
+                    for (int i = 1; i < placesSpinner.getAdapter().getCount(); i++) {
+                        Place place = (Place) placesSpinner.getItemAtPosition(i);
+                        Location placeLocation = new Location("database");
+                        placeLocation.setLatitude(Double.parseDouble(place.getLatitude()));
+                        placeLocation.setLongitude(Double.parseDouble(place.getLongitude()));
+                        float d = mLastLocation.distanceTo(placeLocation);
+                        if (placeDistance == null || placeDistance > d) {
+                            placeDistance = d;
+                            placePosition = i;
+                        }
+                    }
+
+                    if (placePosition != null) {
+                        placeSpinnerPosition = placePosition;
+                        SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                        dialog.setPlace(((Place) placesSpinner.getItemAtPosition(placePosition)).getName());
+                        dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                    }
+                }
+            }
+        }).start();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        // placeFoundByGPS = false;
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        placeFoundByGPS = false;
     }
 
     @Override
     public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        placeFoundByGPS = true;
+
+        // placesSpinner.setSelection(0);
+        placesSpinner.setSelection(placeSpinnerPosition);
+        // marketsSpinner.setSelection(marketSpinnerPosition);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        placeFoundByGPS = false;
 
     }
 }

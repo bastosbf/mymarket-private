@@ -24,8 +24,9 @@
     <string name="title_activity_suggest_market">Sugestão de mercado</string>
     <string name="suggest_loading_activity_suggest_market">Enviando sugestão de mercado</string>
     <string name="send_activity_suggest_market">Enviar</string>
-    <string name="label_name_activity_suggest_market">Nome</string>
-    <string name="label_address_activity_suggest_market">Endereço</string>
+    <string name="label_name_activity_suggest_market">Nome do mercado</string>
+    <string name="label_city_activity_suggest_market">Cidade</string>
+    <string name="label_place_activity_suggest_market">Bairro</string>
     <string name="error_msn_activity_suggest_market">Digite o nome e o endereço do mercado!</string>
 
     <string name="title_activity_suggest_product">Colaboração de produto</string>
@@ -54,9 +55,15 @@
     <string name="scan_msn">Scan</string>
     <string name="product_not_found">NÃO ENCONTRADO</string>
     <string name="confirm_price">Confirmar Preço</string>
-    <string name="place">Cidade</string>
+    <string name="name">Cidade</string>
     <string name="barcode">Código de Barras</string>
     <string name="error_reading_stored_markets">Algum erro ocorreu ao ler mercados armazenados</string>
     <string name="error_connect_using_local_data">Não foi possível conectar ao servidor. Usando arquivos locais.</string>
     <string name="some_error_occur">Algum erro ocorreu</string>
+    <string name="place_question">Você está em</string>
+    <string name="yes">sim</string>
+    <string name="no">não</string>
+    <string name="product_name_suggestion_label">Nome do Produto</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancelar</string>
 </resources>

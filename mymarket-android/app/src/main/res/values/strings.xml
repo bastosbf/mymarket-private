@@ -12,7 +12,7 @@
     <string name="list_msn_activity_main">This feature will be working soon!</string>
     <string name="cart_activity_main">Cart</string>
     <string name="suggest_market_activity_main">Suggest market</string>
-    <string name="selec_place_msn_activity_main">Please, select a place!</string>
+    <string name="selec_place_msn_activity_main">Please, select a name!</string>
 
     <string name="title_activity_product">Product</string>
     <string name="products_loading_activity_product">Loading products</string>
@@ -25,8 +25,9 @@
     <string name="title_activity_suggest_market">Market suggestion</string>
     <string name="suggest_loading_activity_suggest_market">Sending market suggestion</string>
     <string name="send_activity_suggest_market">Send</string>
-    <string name="label_name_activity_suggest_market">Name</string>
-    <string name="label_address_activity_suggest_market">Address</string>
+    <string name="label_name_activity_suggest_market">Market name</string>
+    <string name="label_city_activity_suggest_market">City</string>
+    <string name="label_place_activity_suggest_market">Place</string>
     <string name="error_msn_activity_suggest_market">Inform the name and the address of the market!</string>
 
     <string name="title_activity_suggest_product">Product collaboration</string>
@@ -55,11 +56,16 @@
     <string name="scan_msn">Scan</string>
     <string name="product_not_found">NOT FOUND</string>
     <string name="confirm_price">Confirm Price</string>
-    <string name="place">Place</string>
+    <string name="name">Place</string>
     <string name="barcode">Barcode</string>
     <string name="error_reading_stored_markets">Some error occur reading stored markets</string>
     <string name="error_connect_using_local_data">Could not connect to the service. Using local data.</string>
     <string name="some_error_occur">Some Error Occur</string>
-
+    <string name="place_question">Are you in</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="product_name_suggestion_label">Product Name</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

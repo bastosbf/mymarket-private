@@ -47,18 +47,28 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/editText1"
             android:textColor="@color/black"
-            android:hint="@string/label_address_activity_suggest_market" />
+            android:hint="@string/label_place_activity_suggest_market" />
+
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/editText2"
+            android:textColor="@color/black"
+            android:hint="@string/label_city_activity_suggest_market" />
 
         <Button
             android:id="@+id/button_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editText2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="29dp"
+            android:layout_marginTop="27dp"
             android:onClick="suggestMarket"
             android:background="@color/blue_400"
-            android:text="@string/send_activity_suggest_market" />
-
+            android:text="@string/send_activity_suggest_market"
+            android:layout_below="@+id/editText3"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </LinearLayout>

@@ -98,10 +98,14 @@ public class ListPlacesService extends IntentService {
                     JSONObject place = places.getJSONObject(i);
                     int id = place.getInt("id");
                     String name = place.getString("name");
+                    String latitude = place.getString("latitude");
+                    String longitude = place.getString("longitude");
 
                     Place p = new Place();
                     p.setId(id);
                     p.setName(name);
+                    p.setLatitude(latitude);
+                    p.setLongitude(longitude);
 
                     values.add(p);
                 }
