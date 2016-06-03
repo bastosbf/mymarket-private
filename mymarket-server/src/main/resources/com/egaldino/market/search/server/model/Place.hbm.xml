@@ -8,6 +8,5 @@
 		<property name="name" />
 		<property name="latitude" />
 		<property name="longitude" />
-
 	</class>
 </hibernate-mapping>

@@ -24,10 +24,11 @@ public class CollaborationRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/suggest-market")
-	public void suggestMarket(@QueryParam("name") String name, @QueryParam("address") String address) {
+	public void suggestMarket(@QueryParam("name") String name, @QueryParam("place") String place, @QueryParam("city") String city) {
 		MarketSuggestion suggestion = new MarketSuggestion();
 		suggestion.setName(name);
-		suggestion.setAddress(address);
+		suggestion.setPlace(place);
+		suggestion.setCity(city);
 		MarketSuggestionDAO dao = new MarketSuggestionDAO(HibernateConfig.factory);
 		dao.add(suggestion);
 	}

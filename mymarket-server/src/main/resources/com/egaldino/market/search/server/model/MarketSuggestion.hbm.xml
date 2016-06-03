@@ -8,6 +8,7 @@
 			<generator class="identity" />
 		</id>
 		<property name="name" />
-		<property name="address" />
+		<property name="place" />
+		<property name="city" />
 	</class>
 </hibernate-mapping>
