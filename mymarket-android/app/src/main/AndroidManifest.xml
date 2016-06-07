@@ -58,6 +58,10 @@
             android:exported="false" >
         </service>
         <service
+            android:name="com.mymarket.app.service.ListCitiesService"
+            android:exported="false" >
+        </service>
+        <service
             android:name="com.mymarket.app.service.ListPlacesService"
             android:exported="false" >
         </service>

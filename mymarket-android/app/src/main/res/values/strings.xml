@@ -5,6 +5,7 @@
 
 
     <string name="title_activity_main">My Market</string>
+    <string name="cities_loading_activity_main">Loading cities</string>
     <string name="places_loading_activity_main">Loading places</string>
     <string name="markets_loading_activity_main">Loading markets</string>
     <string name="select_place_msn_activity_main">Please, select a location!</string>
@@ -28,7 +29,10 @@
     <string name="label_name_activity_suggest_market">Market name</string>
     <string name="label_city_activity_suggest_market">City</string>
     <string name="label_place_activity_suggest_market">Place</string>
-    <string name="error_msn_activity_suggest_market">Inform the name and the address of the market!</string>
+    <string name="empty_name_activity_suggest_market">Inform the name of the market!</string>
+    <string name="empty_place_activity_suggest_market">Inform the place!</string>
+    <string name="empty_city_activity_suggest_market">Inform the city!</string>
+
 
     <string name="title_activity_suggest_product">Product collaboration</string>
     <string name="suggest_product_loading_activity_suggest_product">Sending product suggestion</string>
@@ -46,6 +50,9 @@
     <string name="select_market_service_list_market">Select the market...</string>
 
     <string name="select_place_service_list_places">Select the location...</string>
+
+    <string name="select_city_service_list_cities">Select the city...</string>
+
 
     <string name="msn_service_suggest_market">Market successfully added!</string>
 

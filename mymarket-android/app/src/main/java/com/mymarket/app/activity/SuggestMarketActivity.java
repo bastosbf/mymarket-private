@@ -28,6 +28,7 @@ public class SuggestMarketActivity extends AppCompatActivity {
 
     private EditText editText1;
     private EditText editText2;
+    private EditText editText3;
     private ProgressDialog progress;
     private String rootURL;
 
@@ -82,18 +83,31 @@ public class SuggestMarketActivity extends AppCompatActivity {
     public void suggestMarket(View view) {
         editText1 = (EditText) findViewById(R.id.editText1);
         editText2 = (EditText) findViewById(R.id.editText2);
+        editText3 = (EditText) findViewById(R.id.editText3);
 
         String name = URLUtils.removeEmptySpaces(String.valueOf(editText1.getText()));
-        String address = URLUtils.removeEmptySpaces(String.valueOf(editText2.getText()));
+        String place = URLUtils.removeEmptySpaces(String.valueOf(editText2.getText()));
+        String city = URLUtils.removeEmptySpaces(String.valueOf(editText3.getText()));
 
-        if(name.isEmpty() || address.isEmpty()) {
-            Toast.makeText(SuggestMarketActivity.this, getResources().getString(R.string.error_msn_activity_suggest_market), Toast.LENGTH_LONG).show();
+        if(name.isEmpty()) {
+            Toast.makeText(SuggestMarketActivity.this, getResources().getString(R.string.empty_name_activity_suggest_market), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(place.isEmpty()) {
+            Toast.makeText(SuggestMarketActivity.this, getResources().getString(R.string.empty_place_activity_suggest_market), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(city.isEmpty()) {
+            Toast.makeText(SuggestMarketActivity.this, getResources().getString(R.string.empty_city_activity_suggest_market), Toast.LENGTH_LONG).show();
             return;
         }
 
         final Intent i = new Intent(SuggestMarketActivity.this, SuggestMarketService.class);
         i.putExtra("marketName", name);
-        i.putExtra("marketAddress", address);
+        i.putExtra("marketPlace", place);
+        i.putExtra("marketCity", city);
         i.putExtra("root-url", rootURL);
 
         progress = ProgressDialog.show(SuggestMarketActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.suggest_loading_activity_suggest_market), true, true);

@@ -38,8 +38,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.mymarket.app.R;
 import com.mymarket.app.activity.dialogs.SuggestPlaceDialog;
+import com.mymarket.app.model.City;
 import com.mymarket.app.model.Market;
 import com.mymarket.app.model.Place;
+import com.mymarket.app.service.ListCitiesService;
 import com.mymarket.app.service.ListMarketsService;
 import com.mymarket.app.service.ListPlacesService;
 import com.mymarket.app.service.ResendDataService;
@@ -66,21 +68,26 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean placeFoundByGPS = false;
 
+    private Spinner citiesSpinner;
     private Spinner placesSpinner;
     private Spinner marketsSpinner;
     private int placeSpinnerPosition = 0;
     private int marketSpinnerPosition = 0;
+    private ProgressDialog citiesProgress;
     private ProgressDialog placesProgress;
     private ProgressDialog marketsProgress;
     private Button sacanButton;
+    private CircleButton reloadCitiesButton;
     private CircleButton reloadPlacesButton;
     private CircleButton reloadMarketsButton;
 
     private String rootURL;
 
+    private City city;
     private Place place;
     private Market market;
 
+    private ArrayList<City> cities;
     private ArrayList<Place> places;
     private ArrayList<Market> markets;
 
@@ -89,6 +96,64 @@ public class MainActivity extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
 
 
+
+    private BroadcastReceiver citiesReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                cities = (ArrayList<City>) intent.getSerializableExtra("cities");
+                if (cities != null) {
+                    FileOutputStream fos = context.openFileOutput("cities.list", Context.MODE_PRIVATE);
+                    ObjectOutputStream os = null;
+                    os = new ObjectOutputStream(fos);
+                    os.writeObject(cities);
+                    os.close();
+                    fos.close();
+
+                    ArrayAdapter<City> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, cities);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    citiesSpinner.setAdapter(adapter);
+
+                    FileInputStream fileInputStream = getApplicationContext().openFileInput("city.selected");
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                    city = (City) objectInputStream.readObject();
+                    objectInputStream.close();
+                    fileInputStream.close();
+                    int position = adapter.getPosition(city);
+                    citiesSpinner.setSelection(position);
+
+                    reloadCitiesButton.setColor(getResources().getColor(R.color.grey_300));
+                    reloadCitiesButton.setEnabled(false);
+                } else {
+                    FileInputStream fis = context.openFileInput("cities.list");
+                    ObjectInputStream is = new ObjectInputStream(fis);
+                    cities = (ArrayList<City>) is.readObject();
+                    is.close();
+                    fis.close();
+
+                    ArrayAdapter<City> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, cities);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    citiesSpinner.setAdapter(adapter);
+
+                    FileInputStream fileInputStream = getApplicationContext().openFileInput("city.selected");
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                    place = (Place) objectInputStream.readObject();
+                    objectInputStream.close();
+                    fileInputStream.close();
+                    int position = adapter.getPosition(city);
+                    citiesSpinner.setSelection(position);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (citiesProgress != null && citiesProgress.isShowing()) {
+                citiesProgress.dismiss();
+            }
+        }
+    };
     private BroadcastReceiver placesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -212,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable("city", city);
         outState.putSerializable("place", place);
         outState.putSerializable("market", market);
         outState.putSerializable("places", places);
@@ -247,12 +313,31 @@ public class MainActivity extends AppCompatActivity implements
         startService(initResendService);
 
 
+        citiesSpinner = (Spinner) findViewById(R.id.citiesSpinner);
         placesSpinner = (Spinner) findViewById(R.id.placesSpinner);
         marketsSpinner = (Spinner) findViewById(R.id.marketsSpinner);
         sacanButton = (Button) findViewById(R.id.imageButton);
 
+        reloadCitiesButton = (CircleButton) findViewById(R.id.reloadCitiesButton);
         reloadPlacesButton = (CircleButton) findViewById(R.id.reloadPlacesButton);
         reloadMarketsButton = (CircleButton) findViewById(R.id.reloadMarketsButton);
+
+
+        reloadCitiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent i = new Intent(MainActivity.this, ListCitiesService.class);
+                i.putExtra("root-url", rootURL);
+                startService(i);
+                placesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.cities_loading_activity_main), true, true);
+                placesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        stopService(i);
+                    }
+                });
+            }
+        });
 
         reloadPlacesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,10 +378,10 @@ public class MainActivity extends AppCompatActivity implements
 
         placesSpinner.setRight(View.FOCUS_RIGHT);
         if (savedInstanceState == null) {
-            final Intent i = new Intent(MainActivity.this, ListPlacesService.class);
+            final Intent i = new Intent(MainActivity.this, ListCitiesService.class);
             i.putExtra("root-url", rootURL);
             startService(i);
-            placesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.places_loading_activity_main), true, true);
+            placesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.cities_loading_activity_main), true, true);
             placesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
@@ -305,10 +390,58 @@ public class MainActivity extends AppCompatActivity implements
             });
 
         } else {
+            city = (City) savedInstanceState.getSerializable("city");
             place = (Place) savedInstanceState.getSerializable("place");
             market = (Market) savedInstanceState.getSerializable("market");
             places = (ArrayList<Place>) savedInstanceState.getSerializable("places");
             markets = (ArrayList<Market>) savedInstanceState.getSerializable("markets");
+            if(city == null){
+                try {
+                    FileInputStream fis = getApplicationContext().openFileInput("cities.list");
+                    ObjectInputStream is = new ObjectInputStream(fis);
+                    cities = (ArrayList<City>) is.readObject();
+                    is.close();
+                    fis.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (OptionalDataException e) {
+                    e.printStackTrace();
+                } catch (StreamCorruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            {
+                try {
+                    ArrayAdapter<City> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, cities);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    citiesSpinner.setAdapter(adapter);
+                    citiesSpinner.setOnItemSelectedListener(null);
+                    if (city != null) {
+                        int position = adapter.getPosition(city);
+                        citiesSpinner.setSelection(position);
+                    } else {
+                        FileInputStream fis = getApplicationContext().openFileInput("city.selected");
+                        ObjectInputStream is = new ObjectInputStream(fis);
+                        city = (City) is.readObject();
+                        is.close();
+                        fis.close();
+                        int position = adapter.getPosition(city);
+                        citiesSpinner.setSelection(position);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             if (places == null) {
                 try {
                     FileInputStream fis = getApplicationContext().openFileInput("places.list");
@@ -382,6 +515,47 @@ public class MainActivity extends AppCompatActivity implements
                 marketsSpinner.setSelection(position);
             }
         }
+        citiesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                city = (City) parent.getItemAtPosition(position);
+                if (city.getId() == 0) {
+                    placesSpinner = (Spinner) findViewById(R.id.placesSpinner);
+                    placesSpinner.setAdapter(null);
+                    marketsSpinner = (Spinner) findViewById(R.id.marketsSpinner);
+                    marketsSpinner.setAdapter(null);
+                } else {
+                    try {
+                        FileOutputStream fos = getApplicationContext().openFileOutput("city.selected", Context.MODE_PRIVATE);
+                        ObjectOutputStream os = new ObjectOutputStream(fos);
+                        os.writeObject(city);
+                        os.close();
+                        fos.close();
+
+                        final Intent i = new Intent(MainActivity.this, ListPlacesService.class);
+                        i.putExtra("city", city);
+                        i.putExtra("root-url", rootURL);
+                        startService(i);
+                        placesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.places_loading_activity_main), true, true);
+                        placesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                stopService(i);
+                            }
+                        });
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         placesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -443,6 +617,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
+        LocalBroadcastManager.getInstance(this).registerReceiver((citiesReceiver), new IntentFilter("CITIES"));
         LocalBroadcastManager.getInstance(this).registerReceiver((placesReceiver), new IntentFilter("PLACES"));
         LocalBroadcastManager.getInstance(this).registerReceiver((marketsReceiver), new IntentFilter("MARKETS"));
 

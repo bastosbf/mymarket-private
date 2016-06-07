@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.mymarket.app.R;
 import com.mymarket.app.model.City;
-import com.mymarket.app.model.Place;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,15 +31,15 @@ import java.util.concurrent.TimeoutException;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class ListPlacesService extends IntentService {
+public class ListCitiesService extends IntentService {
 
 
     private boolean connectionError = false;
     private int secondsToWait = 0;
     private int connectionAttempts = 0;
 
-    public ListPlacesService() {
-        super("ListPlacesService");
+    public ListCitiesService() {
+        super("ListCitiesService");
     }
 
     @Override
@@ -54,15 +53,13 @@ public class ListPlacesService extends IntentService {
             Thread.sleep(secondsToWait * 1000);
 
             if (connectionAttempts > 3) {
-                Intent i = new Intent("PLACES");
-                //i.putExtra("places", values);
+                Intent i = new Intent("CITIES");
                 LocalBroadcastManager.getInstance(this).sendBroadcast(i);
                 connectionError = true;
                 return;
             }
 
-            City city = (City) intent.getSerializableExtra("city");
-            final URL url = new URL(intent.getStringExtra("root-url") + "/rest/place/list?city=" + city.getId());
+            final URL url = new URL(intent.getStringExtra("root-url") + "/rest/city/list");
 
             HttpURLConnection connection = null;
             ExecutorService executor = Executors.newCachedThreadPool();
@@ -84,34 +81,34 @@ public class ListPlacesService extends IntentService {
                 response += line;
             }
             in.close();
-            Intent intentReturn = new Intent("PLACES");
+            Intent intentReturn = new Intent("CITIES");
             if ((connection.getResponseCode() == 200) && (!response.isEmpty())) {
-                ArrayList<Place> values = new ArrayList<Place>();
+                ArrayList<City> values = new ArrayList<>();
                 //add select message
                 {
-                    Place p = new Place();
-                    p.setId(0);
-                    p.setName(getResources().getString(R.string.select_place_service_list_places));
-                    values.add(p);
+                    City c = new City();
+                    c.setId(0);
+                    c.setName(getResources().getString(R.string.select_city_service_list_cities));
+                    values.add(c);
                 }
-                JSONArray places = new JSONArray(response);
-                int length = places.length();
+                JSONArray cities = new JSONArray(response);
+                int length = cities.length();
                 for (int i = 0; i < length; i++) {
-                    JSONObject place = places.getJSONObject(i);
-                    int id = place.getInt("id");
-                    String name = place.getString("name");
-                    String latitude = place.getString("latitude");
-                    String longitude = place.getString("longitude");
+                    JSONObject city = cities.getJSONObject(i);
+                    int id = city.getInt("id");
+                    String name = city.getString("name");
+                    String latitude = city.getString("latitude");
+                    String longitude = city.getString("longitude");
 
-                    Place p = new Place();
-                    p.setId(id);
-                    p.setName(name);
-                    p.setLatitude(latitude);
-                    p.setLongitude(longitude);
+                    City c = new City();
+                    c.setId(id);
+                    c.setName(name);
+                    c.setLatitude(latitude);
+                    c.setLongitude(longitude);
 
-                    values.add(p);
+                    values.add(c);
                 }
-                intentReturn.putExtra("places", values);
+                intentReturn.putExtra("cities", values);
             } else {
                 Toast.makeText(this, R.string.some_error_occur, Toast.LENGTH_LONG);
             }

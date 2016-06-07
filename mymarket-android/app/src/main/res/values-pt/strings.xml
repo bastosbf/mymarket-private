@@ -27,7 +27,11 @@
     <string name="label_name_activity_suggest_market">Nome do mercado</string>
     <string name="label_city_activity_suggest_market">Cidade</string>
     <string name="label_place_activity_suggest_market">Bairro</string>
-    <string name="error_msn_activity_suggest_market">Digite o nome e o endereço do mercado!</string>
+    <string name="empty_name_activity_suggest_market">Digite o nome do mercado!</string>
+    <string name="empty_place_activity_suggest_market">Digite o bairro!</string>
+    <string name="empty_city_activity_suggest_market">Digite a cidade!</string>
+
+
 
     <string name="title_activity_suggest_product">Colaboração de produto</string>
     <string name="suggest_product_loading_activity_suggest_product">Enviando sugestão de produto</string>

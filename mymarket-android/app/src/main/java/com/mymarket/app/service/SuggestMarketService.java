@@ -17,7 +17,7 @@ import java.net.URL;
  */
 public class SuggestMarketService extends IntentService {
 
-    public SuggestMarketService(){
+    public SuggestMarketService() {
         super("SuggestProductService");
     }
 
@@ -25,9 +25,11 @@ public class SuggestMarketService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             String name = intent.getStringExtra("marketName");
-            String address = intent.getStringExtra("marketAddress");
+            String place = intent.getStringExtra("marketPlace");
+            String city = intent.getStringExtra("marketCity");
 
-            URL url = new URL(intent.getStringExtra("root-url") + "/rest/collaboration/suggest-market?name="+name+"&address="+address);
+
+            URL url = new URL(intent.getStringExtra("root-url") + "/rest/collaboration/suggest-market?name=" + name + "&place=" + place + "&city=" + city);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Accept", "application/json");
