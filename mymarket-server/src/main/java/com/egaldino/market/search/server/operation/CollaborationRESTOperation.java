@@ -93,6 +93,20 @@ public class CollaborationRESTOperation {
 		}
 
 	}
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/suggest-name")
+	public void suggestName(@QueryParam("product") String product, @QueryParam("name") String name) {
+			Product p = null;
+			{
+				ProductDAO dao = new ProductDAO(HibernateConfig.factory);
+				p = dao.get(product);
+				if (p != null) {
+					dao.updateName(product, name);
+				}
+			}
+	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

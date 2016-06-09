@@ -1,6 +1,7 @@
 package com.egaldino.market.search.server.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -57,5 +58,19 @@ public class ProductDAO extends GenericDAO<Product> {
 			return list.get(0);
 		}
 		return null;
+	}
+	
+	public void updateName(String barcode, String name) {
+		Session session = factory.openSession();
+		session.beginTransaction();
+		Criteria criteria = session.createCriteria(Product.class)
+				.createAlias("product", "p")
+				.add(Restrictions.eq("p.barcode", barcode));
+		List<Product> list = criteria.list();
+		if(!list.isEmpty()) {
+			Product p = list.get(0);
+			p.setName(name);
+			update(p);
+		}		
 	}
 }

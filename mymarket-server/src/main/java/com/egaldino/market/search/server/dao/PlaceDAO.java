@@ -16,10 +16,12 @@ public class PlaceDAO extends GenericDAO<Place> {
 		super(factory);
 	}
 
-	public List<Place> list() {
+	public List<Place> list(int city) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(Place.class)
+				.createAlias("city", "c")
+				.add(Restrictions.eq("c.id", city))
 				.addOrder(Order.asc("name"));
 		List<Place> list = criteria.list();
 		return list;

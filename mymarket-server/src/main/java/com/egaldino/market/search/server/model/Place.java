@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Place implements Serializable {
 	private Integer id;
 	private String name;
+	private City city;
 	private String latitude;
 	private String longitude;
 
@@ -25,6 +26,14 @@ public class Place implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
 	}
 
 	public String getLatitude() {

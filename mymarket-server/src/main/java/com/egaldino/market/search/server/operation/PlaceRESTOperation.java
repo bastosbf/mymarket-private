@@ -18,9 +18,9 @@ public class PlaceRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/list")
-	public List<Place> list() {
+	public List<Place> list(@QueryParam("city") int city) {
 		PlaceDAO dao = new PlaceDAO(HibernateConfig.factory);
-		return dao.list();
+		return dao.list(city);
 	}
 
 	@GET
