@@ -37,6 +37,7 @@ import com.mymarket.app.model.Search;
 import com.mymarket.app.service.ConfirmPriceService;
 import com.mymarket.app.service.FindPricesService;
 import com.mymarket.app.service.FindProductService;
+import com.mymarket.app.service.SuggestNameService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -193,6 +194,11 @@ public class ProductActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     String suggestionProductName = input.getText().toString();
+                                    Intent i = new Intent(ProductActivity.this, SuggestNameService.class);
+                                    i.putExtra("name", suggestionProductName);
+                                    i.putExtra("barcode", intent.getStringExtra("barcode"));
+                                    startService(i);
+
                                 }
                             });
                             builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -289,7 +295,7 @@ public class ProductActivity extends AppCompatActivity {
 
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
-                    HashMap<String, String> result = (HashMap<String, String>) getItem(position);
+                   // HashMap<String, String> result = (HashMap<String, String>) getItem(position);
                     View view = super.getView(position, convertView, parent);
                     RelativeLayout twoLineListItem = (RelativeLayout) view;
 

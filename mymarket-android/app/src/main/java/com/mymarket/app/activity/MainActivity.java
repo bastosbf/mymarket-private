@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,8 +62,7 @@ import java.util.Properties;
 
 import at.markushi.ui.CircleButton;
 
-public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, SuggestPlaceDialog.NoticeDialogListener {
+public class MainActivity extends AppCompatActivity implements LocationListener, SuggestPlaceDialog.NoticeDialogListener {
 
     private final int PERMISSIONS_REQUEST_CAMERA = 112;
 
@@ -71,12 +71,14 @@ public class MainActivity extends AppCompatActivity implements
     private Spinner citiesSpinner;
     private Spinner placesSpinner;
     private Spinner marketsSpinner;
+    private int citySpinnerPosition = 0;
     private int placeSpinnerPosition = 0;
     private int marketSpinnerPosition = 0;
+
     private ProgressDialog citiesProgress;
     private ProgressDialog placesProgress;
     private ProgressDialog marketsProgress;
-    private Button sacanButton;
+
     private CircleButton reloadCitiesButton;
     private CircleButton reloadPlacesButton;
     private CircleButton reloadMarketsButton;
@@ -94,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
-
-
 
     private BroadcastReceiver citiesReceiver = new BroadcastReceiver() {
         @Override
@@ -120,8 +120,12 @@ public class MainActivity extends AppCompatActivity implements
                     objectInputStream.close();
                     fileInputStream.close();
                     int position = adapter.getPosition(city);
-                    citiesSpinner.setSelection(position);
+                    citySpinnerPosition = position;
 
+                    new LocationAsyncTask().execute(citiesSpinner);
+                    // citiesSpinner.setSelection(position);
+
+                    reloadCitiesButton.setImageDrawable(getResources().getDrawable(R.drawable.reloadbuttondesabled));
                     reloadCitiesButton.setColor(getResources().getColor(R.color.grey_300));
                     reloadCitiesButton.setEnabled(false);
                 } else {
@@ -137,13 +141,14 @@ public class MainActivity extends AppCompatActivity implements
 
                     FileInputStream fileInputStream = getApplicationContext().openFileInput("city.selected");
                     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                    place = (Place) objectInputStream.readObject();
+                    city = (City) objectInputStream.readObject();
                     objectInputStream.close();
                     fileInputStream.close();
                     int position = adapter.getPosition(city);
-                    citiesSpinner.setSelection(position);
-                }
+                    citySpinnerPosition = position;
 
+                    //citiesSpinner.setSelection(position);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -177,8 +182,11 @@ public class MainActivity extends AppCompatActivity implements
                     objectInputStream.close();
                     fileInputStream.close();
                     int position = adapter.getPosition(place);
-                    placesSpinner.setSelection(position);
+                    //placesSpinner.setSelection(position);
+                    placeSpinnerPosition = position;
+                    //   new LocationAsyncTask().execute(placesSpinner);
 
+                    reloadPlacesButton.setImageDrawable(getResources().getDrawable(R.drawable.reloadbuttondesabled));
                     reloadPlacesButton.setColor(getResources().getColor(R.color.grey_300));
                     reloadPlacesButton.setEnabled(false);
                 } else {
@@ -198,16 +206,44 @@ public class MainActivity extends AppCompatActivity implements
                     objectInputStream.close();
                     fileInputStream.close();
                     int position = adapter.getPosition(place);
-                    placesSpinner.setSelection(position);
+                    //placesSpinner.setSelection(position);
+                    placeSpinnerPosition = position;
+
                 }
+                //new LocationAsyncTask().execute(marketsSpinner);
 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-            }
-            if (placesProgress != null && placesProgress.isShowing()) {
-                placesProgress.dismiss();
+            } finally {
+                if (placesProgress != null && placesProgress.isShowing()) {
+                    placesProgress.dismiss();
+                }
+                if (mLastLocation != null) {
+                    if (placesSpinner.getAdapter() != null) {
+                        Float placeDistance = null;
+                        Integer placePosition = null;
+                        for (int count = 1; count < placesSpinner.getAdapter().getCount(); count++) {
+                            Place place = (Place) placesSpinner.getItemAtPosition(count);
+                            Location placeLocation = new Location("database");
+                            placeLocation.setLatitude(Double.parseDouble(place.getLatitude()));
+                            placeLocation.setLongitude(Double.parseDouble(place.getLongitude()));
+                            float d = mLastLocation.distanceTo(placeLocation);
+                            if (placeDistance == null || placeDistance > d) {
+                                placeDistance = d;
+                                placePosition = count;
+                            }
+                        }
+
+                        if (placePosition != null) {
+                            SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                            dialog.setPlace(((Place) placesSpinner.getItemAtPosition(placePosition)).getName());
+                            dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                            placeSpinnerPosition = placePosition;
+                        }
+                    }
+                }
             }
         }
     };
@@ -227,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     marketsSpinner.setAdapter(adapter);
 
+                    reloadMarketsButton.setImageDrawable(getResources().getDrawable(R.drawable.reloadbuttondesabled));
                     reloadMarketsButton.setEnabled(false);
                     reloadMarketsButton.setColor(getResources().getColor(R.color.grey_300));
                 } else {
@@ -248,26 +285,28 @@ public class MainActivity extends AppCompatActivity implements
                 if (marketsProgress != null && marketsProgress.isShowing()) {
                     marketsProgress.dismiss();
                 }
-                if (marketsSpinner.getAdapter() != null && placeFoundByGPS) {
-                    Float marketDistance = null;
-                    Integer marketPosition = null;
-                    for (int count = 1; count < marketsSpinner.getAdapter().getCount(); count++) {
-                        Market market = (Market) marketsSpinner.getItemAtPosition(count);
-                        Location marketLocation = new Location("database");
-                        marketLocation.setLatitude(Double.parseDouble(market.getLatitude()));
-                        marketLocation.setLongitude(Double.parseDouble(market.getLongitude()));
-                        float d = mLastLocation.distanceTo(marketLocation);
-                        if (marketDistance == null || marketDistance > d) {
-                            marketDistance = d;
-                            marketPosition = count;
+                if (mLastLocation != null) {
+                    if (marketsSpinner.getAdapter() != null && placeFoundByGPS) {
+                        Float marketDistance = null;
+                        Integer marketPosition = null;
+                        for (int count = 1; count < marketsSpinner.getAdapter().getCount(); count++) {
+                            Market market = (Market) marketsSpinner.getItemAtPosition(count);
+                            Location marketLocation = new Location("database");
+                            marketLocation.setLatitude(Double.parseDouble(market.getLatitude()));
+                            marketLocation.setLongitude(Double.parseDouble(market.getLongitude()));
+                            float d = mLastLocation.distanceTo(marketLocation);
+                            if (marketDistance == null || marketDistance > d) {
+                                marketDistance = d;
+                                marketPosition = count;
+                            }
                         }
-                    }
 
-                    if (marketPosition != null) {
-                        SuggestPlaceDialog dialog = new SuggestPlaceDialog();
-                        dialog.setPlace(((Market) marketsSpinner.getItemAtPosition(marketPosition)).getName());
-                        dialog.show(getFragmentManager(), "SuggestPlaceDialog");
-                        marketSpinnerPosition = marketPosition;
+                        if (marketPosition != null) {
+                            SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                            dialog.setPlace(((Market) marketsSpinner.getItemAtPosition(marketPosition)).getName());
+                            dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                            marketSpinnerPosition = marketPosition;
+                        }
                     }
                 }
             }
@@ -316,7 +355,6 @@ public class MainActivity extends AppCompatActivity implements
         citiesSpinner = (Spinner) findViewById(R.id.citiesSpinner);
         placesSpinner = (Spinner) findViewById(R.id.placesSpinner);
         marketsSpinner = (Spinner) findViewById(R.id.marketsSpinner);
-        sacanButton = (Button) findViewById(R.id.imageButton);
 
         reloadCitiesButton = (CircleButton) findViewById(R.id.reloadCitiesButton);
         reloadPlacesButton = (CircleButton) findViewById(R.id.reloadPlacesButton);
@@ -329,8 +367,8 @@ public class MainActivity extends AppCompatActivity implements
                 final Intent i = new Intent(MainActivity.this, ListCitiesService.class);
                 i.putExtra("root-url", rootURL);
                 startService(i);
-                placesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.cities_loading_activity_main), true, true);
-                placesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                citiesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.cities_loading_activity_main), true, true);
+                citiesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         stopService(i);
@@ -381,21 +419,25 @@ public class MainActivity extends AppCompatActivity implements
             final Intent i = new Intent(MainActivity.this, ListCitiesService.class);
             i.putExtra("root-url", rootURL);
             startService(i);
-            placesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.cities_loading_activity_main), true, true);
-            placesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            citiesProgress = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.cities_loading_activity_main), true, true);
+            citiesProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     stopService(i);
                 }
             });
 
+            mLocationRequest = LocationRequest.create()
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                    .setFastestInterval(1 * 1000);
         } else {
             city = (City) savedInstanceState.getSerializable("city");
             place = (Place) savedInstanceState.getSerializable("place");
             market = (Market) savedInstanceState.getSerializable("market");
             places = (ArrayList<Place>) savedInstanceState.getSerializable("places");
             markets = (ArrayList<Market>) savedInstanceState.getSerializable("markets");
-            if(city == null){
+            if (city == null) {
                 try {
                     FileInputStream fis = getApplicationContext().openFileInput("cities.list");
                     ObjectInputStream is = new ObjectInputStream(fis);
@@ -439,7 +481,6 @@ public class MainActivity extends AppCompatActivity implements
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
 
             if (places == null) {
@@ -606,6 +647,8 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+
+        Button sacanButton = (Button) findViewById(R.id.imageButton);
         sacanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -620,24 +663,6 @@ public class MainActivity extends AppCompatActivity implements
         LocalBroadcastManager.getInstance(this).registerReceiver((citiesReceiver), new IntentFilter("CITIES"));
         LocalBroadcastManager.getInstance(this).registerReceiver((placesReceiver), new IntentFilter("PLACES"));
         LocalBroadcastManager.getInstance(this).registerReceiver((marketsReceiver), new IntentFilter("MARKETS"));
-
-
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000);
-
-
-        if (mGoogleApiClient == null) {
-            // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
-            // See https://g.co/AppIndexing/AndroidStudio for more information.
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .addApi(AppIndex.API).build();
-        }
-
     }
 
     @Override
@@ -710,7 +735,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onStart() {
+/*
         mGoogleApiClient.connect();
+*/
         super.onStart();
 /*        // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -780,32 +807,105 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        placeFoundByGPS = true;
+
+        if (citySpinnerPosition != 0) {
+            citiesSpinner.setSelection(citySpinnerPosition);
+            citySpinnerPosition = 0;
         }
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        if (placeSpinnerPosition != 0) {
+            placesSpinner.setSelection(placeSpinnerPosition);
+            placeSpinnerPosition = 0;
+        }
+
+        if (marketSpinnerPosition != 0) {
+            marketsSpinner.setSelection(marketSpinnerPosition);
+            marketSpinnerPosition = 0;
+        }
+
+        // marketsSpinner.setSelection(marketSpinnerPosition);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        placeFoundByGPS = false;
+
+    }
+
+    public class LocationAsyncTask extends AsyncTask<Spinner, Integer, Boolean> implements
+            GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+        private Spinner spinner;
+
+        @Override
+        protected Boolean doInBackground(Spinner... params) {
+            spinner = params[0];
+            if (mGoogleApiClient == null) {
+                // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
+                // See https://g.co/AppIndexing/AndroidStudio for more information.
+                mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .addApi(LocationServices.API)
+                        .addApi(AppIndex.API).build();
+            }
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+            return true;
+        }
+
+        @Override
+        public void onConnected(@Nullable Bundle bundle) {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, MainActivity.this);
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+
+            Float cityDistance = null;
+            Integer cityPosition = null;
+
+            Float placeDistance = null;
+            Integer placePosition = null;
+
+            while (spinner.getAdapter() == null) {
+            }
+
+            if (mLastLocation != null && spinner.getAdapter() != null) {
+                for (int i = 1; i < spinner.getAdapter().getCount(); i++) {
+                    Object item = spinner.getItemAtPosition(i);
 
 
+                    if (item instanceof City) {
+                        City city = (City) item;
+                        Location cityLocation = new Location("database");
+                        cityLocation.setLatitude(Double.parseDouble(city.getLatitude()));
+                        cityLocation.setLongitude(Double.parseDouble(city.getLongitude()));
+                        float d = mLastLocation.distanceTo(cityLocation);
+                        if (cityDistance == null || cityDistance > d) {
+                            cityDistance = d;
+                            cityPosition = i;
+                        }
+                    }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Float placeDistance = null;
-                Integer placePosition = null;
-                if (mLastLocation != null && placesSpinner.getAdapter() != null) {
-                    for (int i = 1; i < placesSpinner.getAdapter().getCount(); i++) {
-                        Place place = (Place) placesSpinner.getItemAtPosition(i);
+                    if (item instanceof Place) {
+                        Place place = (Place) item;
                         Location placeLocation = new Location("database");
                         placeLocation.setLatitude(Double.parseDouble(place.getLatitude()));
                         placeLocation.setLongitude(Double.parseDouble(place.getLongitude()));
@@ -815,45 +915,45 @@ public class MainActivity extends AppCompatActivity implements
                             placePosition = i;
                         }
                     }
+                }
 
-                    if (placePosition != null) {
-                        placeSpinnerPosition = placePosition;
-                        SuggestPlaceDialog dialog = new SuggestPlaceDialog();
-                        dialog.setPlace(((Place) placesSpinner.getItemAtPosition(placePosition)).getName());
-                        dialog.show(getFragmentManager(), "SuggestPlaceDialog");
-                    }
+                if (placePosition != null) {
+                    placeSpinnerPosition = placePosition;
+                    SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                    dialog.setPlace(((Place) spinner.getItemAtPosition(placePosition)).getName());
+                    dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                }
+
+                if (cityPosition != null) {
+                    citySpinnerPosition = cityPosition;
+                    SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                    dialog.setPlace(((City) spinner.getItemAtPosition(cityPosition)).getName());
+                    dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                }
+            } else {
+                if (citiesSpinner.getAdapter() != null) {
+                    citiesSpinner.setSelection(citySpinnerPosition);
+                }
+
+                if (placesSpinner.getAdapter() != null) {
+                    placesSpinner.setSelection(placeSpinnerPosition);
                 }
             }
-        }).start();
-    }
+        }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        // placeFoundByGPS = false;
-    }
+        @Override
+        public void onConnectionSuspended(int i) {
+            placeFoundByGPS = false;
+        }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        placeFoundByGPS = false;
-    }
+        @Override
+        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    @Override
-    public void onLocationChanged(Location location) {
+        }
 
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        placeFoundByGPS = true;
-
-        // placesSpinner.setSelection(0);
-        placesSpinner.setSelection(placeSpinnerPosition);
-        // marketsSpinner.setSelection(marketSpinnerPosition);
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        placeFoundByGPS = false;
-
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+        }
     }
 }
