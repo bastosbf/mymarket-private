@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.mymarket.app.model.Market;
 import com.mymarket.app.model.ProductRecord;
+import com.mymarket.app.utils.URLUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,6 +40,7 @@ public class SuggestNameService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String barcode = intent.getStringExtra("barcode");
         String name = intent.getStringExtra("name");
+        name = URLUtils.removeEmptySpaces(String.valueOf(name));
 
         try {
             URL url = new URL(intent.getStringExtra("root-url") + "/rest/collaboration/suggest-name?product=" + barcode + "&name=" + name);
@@ -49,9 +51,14 @@ public class SuggestNameService extends IntentService {
             is.close();
 
             Intent i = new Intent("SUGGEST_NAME");
+            i.putExtra("barcode", intent.getStringExtra("barcode"));
+            i.putExtra("place", intent.getSerializableExtra("place"));
+            i.putExtra("market", intent.getSerializableExtra("market"));
+            i.putExtra("markets", intent.getSerializableExtra("markets"));
+            i.putExtra("root-url", intent.getStringExtra("root-url"));
             LocalBroadcastManager.getInstance(this).sendBroadcast(i);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

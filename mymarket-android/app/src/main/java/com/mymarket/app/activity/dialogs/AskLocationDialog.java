@@ -3,16 +3,16 @@ package com.mymarket.app.activity.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 
 import com.mymarket.app.R;
 
 /**
  * Created by egaldino on 24/05/16.
  */
-public class SuggestPlaceDialog extends DialogFragment {
+public class AskLocationDialog extends DialogFragment {
 
     private String place;
 
@@ -57,13 +57,13 @@ public class SuggestPlaceDialog extends DialogFragment {
         builder.setMessage(getResources().getString(R.string.place_question) + " " + place + "?")
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogPositiveClick(SuggestPlaceDialog.this);
+                        mListener.onDialogPositiveClick(AskLocationDialog.this);
 
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNegativeClick(SuggestPlaceDialog.this);
+                        mListener.onDialogNegativeClick(AskLocationDialog.this);
                     }
                 });
         // Create the AlertDialog object and return it

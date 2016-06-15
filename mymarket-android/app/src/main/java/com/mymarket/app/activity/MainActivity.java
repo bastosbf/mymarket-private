@@ -1,7 +1,6 @@
 package com.mymarket.app.activity;
 
 import android.Manifest;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,10 +11,13 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,8 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,7 +42,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.mymarket.app.R;
-import com.mymarket.app.activity.dialogs.SuggestPlaceDialog;
+import com.mymarket.app.activity.dialogs.AskLocationDialog;
 import com.mymarket.app.model.City;
 import com.mymarket.app.model.Market;
 import com.mymarket.app.model.Place;
@@ -62,9 +66,10 @@ import java.util.Properties;
 
 import at.markushi.ui.CircleButton;
 
-public class MainActivity extends AppCompatActivity implements LocationListener, SuggestPlaceDialog.NoticeDialogListener {
+public class MainActivity extends AppCompatActivity implements LocationListener, AskLocationDialog.NoticeDialogListener {
 
     private final int PERMISSIONS_REQUEST_CAMERA = 112;
+    private final int PERMISSIONS_REQUEST_LOCATION = 113;
 
     private boolean placeFoundByGPS = false;
 
@@ -123,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     citySpinnerPosition = position;
 
                     new LocationAsyncTask().execute(citiesSpinner);
-                    // citiesSpinner.setSelection(position);
 
                     reloadCitiesButton.setImageDrawable(getResources().getDrawable(R.drawable.reloadbuttondesabled));
                     reloadCitiesButton.setColor(getResources().getColor(R.color.grey_300));
@@ -146,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     fileInputStream.close();
                     int position = adapter.getPosition(city);
                     citySpinnerPosition = position;
-
-                    //citiesSpinner.setSelection(position);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -182,9 +184,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     objectInputStream.close();
                     fileInputStream.close();
                     int position = adapter.getPosition(place);
-                    //placesSpinner.setSelection(position);
                     placeSpinnerPosition = position;
-                    //   new LocationAsyncTask().execute(placesSpinner);
 
                     reloadPlacesButton.setImageDrawable(getResources().getDrawable(R.drawable.reloadbuttondesabled));
                     reloadPlacesButton.setColor(getResources().getColor(R.color.grey_300));
@@ -206,12 +206,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     objectInputStream.close();
                     fileInputStream.close();
                     int position = adapter.getPosition(place);
-                    //placesSpinner.setSelection(position);
                     placeSpinnerPosition = position;
 
                 }
-                //new LocationAsyncTask().execute(marketsSpinner);
-
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -237,9 +234,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                         }
 
                         if (placePosition != null) {
-                            SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                            AskLocationDialog dialog = new AskLocationDialog();
                             dialog.setPlace(((Place) placesSpinner.getItemAtPosition(placePosition)).getName());
-                            dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                           // dialog.show(getFragmentManager(), "AskLocationDialog");
+
+                            Fragment d = dialog;
+                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                            transaction.add(d, "AskLocationDialog");
+                            transaction.commitAllowingStateLoss();
+
                             placeSpinnerPosition = placePosition;
                         }
                     }
@@ -302,12 +305,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                         }
 
                         if (marketPosition != null) {
-                            SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                            AskLocationDialog dialog = new AskLocationDialog();
                             dialog.setPlace(((Market) marketsSpinner.getItemAtPosition(marketPosition)).getName());
-                            dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                           // dialog.show(getFragmentManager(), "AskLocationDialog");
+
+                            Fragment d = dialog;
+                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                            transaction.add(d, "AskLocationDialog");
+                            transaction.commitAllowingStateLoss();
+
                             marketSpinnerPosition = marketPosition;
                         }
                     }
+                    mGoogleApiClient.disconnect();
                 }
             }
         }
@@ -319,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         outState.putSerializable("city", city);
         outState.putSerializable("place", place);
         outState.putSerializable("market", market);
+        outState.putSerializable("cities", cities);
         outState.putSerializable("places", places);
         outState.putSerializable("markets", markets);
     }
@@ -346,6 +357,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            FrameLayout toolbarSpace = (FrameLayout) findViewById(R.id.toolbarSpace);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.activity_main);
+            layout.removeView(toolbarSpace);
+            layout.removeView(toolbar);
+        }
 
         Intent initResendService = new Intent(MainActivity.this, ResendDataService.class);
         initResendService.putExtra("root-url", rootURL);
@@ -411,8 +429,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         });
 
 
-        //reloadPlacesButton.setEnabled(false);
-        //reloadMarketsButton.setEnabled(false);
+        reloadPlacesButton.setEnabled(false);
+        reloadMarketsButton.setEnabled(false);
 
         placesSpinner.setRight(View.FOCUS_RIGHT);
         if (savedInstanceState == null) {
@@ -427,6 +445,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 }
             });
 
+
+            int locationPermissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION);
+            if (locationPermissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST_LOCATION);
+            }
+
             mLocationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)        // 10 seconds, in milliseconds
@@ -435,6 +462,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             city = (City) savedInstanceState.getSerializable("city");
             place = (Place) savedInstanceState.getSerializable("place");
             market = (Market) savedInstanceState.getSerializable("market");
+            cities = (ArrayList<City>) savedInstanceState.getSerializable("cities");
             places = (ArrayList<Place>) savedInstanceState.getSerializable("places");
             markets = (ArrayList<Market>) savedInstanceState.getSerializable("markets");
             if (city == null) {
@@ -787,6 +815,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 }
                 return;
             }
+
+            case PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationRequest = LocationRequest.create()
+                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                            .setFastestInterval(1 * 1000);
+                } else {
+                    Toast.makeText(this, R.string.some_error_occur, Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
         }
     }
 
@@ -811,7 +853,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     }
 
-    @Override
+/*    @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         placeFoundByGPS = true;
 
@@ -831,10 +873,36 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
         // marketsSpinner.setSelection(marketSpinnerPosition);
+    }*/
+
+/*    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        placeFoundByGPS = false;
+
+    }*/
+
+    @Override
+    public void onDialogPositiveClick(android.support.v4.app.DialogFragment dialog) {
+        placeFoundByGPS = true;
+
+        if (citySpinnerPosition != 0) {
+            citiesSpinner.setSelection(citySpinnerPosition);
+            citySpinnerPosition = 0;
+        }
+
+        if (placeSpinnerPosition != 0) {
+            placesSpinner.setSelection(placeSpinnerPosition);
+            placeSpinnerPosition = 0;
+        }
+
+        if (marketSpinnerPosition != 0) {
+            marketsSpinner.setSelection(marketSpinnerPosition);
+            marketSpinnerPosition = 0;
+        }
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(android.support.v4.app.DialogFragment dialog) {
         placeFoundByGPS = false;
 
     }
@@ -919,16 +987,27 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                 if (placePosition != null) {
                     placeSpinnerPosition = placePosition;
-                    SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                    AskLocationDialog dialog = new AskLocationDialog();
                     dialog.setPlace(((Place) spinner.getItemAtPosition(placePosition)).getName());
-                    dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                   // dialog.show(getFragmentManager(), "AskLocationDialog");
+
+                    Fragment d = dialog;
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.add(d, "AskLocationDialog");
+                    transaction.commitAllowingStateLoss();
                 }
 
                 if (cityPosition != null) {
                     citySpinnerPosition = cityPosition;
-                    SuggestPlaceDialog dialog = new SuggestPlaceDialog();
+                    AskLocationDialog dialog = new AskLocationDialog();
                     dialog.setPlace(((City) spinner.getItemAtPosition(cityPosition)).getName());
-                    dialog.show(getFragmentManager(), "SuggestPlaceDialog");
+                   // dialog.show(getFragmentManager(), "AskLocationDialog");
+
+
+                    Fragment d = dialog;
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.add(d, "AskLocationDialog");
+                    transaction.commitAllowingStateLoss();
                 }
             } else {
                 if (citiesSpinner.getAdapter() != null) {

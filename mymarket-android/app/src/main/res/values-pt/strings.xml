@@ -4,6 +4,7 @@
     <string name="loading">Carregando</string>
 
     <string name="title_activity_main">Meu Mercado</string>
+    <string name="cities_loading_activity_main">Carregando cidades</string>
     <string name="places_loading_activity_main">Carregando locais</string>
     <string name="markets_loading_activity_main">Carregando mercados</string>
     <string name="selec_place_msn_activity_main">Por favor, selecione a localização!</string>
@@ -46,6 +47,8 @@
 
     <string name="title_activity_splash_screen">Meu Mercado</string>
 
+    <string name="select_city_service_list_cities">Selecione a cidade...</string>
+
     <string name="select_market_service_list_market">Selecione o mercado...</string>
 
     <string name="select_place_service_list_places">Selecione a localização...</string>
@@ -70,4 +73,6 @@
     <string name="product_name_suggestion_label">Nome do Produto</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancelar</string>
+    <string name="suggest_product_name_loading_activity_suggest_product">Sugerindo novo nome para o produto</string>
+    <string name="thanks_for_collaboration">Obrigado pela colaboração</string>
 </resources>

@@ -74,5 +74,6 @@
     <string name="product_name_suggestion_label">Product Name</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
-
+    <string name="suggest_product_name_loading_activity_suggest_product">Suggesting new name to product</string>
+    <string name="thanks_for_collaboration">Thanks for collaboration</string>
 </resources>

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +24,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mymarket.app.R;
 import com.mymarket.app.model.Market;
@@ -60,7 +63,7 @@ public class ProductActivity extends AppCompatActivity {
     private ListView listView;
     private Button buttonAction;
     private Button buttonConfirm;
-    private Button suggestProductNameButton;
+    private ImageButton suggestProductNameButton;
     private ProgressDialog progress;
     private String rootURL;
 
@@ -79,6 +82,32 @@ public class ProductActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver nameSuggestionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            progress.dismiss();
+            Toast.makeText(ProductActivity.this, getResources().getString(R.string.thanks_for_collaboration), Toast.LENGTH_SHORT).show();
+
+            Intent reloadIntent = getIntent();
+            final Intent i = new Intent(ProductActivity.this, FindPricesService.class);
+            i.putExtra("barcode", reloadIntent.getStringExtra("barcode"));
+            i.putExtra("place", reloadIntent.getSerializableExtra("place"));
+            i.putExtra("market", reloadIntent.getSerializableExtra("market"));
+            i.putExtra("markets", reloadIntent.getSerializableExtra("markets"));
+            i.putExtra("root-url", rootURL);
+            startService(i);
+            progress = ProgressDialog.show(ProductActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.products_loading_activity_product), true, true);
+        /*progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                stopService(i);
+            }
+        });*/
+            progress.setCancelable(false);
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,8 +117,17 @@ public class ProductActivity extends AppCompatActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_product));
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            FrameLayout toolbarSpace = (FrameLayout) findViewById(R.id.toolbarSpace);
+
+            LinearLayout layout = (LinearLayout) findViewById(R.id.activity_main);
+            layout.removeView(toolbarSpace);
+            layout.removeView(toolbar);
         }
 
 
@@ -119,6 +157,7 @@ public class ProductActivity extends AppCompatActivity {
         progress.setCancelable(false);
         LocalBroadcastManager.getInstance(this).registerReceiver((productsReceiver), new IntentFilter("PRODUCTS"));
         LocalBroadcastManager.getInstance(this).registerReceiver((confirmReceiver), new IntentFilter("CONFIRM_PRICE"));
+        LocalBroadcastManager.getInstance(this).registerReceiver((nameSuggestionReceiver), new IntentFilter("SUGGEST_NAME"));
         frameLayout = (FrameLayout) findViewById(R.id.productFrame);
         frameLayout.setVisibility(View.INVISIBLE);
     }
@@ -144,7 +183,7 @@ public class ProductActivity extends AppCompatActivity {
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         listView = (ListView) findViewById(R.id.listView);
-        suggestProductNameButton = (Button) findViewById(R.id.suggestProductNameButton);
+        suggestProductNameButton = (ImageButton) findViewById(R.id.suggestProductNameButton);
         buttonAction = (Button) findViewById(R.id.button_action);
         buttonConfirm = (Button) findViewById(R.id.button_confirm);
         frameLayout = (FrameLayout) findViewById(R.id.productFrame);
@@ -157,6 +196,7 @@ public class ProductActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_product));
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationIcon(null);
         }
 
         final ArrayList<Search> results = (ArrayList<Search>) intent.getSerializableExtra("results");
@@ -177,40 +217,6 @@ public class ProductActivity extends AppCompatActivity {
                     productName = product.getName();
                     textView1.setText(productName);
                     suggestProductNameButton.setVisibility(View.VISIBLE);
-                    suggestProductNameButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                            builder.setTitle(getResources().getString(R.string.product_name_suggestion_label));
-
-                            // Set up the input
-                            final EditText input = new EditText(getApplicationContext());
-                            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-                            builder.setView(input);
-
-                            // Set up the buttons
-                            builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String suggestionProductName = input.getText().toString();
-                                    Intent i = new Intent(ProductActivity.this, SuggestNameService.class);
-                                    i.putExtra("name", suggestionProductName);
-                                    i.putExtra("barcode", intent.getStringExtra("barcode"));
-                                    startService(i);
-
-                                }
-                            });
-                            builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                            builder.show();
-                        }
-                    });
                 } else {
                     productName = "";
                     textView1.setText(getResources().getString(R.string.not_found_activity_product));
@@ -366,6 +372,8 @@ public class ProductActivity extends AppCompatActivity {
 
                     startService(i);
                     buttonConfirm.setEnabled(false);
+                    buttonConfirm.setTextColor(getResources().getColor(R.color.grey_400));
+                    buttonConfirm.setBackgroundColor(getResources().getColor(R.color.grey_200));
                 }
             });
             Market market = (Market) intent.getSerializableExtra("market");
@@ -416,5 +424,52 @@ public class ProductActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    public void suggestName(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.product_name_suggestion_label));
+
+        // Set up the input
+        final EditText input = new EditText(getApplicationContext());
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setText(textView1.getText());
+        input.setTextColor(getResources().getColor(R.color.grey_700));
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String suggestionProductName = input.getText().toString();
+                final Intent i = new Intent(ProductActivity.this, SuggestNameService.class);
+                i.putExtra("root-url", rootURL);
+                i.putExtra("name", suggestionProductName);
+                i.putExtra("barcode", getIntent().getStringExtra("barcode"));
+                i.putExtra("place", getIntent().getSerializableExtra("place"));
+                i.putExtra("market", getIntent().getSerializableExtra("market"));
+                i.putExtra("markets", getIntent().getSerializableExtra("markets"));
+                startService(i);
+
+                progress = ProgressDialog.show(ProductActivity.this, getResources().getString(R.string.loading), getResources().getString(R.string.suggest_product_name_loading_activity_suggest_product), true, true);
+                progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        stopService(i);
+                    }
+                });
+
+
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder. create().show();
     }
 }

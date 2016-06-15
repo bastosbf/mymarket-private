@@ -10,9 +10,9 @@ android {
 
     defaultConfig {
         applicationId "com.mymarket.app"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
-        versionCode 2
+        versionCode 3
         versionName "1.0"
     }
     buildTypes {
@@ -34,4 +34,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+    compile 'com.android.support:design:23.4.0'
 }

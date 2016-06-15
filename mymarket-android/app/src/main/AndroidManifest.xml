@@ -34,7 +34,6 @@
         <activity
             android:name="com.mymarket.app.activity.ProductActivity"
             android:label="@string/title_activity_product"
-            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
@@ -45,8 +44,7 @@
         </activity>
         <activity
             android:name="com.mymarket.app.activity.SuggestMarketActivity"
-            android:label="@string/title_activity_suggest_market"
-            android:parentActivityName=".activity.MainActivity">
+            android:label="@string/title_activity_suggest_market">
         </activity>
 
         <service
@@ -79,6 +77,10 @@
         </service>
         <service
             android:name="com.mymarket.app.service.SuggestPriceService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.mymarket.app.service.SuggestNameService"
             android:exported="false" >
         </service>
         <service

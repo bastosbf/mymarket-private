@@ -64,8 +64,7 @@ public class ProductDAO extends GenericDAO<Product> {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(Product.class)
-				.createAlias("product", "p")
-				.add(Restrictions.eq("p.barcode", barcode));
+				.add(Restrictions.eq("barcode", barcode));
 		List<Product> list = criteria.list();
 		if(!list.isEmpty()) {
 			Product p = list.get(0);
