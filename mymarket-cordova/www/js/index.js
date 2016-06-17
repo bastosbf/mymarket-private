@@ -110,9 +110,9 @@ function initScan() {
 	cordova.plugins.barcodeScanner.scan(
 		      function (result) {
 		    	  if(!result.cancelled){
-		    		  window.location.replace("#ProductActivity");
+		    		  $("#barcode").text(result.text);
+			    	  $.mobile.pageContainer.pagecontainer("change", "#ProductActivity", null);
 		    	  }
-		    	  $.mobile.pageContainer.pagecontainer("change", "#ProductActivity", null);
 		    	  alert("We got a barcode\n" +
 		                "Result: " + result.text + "\n" +
 		                "Format: " + result.format + "\n" +
@@ -124,9 +124,20 @@ function initScan() {
 		      {
 		          "preferFrontCamera" : false, // iOS and Android
 		          "showFlipCameraButton" : false, // iOS and Android
-		          "prompt" : "Place a barcode inside the scan area", // supported on Android only
-		          "formats" : "UPC_E,UPC_A,EAN_8,EAN_13,CODE_128,CODE_39,CODE_93,CODABAR", // default: all but PDF_417 and RSS_EXPANDED
-		          "orientation" : "landscape" // Android only (portrait|landscape), default unset so it rotates with the device
+		          "prompt" : "Place a barcode inside the scan area", // supported
+																		// on
+																		// Android
+																		// only
+		          "formats" : "UPC_E,UPC_A,EAN_8,EAN_13,CODE_128,CODE_39,CODE_93,CODABAR", // default:
+																							// all
+																							// but
+																							// PDF_417
+																							// and
+																							// RSS_EXPANDED
+		          "orientation" : "landscape" // Android only
+												// (portrait|landscape), default
+												// unset so it rotates with the
+												// device
 		      }
 		   );
 }
@@ -136,8 +147,26 @@ function goToSuggestMarketActivity() {
 	  $.mobile.pageContainer.pagecontainer("change", "#SuggestMarketActivity", null);
 }
 
-
-
+document.getElementById('suggestMarketSendButton').addEventListener("click", suggestMarket);
+function suggestMarket() {
+	var city = $("#city").val();
+	var place = $("#place").val();
+	var market = $("#market").val();
+	
+	showLoading();
+	
+	$.getJSON('http://146.134.100.66:8080/mymarket-server/rest/collaboration/suggest-market', 
+		     {
+		        city: city,
+		        place: place,
+		        name: market
+		     }, 
+		     function(data) {
+					alert("Thank you for collaboration!");
+					$.mobile.pageContainer.pagecontainer("change", "#MaintActivity", null);
+		     });
+	hideLoading();
+}
 
 function showLoading(id) {
 	if (id == null) {
