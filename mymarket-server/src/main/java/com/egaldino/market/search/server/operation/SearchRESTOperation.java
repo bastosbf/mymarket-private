@@ -38,10 +38,29 @@ public class SearchRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/prices")
-	public List<Search> prices(@QueryParam("barcode") String barcode, @QueryParam("place") int place) {
+	@Path("/prices-by-place")
+	public List<Search> pricesByPlace(@QueryParam("barcode") String barcode, @QueryParam("place") int place) {
 		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
 		List<MarketProduct> results = dao.getByBarcodeAndPlace(barcode, place);
+		List<Search> prices = new ArrayList<Search>();
+		for (MarketProduct result : results) {
+			Search price = new Search();
+			price.setProduct(result.getProduct());
+			price.setMarket(result.getMarket());
+			price.setPrice(result.getPrice());
+			price.setLastUpdate(result.getLastUpdate());
+
+			prices.add(price);
+		}
+		return prices;
+	}
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/prices-by-city")
+	public List<Search> pricesByCity(@QueryParam("barcode") String barcode, @QueryParam("city") int city) {
+		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
+		List<MarketProduct> results = dao.getByBarcodeAndCity(barcode, city);
 		List<Search> prices = new ArrayList<Search>();
 		for (MarketProduct result : results) {
 			Search price = new Search();

@@ -76,7 +76,26 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 		return list;
 	}
 	
+	public List<MarketProduct> getByBarcodeAndCity(String barcode, int city, int maxResults) {
+		Session session = factory.openSession();
+		session.beginTransaction();
+		Criteria criteria = session.createCriteria(MarketProduct.class)
+				.createAlias("product", "p")
+				.createAlias("market", "m")
+				.createAlias("m.place", "mp")
+				.add(Restrictions.eq("p.barcode", barcode))
+				.add(Restrictions.eq("mp.city.id", city))
+				.addOrder(Order.asc("price"));
+		criteria.setMaxResults(maxResults);
+		List<MarketProduct> list = criteria.list();		
+		return list;
+	}
+	
 	public List<MarketProduct> getByBarcodeAndPlace(String barcode, int place) {
 		return getByBarcodeAndPlace(barcode, place, -1);
+	}
+	
+	public List<MarketProduct> getByBarcodeAndCity(String barcode, int city) {
+		return getByBarcodeAndCity(barcode, city, -1);
 	}
 }
