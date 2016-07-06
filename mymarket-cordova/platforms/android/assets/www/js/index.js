@@ -28,11 +28,12 @@ var app = {
 	bindEvents : function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
 		
-		$("#ProductActivity").load("activities/productsActivity.html");
 		$("#AddProductActivity").load("activities/addProductActivity.html");
 		$("#SuggestMarketActivity").load("activities/suggestMarketActivity.html");
 		$("#dialogLocation").load("dialogs/dialogLocation.html");
-
+		$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
+		$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
+		
 		var onSuccessGetUserLocation = function(position) {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;

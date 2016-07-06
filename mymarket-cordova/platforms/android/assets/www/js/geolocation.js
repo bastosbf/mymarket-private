@@ -36,14 +36,13 @@ function onSuccessGetLocation(latitude, longitude, data, select) {
 				$(this).prop('selected', true);
 			}
 		});
-
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", null);
 		$(select).change();
+		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {reverse: false, changeHash: false});
 	});
 
 	$('#locationNoButton').on("click", function() {
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", null);
+		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {reverse: false, changeHash: false});
 	});
 
-	$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", null);
+	$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", {reverse: false, changeHash: false});
 }

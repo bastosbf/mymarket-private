@@ -104,20 +104,26 @@ function searchProduct(barcode) {
 								class : "glyphicon glyphicon-pencil",
 								"data-role" : "none",
 								"aria-hidden" : true
-							}).click(
-									function() {
-										$("#productNameRenameDialog").val(
-												data[0].product.name);
-										
-										$("#renameSendButton").click(function() {
-											alert("Obrigado pela colaboração!");
-											searchProduct(barcode);
-										});
+							})
+									.click(
+											function() {
+												$("#productNameRenameDialog")
+														.val(
+																data[0].product.name);
 
-										$.mobile.pageContainer.pagecontainer(
-												"change",
-												"#dialogRenameProduct", null);
-									});
+												$("#renameSendButton")
+														.click(
+																function() {
+																	alert("Obrigado pela colaboração!");
+																	searchProduct(barcode);
+																});
+
+												$.mobile.pageContainer
+														.pagecontainer(
+																"change",
+																"#dialogRenameProduct",
+																null);
+											});
 
 							$legendName.append($renameButton);
 
@@ -196,7 +202,7 @@ function searchProduct(barcode) {
 																		function() {
 																			// number-format
 																			// the
-   																			// user
+																			// user
 																			// input
 																			this.value = parseFloat(
 																					this.value
@@ -403,8 +409,18 @@ function searchProduct(barcode) {
 						$("#productsFieldset").remove();
 
 						$("#ProductsActivity").append($productFieldSet);
-						$.mobile.pageContainer.pagecontainer("change",
-								"#ProductsActivity", null);
+
+						if ($.mobile.activePage.is('#MainActivity')) {
+							$.mobile.pageContainer.pagecontainer("change",
+									"#ProductsActivity", null);
+						} else {
+							//não funciona
+							$.mobile.pageContainer.pagecontainer("change",
+									"#ProductsActivity", {
+										reverse : true,
+										changeHash : true
+									});
+						}
 					});
 
 }
@@ -416,7 +432,13 @@ function suggestMarket(city, place, market) {
 		name : market
 	}, function(data) {
 		alert("Obrigado pela colaboração!");
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", null);
+		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
+			reverse : false,
+			changeHash : false
+		});
+		document.addEventListener('backbutton', function() {
+
+		}, false);
 	});
 
 }
@@ -428,6 +450,6 @@ function addProduct(market, barcode, name, price) {
 		price : price
 	}, function(data) {
 		alert("Obrigado pela colaboração!");
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", null);
+		searchProduct(barcode);
 	});
 }
