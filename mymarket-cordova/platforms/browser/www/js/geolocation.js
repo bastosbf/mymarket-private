@@ -15,18 +15,6 @@ function degTorad(deg) {
 }
 
 function onSuccessGetLocation(latitude, longitude, data, select) {
-	/*
-	 * alert('Latitude: ' + position.coords.latitude + '\n' + 'Longitude: ' +
-	 * position.coords.longitude + '\n' + 'Altitude: ' +
-	 * position.coords.altitude + '\n' + 'Accuracy: ' + position.coords.accuracy +
-	 * '\n' + 'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-	 * 'Heading: ' + position.coords.heading + '\n' + 'Speed: ' +
-	 * position.coords.speed + '\n' + 'Timestamp: ' + position.timestamp +
-	 * '\n');
-	 */
-
-	alert($(select).attr('id'));
-
 	var locationNear = null;
 	var distanceToLocationNear = null;
 	for (i in data) {
@@ -42,25 +30,19 @@ function onSuccessGetLocation(latitude, longitude, data, select) {
 
 	$('#locationName').text("Você está em " + data[locationNear].name + "?");
 
-	var locationYesButtonOnCLick = function() {
+	$('#locationYesButton').unbind('click').on("click", function() {
 		$(select).find('option').each(function() {
 			if ($(this).val() == data[locationNear].id) {
-				alert("Dentro do button: " + $(select).attr('id'));
-				alert($(this).val());
-				alert($(this).text());
 				$(this).prop('selected', true);
 			}
 		});
 
-		$.mobile.pageContainer.pagecontainer("change", "#MaintActivity", null);
-
+		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", null);
 		$(select).change();
-	};
-
-	$('#locationYesButton').attr("onclick", locationYesButtonOnCLick);
+	});
 
 	$('#locationNoButton').on("click", function() {
-		$.mobile.pageContainer.pagecontainer("change", "#MaintActivity", null);
+		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", null);
 	});
 
 	$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", null);

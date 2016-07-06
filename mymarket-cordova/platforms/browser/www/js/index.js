@@ -27,19 +27,28 @@ var app = {
 	// 'load', 'deviceready', 'offline', and 'online'.
 	bindEvents : function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
-
+		
+		$("#AddProductActivity").load("activities/addProductActivity.html");
+		$("#SuggestMarketActivity").load("activities/suggestMarketActivity.html");
+		$("#dialogLocation").load("dialogs/dialogLocation.html");
+		$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
+		$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
+		
 		var onSuccessGetUserLocation = function(position) {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
 			localStorage.setItem("latitude", latitude);
 			localStorage.setItem("longitude", longitude);
 			getCities();
-		}
-		
-		var onErrorGetUserLocation = function(error){
-			
+			hideLoading();
 		}
 
+		var onErrorGetUserLocation = function(error) {
+			getCities();
+			hideLoading();
+		}
+
+		showLoading();
 		navigator.geolocation.getCurrentPosition(onSuccessGetUserLocation,
 				onErrorGetUserLocation, {
 					timeout : 7000,
