@@ -15,6 +15,7 @@ function degTorad(deg) {
 }
 
 function onSuccessGetLocation(latitude, longitude, data, select) {
+	showLoading();
 	var locationNear = null;
 	var distanceToLocationNear = null;
 	for (i in data) {
@@ -28,21 +29,34 @@ function onSuccessGetLocation(latitude, longitude, data, select) {
 		}
 	}
 
-	$('#locationName').text("Você está em " + data[locationNear].name + "?");
+	if (locationNear != null) {
+		$('#locationName')
+				.text("Você está em " + data[locationNear].name + "?");
 
-	$('#locationYesButton').unbind('click').on("click", function() {
-		$(select).find('option').each(function() {
-			if ($(this).val() == data[locationNear].id) {
-				$(this).prop('selected', true);
-			}
+		$('#locationYesButton').unbind('click').on("click", function() {
+			$(select).find('option').each(function() {
+				if ($(this).val() == data[locationNear].id) {
+					$(this).prop('selected', true);
+				}
+			});
+			$(select).change();
+			$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
+				reverse : false,
+				changeHash : false
+			});
 		});
-		$(select).change();
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {reverse: false, changeHash: false});
-	});
 
-	$('#locationNoButton').on("click", function() {
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {reverse: false, changeHash: false});
-	});
+		$('#locationNoButton').on("click", function() {
+			$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
+				reverse : false,
+				changeHash : false
+			});
+		});
 
-	$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", {reverse: false, changeHash: false});
+		$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", {
+			reverse : false,
+			changeHash : false
+		});
+	}
+	hideLoading();
 }

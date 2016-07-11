@@ -27,13 +27,14 @@ var app = {
 	// 'load', 'deviceready', 'offline', and 'online'.
 	bindEvents : function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
-		
+
 		$("#AddProductActivity").load("activities/addProductActivity.html");
-		$("#SuggestMarketActivity").load("activities/suggestMarketActivity.html");
+		$("#SuggestMarketActivity").load(
+				"activities/suggestMarketActivity.html");
 		$("#dialogLocation").load("dialogs/dialogLocation.html");
 		$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
 		$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
-		
+
 		var onSuccessGetUserLocation = function(position) {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
@@ -44,8 +45,9 @@ var app = {
 		}
 
 		var onErrorGetUserLocation = function(error) {
+			navigator.notification.alert("Não foi possível adquirir localização por GPS!", null,
+					"Meu Mercado", null);
 			getCities();
-			hideLoading();
 		}
 
 		showLoading();

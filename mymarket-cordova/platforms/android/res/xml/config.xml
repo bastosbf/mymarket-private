@@ -11,14 +11,28 @@
     <feature name="Geolocation">
         <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
     </feature>
+    <feature name="Notification">
+        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
+    <preference name="android-minSdkVersion" value="19" />
+    <icon density="hdpi" src="img/mipmap-hdpi/icon.png" />
+    <icon density="mpdi" src="img/mipmap-mpdi/icon.png" />
+    <icon density="xhdpi" src="img/mipmap-xhdpi/icon.png" />
+    <icon density="xxhdpi" src="img/mipmap-xxhdpi/icon.png" />
     <allow-intent href="market:*" />
     <name>Mercado(Cordova)</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
+		Veja se o preço do produto é o mesmo em todos os mercados
+		da região e colabore com seus amigos informando os preços mais atuais.
+		Usuários podem sugerir mercados e produtos que ainda não estejam
+		cadastrados, assim como atualizar preços de produtos que estejam
+		desatualizados.
+		event.
+	</description>
+    <author email="edson1galdino@gmail.com" href="">
+		Edson Galdino da
+		Silva Alves
+	</author>
     <content src="index.html" />
     <allow-navigation href="http://mymarket.bastosbf.com/*" />
     <access origin="*" />

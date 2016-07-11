@@ -1,9 +1,13 @@
 function getCities() {
+	showLoading();
 	latitude = localStorage.getItem("latitude");
 	longitude = localStorage.getItem("longitude");
-	showLoading();
 	$.getJSON(rest_url + '/city/list',
 			function(data) {
+				$('#citiesSelect').append($('<option>', {
+					value : 0,
+					text : "Selecione a cidade"
+				}));
 				for (i in data) {
 					$('#citiesSelect').append($('<option>', {
 						value : data[i].id,
@@ -15,8 +19,8 @@ function getCities() {
 					onSuccessGetLocation(latitude, longitude, data,
 							$("#citiesSelect"));
 				}
+				hideLoading();
 			});
-	hideLoading();
 }
 
 function getPlaces() {
@@ -31,6 +35,10 @@ function getPlaces() {
 	}
 	$.getJSON(rest_url + '/place/list?city=' + cityId,
 			function(data) {
+				$('#placesSelect').append($('<option>', {
+					value : 0,
+					text : "Selecione o bairro"
+				}));
 				for (i in data) {
 					$('#placesSelect').append($('<option>', {
 						value : data[i].id,
@@ -42,8 +50,9 @@ function getPlaces() {
 					onSuccessGetLocation(latitude, longitude, data,
 							$("#placesSelect"));
 				}
+				$('#placesSelect').selectmenu("refresh", true);
+				hideLoading();
 			});
-	hideLoading();
 }
 
 function getMarkets() {
@@ -54,6 +63,10 @@ function getMarkets() {
 	var placeId = $("#placesSelect").val();
 	if (placeId != null) {
 		$.getJSON(rest_url + '/market/list?place=' + placeId, function(data) {
+			$('#marketsSelect').append($('<option>', {
+				value : 0,
+				text : "Selecione o mercado"
+			}));
 			for (i in data) {
 				$('#marketsSelect').append($('<option>', {
 					value : data[i].id,
@@ -65,16 +78,17 @@ function getMarkets() {
 				onSuccessGetLocation(latitude, longitude, data,
 						$("#marketsSelect"));
 			}
+			$('#marketsSelect').selectmenu("refresh", true);
+			hideLoading();
 		});
 	}
-	hideLoading();
 }
 
 function searchProduct(barcode) {
 	if (barcode == null) {
 		return;
 	}
-
+	showLoading();
 	var cityId = $("#citiesSelect").val();
 	var marketId = $("#marketsSelect").val();
 	$
@@ -114,7 +128,17 @@ function searchProduct(barcode) {
 												$("#renameSendButton")
 														.click(
 																function() {
-																	alert("Obrigado pela colaboração!");
+																	renameProduct(
+																			barcode,
+																			$(
+																					"#productNameRenameDialog")
+																					.val());
+																	navigator.notification
+																			.alert(
+																					"Obrigado pela colaboração!",
+																					null,
+																					"Meu Mercado",
+																					null);
 																	searchProduct(barcode);
 																});
 
@@ -156,10 +180,14 @@ function searchProduct(barcode) {
 												+ parseFloat(data[i].price)
 														.toFixed(2)
 												+ '</p></dd>');
+
+								var lastUpdate = new Date(data[i].last_update);
+
 								$dlElement
 										.append('<dd><code>Última Atualização</code><p>'
-												+ new Date(data[i].lastUpdate)
-														.toString()
+												+ formatDate(lastUpdate)
+												+ '</p><p>'
+												+ formatHour(lastUpdate) +
 												+ '</p></dd>');
 
 								$productDiv.append($dlElement);
@@ -174,10 +202,19 @@ function searchProduct(barcode) {
 										"data-role" : "none",
 										class : "btn btn-primary",
 										text : "Confirmar preço"
-									}).click(function() {
-										alert("Obrigado pela colaboração!");
-										searchProduct(barcode);
-									});
+									})
+											.click(
+													function() {
+														navigator.notification
+																.alert(
+																		"Obrigado pela colaboração!",
+																		null,
+																		"Meu Mercado",
+																		null);
+														confirmPrice(marketId,
+																barcode);
+														searchProduct(barcode);
+													});
 
 									var $updatePriceButton = $("<button>", {
 										type : "button",
@@ -191,9 +228,24 @@ function searchProduct(barcode) {
 																"#updatePriceSendButton")
 																.click(
 																		function() {
-																			alert("Obrigado pela colaboração!");
+																			navigator.notification
+																					.alert(
+																							"Obrigado pela colaboração!",
+																							null,
+																							"Meu Mercado",
+																							null);
+																			updatePrice(
+																					marketId,
+																					barcode,
+																					$(
+																							"#priceUpdatePriceDialog")
+																							.val());
 																			searchProduct(barcode);
 																		});
+
+														$(
+																"#priceUpdatePriceDialog")
+																.text("");
 
 														$(
 																"#priceUpdatePriceDialog")
@@ -236,7 +288,8 @@ function searchProduct(barcode) {
 								}
 							}
 
-							if (!foundOnSelectedMarket) {
+							if (!foundOnSelectedMarket && marketId != null
+									&& marketId > 0) {
 								var $selectedMarketDiv = $("<div>", {
 									class : "list-group-item"
 								}).attr('style',
@@ -275,6 +328,10 @@ function searchProduct(barcode) {
 																	$(
 																			"#marketsSelect option:selected")
 																			.text());
+
+													$("#priceAddProduct").text(
+															"");
+
 													$("#priceAddProduct")
 															.on(
 																	"blur",
@@ -314,6 +371,13 @@ function searchProduct(barcode) {
 																				barcode,
 																				name,
 																				price);
+																		navigator.notification
+																				.alert(
+																						"Obrigado pela colaboração!",
+																						null,
+																						"Meu Mercado",
+																						null);
+																		searchProduct(barcode);
 																	});
 
 													$.mobile.pageContainer
@@ -355,6 +419,9 @@ function searchProduct(barcode) {
 																$(
 																		"#marketsSelect option:selected")
 																		.text());
+
+												$("#priceAddProduct").val("");
+
 												$("#priceAddProduct")
 														.on(
 																"blur",
@@ -393,6 +460,13 @@ function searchProduct(barcode) {
 																			barcode,
 																			name,
 																			price);
+																	navigator.notification
+																			.alert(
+																					"Obrigado pela colaboração!",
+																					null,
+																					"Meu Mercado",
+																					null);
+																	searchProduct(barcode);
 																});
 
 												$.mobile.pageContainer
@@ -414,13 +488,14 @@ function searchProduct(barcode) {
 							$.mobile.pageContainer.pagecontainer("change",
 									"#ProductsActivity", null);
 						} else {
-							//não funciona
+							// não funciona
 							$.mobile.pageContainer.pagecontainer("change",
 									"#ProductsActivity", {
 										reverse : true,
-										changeHash : true
+										changeHash : false
 									});
 						}
+						hideLoading();
 					});
 
 }
@@ -431,17 +506,18 @@ function suggestMarket(city, place, market) {
 		place : place,
 		name : market
 	}, function(data) {
-		alert("Obrigado pela colaboração!");
-		$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
-			reverse : false,
-			changeHash : false
-		});
-		document.addEventListener('backbutton', function() {
-
-		}, false);
 	});
+	navigator.notification.alert("Obrigado pela colaboração!", null,
+			"Meu Mercado", null);
+	$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
+		reverse : false,
+		changeHash : false
+	});
+	document.addEventListener('backbutton', function() {
 
+	}, false);
 }
+
 function addProduct(market, barcode, name, price) {
 	$.getJSON(rest_url + '/collaboration/suggest-product', {
 		market : market,
@@ -449,7 +525,30 @@ function addProduct(market, barcode, name, price) {
 		name : name,
 		price : price
 	}, function(data) {
-		alert("Obrigado pela colaboração!");
-		searchProduct(barcode);
+	});
+}
+
+function updatePrice(market, barcode, price) {
+	$.getJSON(rest_url + '/collaboration/suggest-price', {
+		market : market,
+		product : barcode,
+		price : price
+	}, function(data) {
+	});
+}
+
+function confirmPrice(market, barcode) {
+	$.getJSON(rest_url + '/collaboration/confirm-price', {
+		market : market,
+		barcode : barcode
+	}, function(data) {
+	});
+}
+
+function renameProduct(barcode, name) {
+	$.getJSON(rest_url + '/collaboration/suggest-name', {
+		product : barcode,
+		name : name
+	}, function(data) {
 	});
 }
