@@ -39,7 +39,7 @@ public class Search {
 		this.price = price;
 	}
 
-	@XmlElement(name = "last-update")
+	@XmlElement(name = "last_update")
 	public Date getLastUpdate() {
 		return lastUpdate;
 	}
