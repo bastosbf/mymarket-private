@@ -7,16 +7,16 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.mymarket.cordova.app"
-        },
-        "phonegap-plugin-barcodescanner": {
+        "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.mymarket.cordova.app"
         },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.mymarket.cordova.app"
         },
-        "cordova-plugin-dialogs": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mymarket.cordova.app"
+        },
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.mymarket.cordova.app"
         }
     },

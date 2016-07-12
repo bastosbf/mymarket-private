@@ -46,7 +46,7 @@ var app = {
 
 		var onErrorGetUserLocation = function(error) {
 			navigator.notification.alert("Não foi possível adquirir localização por GPS!", null,
-					"Meu Mercado", null);
+					"e-Mercado", null);
 			getCities();
 		}
 

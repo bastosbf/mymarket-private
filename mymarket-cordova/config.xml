@@ -1,14 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.mymarket.cordova.app" version="0.0.1"
 	xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-	<name>Mercado(Cordova)</name>
+	<name>e-Mercado</name>
 	<description>
 		Veja se o preço do produto é o mesmo em todos os mercados
 		da região e colabore com seus amigos informando os preços mais atuais.
 		Usuários podem sugerir mercados e produtos que ainda não estejam
 		cadastrados, assim como atualizar preços de produtos que estejam
 		desatualizados.
-		event.
 	</description>
 	<author email="edson1galdino@gmail.com" href="">
 		Edson Galdino da
@@ -25,14 +24,16 @@
 	<allow-intent href="mailto:*" />
 	<allow-intent href="geo:*" />
 	<platform name="android">
+		<preference name="DisallowOverscroll" value="true" />
 		<preference name="android-minSdkVersion" value="19" />
-		<icon src="img/mipmap-hdpi/icon.png" density="hdpi" />
-		<icon src="img/mipmap-mpdi/icon.png" density="mpdi" />
-		<icon src="img/mipmap-xhdpi/icon.png" density="xhdpi" />
-		<icon src="img/mipmap-xxhdpi/icon.png" density="xxhdpi" />
+		<icon src="img/mipmap-hdpi/logo_72w_72h.png" density="hdpi" />
+		<icon src="img/mipmap-mdpi/logo_48w_48h.png" density="mdpi" />
+		<icon src="img/mipmap-xhdpi/logo_96w_96h.png" density="xhdpi" />
+		<icon src="img/mipmap-xxhdpi/logo_144w_144h.png" density="xxhdpi" />
 		<allow-intent href="market:*" />
 	</platform>
 	<platform name="ios">
+		<preference name="DisallowOverscroll" value="true" />
 		<allow-intent href="itms:*" />
 		<allow-intent href="itms-apps:*" />
 	</platform>

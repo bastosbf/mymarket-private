@@ -104,14 +104,15 @@ function searchProduct(barcode) {
 							class : "scheduler-border"
 						});
 
-						$productFieldSet.append('<p>' + barcode + '</p>');
+						$productFieldSet.append('<p data-position="fixed">' + barcode + '</p>');
 
 						if (data.length > 0 && typeof data[0] !== 'undefined'
 								&& data[0] !== null) {
 
 							$legendName = $("<legend>", {
 								class : "scheduler-border",
-								text : data[0].product.name
+								text : data[0].product.name,
+								"data-position" : "fixed"
 							});
 
 							$renameButton = $("<span>", {
@@ -137,7 +138,7 @@ function searchProduct(barcode) {
 																			.alert(
 																					"Obrigado pela colaboração!",
 																					null,
-																					"Meu Mercado",
+																					"e-Mercado",
 																					null);
 																	searchProduct(barcode);
 																});
@@ -185,10 +186,10 @@ function searchProduct(barcode) {
 
 								$dlElement
 										.append('<dd><code>Última Atualização</code><p>'
-												+ formatDate(lastUpdate)
-												+ '</p><p>'
-												+ formatHour(lastUpdate) +
-												+ '</p></dd>');
+												.concat(formatDate(lastUpdate))
+												.concat('</p><p>').concat(
+														formatHour(lastUpdate))
+												.concat('</p></dd>'));
 
 								$productDiv.append($dlElement);
 
@@ -209,7 +210,7 @@ function searchProduct(barcode) {
 																.alert(
 																		"Obrigado pela colaboração!",
 																		null,
-																		"Meu Mercado",
+																		"e-Mercado",
 																		null);
 														confirmPrice(marketId,
 																barcode);
@@ -232,7 +233,7 @@ function searchProduct(barcode) {
 																					.alert(
 																							"Obrigado pela colaboração!",
 																							null,
-																							"Meu Mercado",
+																							"e-Mercado",
 																							null);
 																			updatePrice(
 																					marketId,
@@ -277,6 +278,7 @@ function searchProduct(barcode) {
 													});
 
 									$productDiv.append($confirmPriceButton);
+									$productDiv.append("&nbsp;");
 									$productDiv.append($updatePriceButton);
 									$listGroupDiv.prepend($productDiv);
 									foundOnSelectedMarket = true;
@@ -375,7 +377,7 @@ function searchProduct(barcode) {
 																				.alert(
 																						"Obrigado pela colaboração!",
 																						null,
-																						"Meu Mercado",
+																						"e-Mercado",
 																						null);
 																		searchProduct(barcode);
 																	});
@@ -464,7 +466,7 @@ function searchProduct(barcode) {
 																			.alert(
 																					"Obrigado pela colaboração!",
 																					null,
-																					"Meu Mercado",
+																					"e-Mercado",
 																					null);
 																	searchProduct(barcode);
 																});
@@ -508,7 +510,7 @@ function suggestMarket(city, place, market) {
 	}, function(data) {
 	});
 	navigator.notification.alert("Obrigado pela colaboração!", null,
-			"Meu Mercado", null);
+			"e-Mercado", null);
 	$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
 		reverse : false,
 		changeHash : false

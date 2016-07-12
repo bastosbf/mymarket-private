@@ -24,7 +24,7 @@ function formatDate(date) {
 	if (month.toString().length == 1)
 		month = "0" + month;
 	var year = date.getFullYear();
-	return day + "/" + month + "/" + year;
+	return String(day + "/" + month + "/" + year);
 }
 
 function formatHour(date) {
@@ -36,6 +36,6 @@ function formatHour(date) {
 		minutes = "0" + minutes;
 	var seconds = date.getSeconds();
 	if (seconds.toString().length == 1)
-		seconds = "0" + seconds;
-	return hours + ":" + minutes + ":" + seconds;
+		seconds = "0" + seconds;	
+	return String(hours + ":" + minutes + ":" + seconds);
 }
