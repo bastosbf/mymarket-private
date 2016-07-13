@@ -129,7 +129,6 @@ $('#suggestMarketActivityButton').on(
 					"#SuggestMarketActivity", null);
 
 			$('#suggestMarketSendButton').on("click", function() {
-				alert("entrou aqui");
 				var city = $("#city").val();
 				var place = $("#place").val();
 				var market = $("#market").val();
