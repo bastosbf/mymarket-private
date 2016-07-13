@@ -45,7 +45,8 @@ var app = {
 		}
 
 		var onErrorGetUserLocation = function(error) {
-			navigator.notification.alert("Não foi possível adquirir localização por GPS!", null,
+			navigator.notification.alert(
+					"Não foi possível adquirir localização por GPS!", null,
 					"e-Mercado", null);
 			getCities();
 		}
@@ -88,6 +89,7 @@ $('#scanBarcodeButton')
 							.scan(
 									function(result) {
 										if (!result.cancelled) {
+											localStorage.setItem("confirmActived", true);
 											searchProduct(result.text)
 										}
 									},
@@ -125,16 +127,19 @@ $('#suggestMarketActivityButton').on(
 		function() {
 			$.mobile.pageContainer.pagecontainer("change",
 					"#SuggestMarketActivity", null);
-		});
 
-$('#suggestMarketSendButton').on("click", function() {
-	var city = $("#city").val();
-	var place = $("#place").val();
-	var market = $("#market").val();
+			$('#suggestMarketSendButton').on("click", function() {
+				alert("entrou aqui");
+				var city = $("#city").val();
+				var place = $("#place").val();
+				var market = $("#market").val();
 
-	showLoading();
-	suggestMarket(city, place, market);
-	hideLoading();
-});
+				showLoading();
+				suggestMarket(city, place, market);
+				hideLoading();
+			});
+
+		}
+);
 
 app.initialize();

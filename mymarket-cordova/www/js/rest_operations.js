@@ -8,6 +8,7 @@ function getCities() {
 					value : 0,
 					text : "Selecione a cidade"
 				}));
+				$('#citiesSelect').change();
 				for (i in data) {
 					$('#citiesSelect').append($('<option>', {
 						value : data[i].id,
@@ -32,6 +33,8 @@ function getPlaces() {
 
 	if (cityId > 0) {
 		$("#scanBarcodeButton").prop('disabled', null);
+	} else {
+		$("#scanBarcodeButton").prop('disabled', true);
 	}
 	$.getJSON(rest_url + '/place/list?city=' + cityId,
 			function(data) {
@@ -39,6 +42,7 @@ function getPlaces() {
 					value : 0,
 					text : "Selecione o bairro"
 				}));
+				$('#placesSelect').change();
 				for (i in data) {
 					$('#placesSelect').append($('<option>', {
 						value : data[i].id,
@@ -104,7 +108,8 @@ function searchProduct(barcode) {
 							class : "scheduler-border"
 						});
 
-						$productFieldSet.append('<p data-position="fixed">' + barcode + '</p>');
+						$productFieldSet.append('<p data-position="fixed">'
+								+ barcode + '</p>');
 
 						if (data.length > 0 && typeof data[0] !== 'undefined'
 								&& data[0] !== null) {
@@ -217,6 +222,13 @@ function searchProduct(barcode) {
 														searchProduct(barcode);
 													});
 
+									var confirmActived = localStorage
+											.getItem("confirmActived");
+									if (confirmActived == "false") {
+										$confirmPriceButton.prop('disabled',
+												true);
+									}
+
 									var $updatePriceButton = $("<button>", {
 										type : "button",
 										"data-role" : "none",
@@ -321,7 +333,7 @@ function searchProduct(barcode) {
 													$("#nameAddProduct")
 															.val(
 																	data[0].product.name);
-
+													
 													$("#nameAddProduct").prop(
 															'disabled', true);
 
@@ -412,7 +424,7 @@ function searchProduct(barcode) {
 														barcode);
 
 												$("#nameAddProduct").val("");
-
+												
 												$("#nameAddProduct").prop(
 														'disabled', null);
 
@@ -468,6 +480,14 @@ function searchProduct(barcode) {
 																					null,
 																					"e-Mercado",
 																					null);
+																	$(
+																			"#nameAddProduct")
+																			.val(
+																					"");
+																	$(
+																			"#priceAddProduct")
+																			.val(
+																					"");
 																	searchProduct(barcode);
 																});
 
@@ -521,6 +541,7 @@ function suggestMarket(city, place, market) {
 }
 
 function addProduct(market, barcode, name, price) {
+	localStorage.setItem("confirmActived", false);
 	$.getJSON(rest_url + '/collaboration/suggest-product', {
 		market : market,
 		barcode : barcode,
@@ -528,23 +549,35 @@ function addProduct(market, barcode, name, price) {
 		price : price
 	}, function(data) {
 	});
+
+	showLoading();
+	sleep(7000);
+	hideLoading();
 }
 
 function updatePrice(market, barcode, price) {
+	localStorage.setItem("confirmActived", false);
 	$.getJSON(rest_url + '/collaboration/suggest-price', {
 		market : market,
 		product : barcode,
 		price : price
 	}, function(data) {
 	});
+	showLoading();
+	sleep(7000);
+	hideLoading();
 }
 
 function confirmPrice(market, barcode) {
+	localStorage.setItem("confirmActived", false);
 	$.getJSON(rest_url + '/collaboration/confirm-price', {
 		market : market,
 		barcode : barcode
 	}, function(data) {
 	});
+	showLoading();
+	sleep(7000);
+	hideLoading();
 }
 
 function renameProduct(barcode, name) {

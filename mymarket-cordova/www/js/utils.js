@@ -39,3 +39,12 @@ function formatHour(date) {
 		seconds = "0" + seconds;	
 	return String(hours + ":" + minutes + ":" + seconds);
 }
+
+function sleep(milliseconds) {
+	  var start = new Date().getTime();
+	  for (var i = 0; i < 1e7; i++) {
+	    if ((new Date().getTime() - start) > milliseconds){
+	      break;
+	    }
+	  }
+	}
