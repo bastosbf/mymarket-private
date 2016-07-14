@@ -340,6 +340,12 @@ function searchProduct(barcode) {
 								})
 										.click(
 												function() {
+													$.mobile.pageContainer
+													.pagecontainer(
+															"change",
+															"#AddProductActivity",
+															null);
+													
 													$("#barcodeAddProduct")
 															.val(barcode);
 
@@ -347,8 +353,12 @@ function searchProduct(barcode) {
 															.val(
 																	data[0].product.name);
 
-													$("#nameAddProduct").prop(
-															'disabled', true);
+													// $("#nameAddProduct").prop(
+													// 'disabled', true);
+
+													$("#nameAddProduct")
+															.textinput(
+																	'disable');
 
 													$("#marketAddProduct")
 															.val(
@@ -407,11 +417,11 @@ function searchProduct(barcode) {
 																		searchProduct(barcode);
 																	});
 
-													$.mobile.pageContainer
-															.pagecontainer(
-																	"change",
-																	"#AddProductActivity",
-																	null);
+//													$.mobile.pageContainer
+//															.pagecontainer(
+//																	"change",
+//																	"#AddProductActivity",
+//																	null);
 												});
 
 								$selectedMarketDiv
@@ -433,21 +443,31 @@ function searchProduct(barcode) {
 							})
 									.click(
 											function() {
+												$.mobile.pageContainer
+												.pagecontainer(
+														"change",
+														"#AddProductActivity",
+														null);
+												
 												$("#barcodeAddProduct").val(
 														barcode);
 
 												$("#nameAddProduct").val("");
 
-												$("#nameAddProduct").prop(
-														'disabled', null);
+												$("#nameAddProduct").textinput("enable");
 
 												if (marketId != null
 														&& marketId > 0) {
+													
+													$("#marketAddProduct").textinput("disable");
+													
 													$("#marketAddProduct")
 															.val(
 																	$(
 																			"#marketsSelect option:selected")
 																			.text());
+
+													$("#priceAddProduct").textinput("enable");
 
 													$("#priceAddProduct").val(
 															"");
@@ -479,12 +499,17 @@ function searchProduct(barcode) {
 													$("#priceAddProduct").val(
 															"");
 
-													$("#marketAddProduct")
-															.prop('disabled',
-																	true);
+													$("#marketAddProduct").textinput("disable");
+													
+//													$("#marketAddProduct")
+//															.prop('disabled',
+//																	true);
 
-													$("#priceAddProduct").prop(
-															'disabled', true);
+													
+													$("#priceAddProduct").textinput("disable");
+
+//													$("#priceAddProduct").prop(
+//															'disabled', true);
 												}
 
 												$("#addProdutctButton")
@@ -522,11 +547,11 @@ function searchProduct(barcode) {
 																	searchProduct(barcode);
 																});
 
-												$.mobile.pageContainer
-														.pagecontainer(
-																"change",
-																"#AddProductActivity",
-																null);
+//												$.mobile.pageContainer
+//														.pagecontainer(
+//																"change",
+//																"#AddProductActivity",
+//																null);
 											});
 
 							$productFieldSet.append(addProductActivityButton);
