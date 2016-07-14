@@ -11,7 +11,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.egaldino.market.search.server.HibernateConfig;
 import com.egaldino.market.search.server.dao.MarketProductDAO;
+import com.egaldino.market.search.server.dao.ProductDAO;
 import com.egaldino.market.search.server.model.MarketProduct;
+import com.egaldino.market.search.server.model.Product;
 import com.egaldino.market.search.server.to.Search;
 
 @Path("/search")
@@ -42,7 +44,7 @@ public class SearchRESTOperation {
 	public List<Search> pricesByPlace(@QueryParam("barcode") String barcode, @QueryParam("place") int place) {
 		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
 		List<MarketProduct> results = dao.getByBarcodeAndPlace(barcode, place);
-		List<Search> prices = new ArrayList<Search>();
+		List<Search> searchList = new ArrayList<Search>();
 		for (MarketProduct result : results) {
 			Search price = new Search();
 			price.setProduct(result.getProduct());
@@ -50,9 +52,21 @@ public class SearchRESTOperation {
 			price.setPrice(result.getPrice());
 			price.setLastUpdate(result.getLastUpdate());
 
-			prices.add(price);
+			searchList.add(price);
 		}
-		return prices;
+		if(results.isEmpty()) {
+			//busca produto por barcode
+			ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
+			Product product = productDAO.get(barcode);
+			if(product != null){
+				Search productSearch = new Search();
+				productSearch.setProduct(product);
+				
+				searchList.add(productSearch);
+			}
+		}
+		
+		return searchList;
 	}
 	
 	@GET
@@ -61,7 +75,7 @@ public class SearchRESTOperation {
 	public List<Search> pricesByCity(@QueryParam("barcode") String barcode, @QueryParam("city") int city) {
 		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
 		List<MarketProduct> results = dao.getByBarcodeAndCity(barcode, city);
-		List<Search> prices = new ArrayList<Search>();
+		List<Search> searchList = new ArrayList<Search>();
 		for (MarketProduct result : results) {
 			Search price = new Search();
 			price.setProduct(result.getProduct());
@@ -69,9 +83,20 @@ public class SearchRESTOperation {
 			price.setPrice(result.getPrice());
 			price.setLastUpdate(result.getLastUpdate());
 
-			prices.add(price);
+			searchList.add(price);
+		} 
+		if(results.isEmpty()) {
+			//busca produto por barcode
+			ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
+			Product product = productDAO.get(barcode);
+			if(product != null){
+				Search productSearch = new Search();
+				productSearch.setProduct(product);
+				
+				searchList.add(productSearch);
+			}
 		}
-		return prices;
+		return searchList;
 	}
 
 }

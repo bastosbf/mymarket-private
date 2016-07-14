@@ -37,37 +37,36 @@ public class CollaborationRESTOperation {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/suggest-product")
 	public void suggestProduct(@QueryParam("market") int market, @QueryParam("barcode") String barcode, @QueryParam("name") String name, @QueryParam("price") double price) {
+		Product product = null;
+		{
+			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
+			product = dao.get(barcode);
+		}
+		if (product == null) {
+			{
+				product = new Product();
+				product.setBarcode(barcode);
+				product.setName(name.toUpperCase());
+
+				ProductDAO dao = new ProductDAO(HibernateConfig.factory);
+				dao.add(product);
+			}
+		}
+
 		Market m = null;
 		{
 			MarketDAO dao = new MarketDAO(HibernateConfig.factory);
 			m = dao.get(market);
 		}
 		if (m != null) {
-			Product product = null;
-			{
-				ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-				product = dao.get(barcode);
-			}
-			if (product == null) {
-				{
-					product = new Product();
-					product.setBarcode(barcode);
-					product.setName(name.toUpperCase());
+			MarketProduct mp = new MarketProduct();
+			mp.setMarket(m);
+			mp.setProduct(product);
+			mp.setLastUpdate(new Date());
+			mp.setPrice(price);
 
-					ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-					dao.add(product);
-				}
-			}
-			{
-				MarketProduct mp = new MarketProduct();
-				mp.setMarket(m);
-				mp.setProduct(product);
-				mp.setLastUpdate(new Date());
-				mp.setPrice(price);
-
-				MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
-				dao.add(mp);
-			}
+			MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
+			dao.add(mp);
 		}
 	}
 
@@ -93,19 +92,19 @@ public class CollaborationRESTOperation {
 		}
 
 	}
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/suggest-name")
 	public void suggestName(@QueryParam("product") String product, @QueryParam("name") String name) {
-			Product p = null;
-			{
-				ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-				p = dao.get(product);
-				if (p != null) {
-					dao.updateName(product, name);
-				}
+		Product p = null;
+		{
+			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
+			p = dao.get(product);
+			if (p != null) {
+				dao.updateName(product, name);
 			}
+		}
 	}
 
 	@GET
