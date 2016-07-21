@@ -270,25 +270,7 @@ function searchProduct(barcode) {
 
 															$(
 																	"#priceUpdatePriceDialog")
-																	.on(
-																			"blur",
-																			function() {
-																				// number-format
-																				// the
-																				// user
-																				// input
-																				this.value = parseFloat(
-																						this.value
-																								.replace(
-																										/,/g,
-																										""))
-																						.toFixed(
-																								2)
-																						.toString()
-																						.replace(
-																								/\B(?=(\d{3})+(?!\d))/g,
-																								".");
-																			});
+																	.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
 
 															$.mobile.pageContainer
 																	.pagecontainer(
@@ -370,25 +352,7 @@ function searchProduct(barcode) {
 															"");
 
 													$("#priceAddProduct")
-															.on(
-																	"blur",
-																	function() {
-																		// number-format
-																		// the
-																		// user
-																		// input
-																		this.value = parseFloat(
-																				this.value
-																						.replace(
-																								/,/g,
-																								""))
-																				.toFixed(
-																						2)
-																				.toString()
-																				.replace(
-																						/\B(?=(\d{3})+(?!\d))/g,
-																						".");
-																	});
+															.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
 
 													$("#addProdutctButton")
 															.on(
@@ -473,25 +437,7 @@ function searchProduct(barcode) {
 															"");
 
 													$("#priceAddProduct")
-															.on(
-																	"blur",
-																	function() {
-																		// number-format
-																		// the
-																		// user
-																		// input
-																		this.value = parseFloat(
-																				this.value
-																						.replace(
-																								/,/g,
-																								""))
-																				.toFixed(
-																						2)
-																				.toString()
-																				.replace(
-																						/\B(?=(\d{3})+(?!\d))/g,
-																						".");
-																	});
+															.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
 												} else {
 													$("#marketAddProduct").val(
 															"");
