@@ -260,7 +260,7 @@ function searchProduct(barcode) {
 																						barcode,
 																						$(
 																								"#priceUpdatePriceDialog")
-																								.val());
+																								.maskMoney('unmasked')[0]);
 																				searchProduct(barcode);
 																			});
 
@@ -350,6 +350,8 @@ function searchProduct(barcode) {
 
 													$("#priceAddProduct").text(
 															"");
+													
+													$("#priceAddProduct").textinput("enable");
 
 													$("#priceAddProduct")
 															.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
@@ -366,7 +368,7 @@ function searchProduct(barcode) {
 																				.val();
 																		var price = $(
 																				"#priceAddProduct")
-																				.val();
+																				.maskMoney('unmasked')[0];
 																		addProduct(
 																				market,
 																				barcode,
@@ -461,7 +463,7 @@ function searchProduct(barcode) {
 												$("#addProdutctButton")
 														.on(
 																"click",
-																function() {
+																function() {																	
 																	var market = $(
 																			"#marketsSelect")
 																			.val();
@@ -470,7 +472,7 @@ function searchProduct(barcode) {
 																			.val();
 																	var price = $(
 																			"#priceAddProduct")
-																			.val();
+																			.maskMoney('unmasked')[0];
 																	addProduct(
 																			market,
 																			barcode,
