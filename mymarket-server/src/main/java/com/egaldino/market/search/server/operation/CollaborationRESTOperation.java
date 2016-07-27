@@ -1,7 +1,13 @@
 package com.egaldino.market.search.server.operation;
 
 import java.util.Date;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -31,6 +37,22 @@ public class CollaborationRESTOperation {
 		suggestion.setCity(city);
 		MarketSuggestionDAO dao = new MarketSuggestionDAO(HibernateConfig.factory);
 		dao.add(suggestion);
+
+		try {
+			Properties props = System.getProperties();
+			Session session = Session.getDefaultInstance(props);
+			Message msn = new MimeMessage(session);
+			msn.setFrom(new InternetAddress("eMercado@mail.com"));
+			msn.setRecipients(Message.RecipientType.TO, InternetAddress.parse("edson1galdino@gmail.com", false));
+			msn.setSubject("Market collaboration");
+			msn.setText("Mercado: " + name + "\nLocal: " + place + "\nCidade: " + city);
+			msn.setHeader("e-Marcado", "MARKET-SUGGESTION");
+			msn.setSentDate(new Date());
+			Transport.send(msn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@GET
@@ -102,7 +124,7 @@ public class CollaborationRESTOperation {
 			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
 			p = dao.get(product);
 			if (p != null) {
-				dao.updateName(product, name);
+				dao.updateName(product, name.toUpperCase());
 			}
 		}
 	}
