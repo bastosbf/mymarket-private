@@ -1,7 +1,7 @@
 <div data-role="header" class="ui-header ui-bar-a">
   <h1>Adicionar</h1>
 </div>
-<div>
+<div data-role="content" class="ui-responsive">
   <label for="barcodeAddProduct">Barcode:</label>
   <input id="barcodeAddProduct" type="text" name="barcodeAddProduct" disabled>
   <label for="nameAddProduct">Nome:</label>
@@ -9,6 +9,9 @@
   <label for="marketAddProduct">Mercado:</label>
   <input id="marketAddProduct" type="text" name="marketAddProduct" disabled>
   <label for="priceAddProduct">Preço:</label>
-  <input id="priceAddProduct" class="form-control" type="text" name="priceAddProduct">
+  <div  data-role="controlgroup" data-type="horizontal">
+    <button>R$</button>
+    <input id="priceAddProduct" type="number" name="priceAddProduct" data-wrapper-class="controlgroup-textinput ui-btn">
+  </div>
   <button id="addProdutctButton" type="button" data-role="none" class="btn btn-primary">Enviar</button>
 </div>

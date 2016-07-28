@@ -28,6 +28,22 @@ var app = {
 	bindEvents : function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
 
+		// $(document).bind("mobileinit", function() {
+		// // para resolver problema do jQuery de avançar para página seguinte,
+		// // mas depois retornar
+		// $.mobile.pushStateEnabled = false;
+		// });
+
+		$(document).bind('mobileinit', function() {
+			$.mobile.loader.prototype.options.text = "Aguarde";
+			$.mobile.loader.prototype.options.textVisible = true;
+			$.mobile.loader.prototype.options.theme = "a";
+			// $.mobile.loader.prototype.options.html = '"<div
+			// id="loading-indicator" class="loading"> <img
+			// src="img/loading.gif" /></div>";'
+		});
+
+		showLoading();
 		$("#AddProductActivity").load("activities/addProductActivity.html");
 		$("#SuggestMarketActivity").load(
 				"activities/suggestMarketActivity.html");
@@ -51,7 +67,7 @@ var app = {
 			getCities();
 		}
 
-		showLoading();
+		$.mobile.loading("show");
 		navigator.geolocation.getCurrentPosition(onSuccessGetUserLocation,
 				onErrorGetUserLocation, {
 					timeout : 7000,
@@ -89,7 +105,8 @@ $('#scanBarcodeButton')
 							.scan(
 									function(result) {
 										if (!result.cancelled) {
-											localStorage.setItem("confirmActived", true);
+											localStorage.setItem(
+													"confirmActived", true);
 											searchProduct(result.text)
 										}
 									},
@@ -122,23 +139,42 @@ $('#scanBarcodeButton')
 
 				});
 
-$('#suggestMarketActivityButton').on(
+$('#suggestMarketActivityButton').unbind('click').on(
 		"click",
 		function() {
 			$.mobile.pageContainer.pagecontainer("change",
 					"#SuggestMarketActivity", null);
 
-			$('#suggestMarketSendButton').on("click", function() {
-				var city = $("#city").val();
-				var place = $("#place").val();
-				var market = $("#market").val();
+			$('#suggestMarketSendButton').unbind('click').on("click",
+					function() {
+						var city = $("#citySuggestMarketActivity").val();
+						var place = $("#placeSuggestMarketActivity").val();
+						var market = $("#marketSuggestMarketActivity").val();
 
-				showLoading();
-				suggestMarket(city, place, market);
-				hideLoading();
-			});
+						if ((city == null || city == "") || (place == null || place == "")
+								|| (market == null || market == "")) {
+							navigator.notification.alert(
+									"Por favor, preencha os campos necessários!", null,
+									"e-Mercado", null);
+							return;
+						}
+						
+						showLoading();
+						suggestMarket(city, place, market);
+						hideLoading();
+						
+						navigator.notification.alert("Obrigado pela colaboração!", null,
+								"e-Mercado", null);
+						$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
+							reverse : false,
+							changeHash : false
+						});
+						
+						$("#citySuggestMarketActivity").val("");
+						$("#placeSuggestMarketActivity").val("");
+						$("#marketSuggestMarketActivity").val("");
+					});
 
-		}
-);
+		});
 
 app.initialize();

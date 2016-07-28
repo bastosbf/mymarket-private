@@ -53,10 +53,12 @@ function onSuccessGetLocation(latitude, longitude, data, select) {
 			});
 		});
 
+		hideLoading();
+
 		$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", {
 			reverse : false,
 			changeHash : false
 		});
 	}
-	hideLoading();
+
 }

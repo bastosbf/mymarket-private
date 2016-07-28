@@ -115,6 +115,7 @@ function searchProduct(barcode) {
 								&& data[0] !== null) {
 
 							$legendName = $("<legend>", {
+								id : "productName",
 								class : "scheduler-border",
 								text : data[0].product.name,
 								"data-position" : "fixed"
@@ -125,6 +126,7 @@ function searchProduct(barcode) {
 								"data-role" : "none",
 								"aria-hidden" : true
 							})
+									.unbind('click')
 									.click(
 											function() {
 												$("#productNameRenameDialog")
@@ -132,20 +134,47 @@ function searchProduct(barcode) {
 																data[0].product.name);
 
 												$("#renameSendButton")
+														.unbind('click')
 														.click(
 																function() {
-																	renameProduct(
-																			barcode,
-																			$(
-																					"#productNameRenameDialog")
-																					.val());
-																	navigator.notification
-																			.alert(
-																					"Obrigado pela colaboração!",
-																					null,
-																					"e-Mercado",
-																					null);
-																	searchProduct(barcode);
+																	var name = $(
+																			"#productNameRenameDialog")
+																			.val();
+																	if (name == null
+																			|| name == "") {
+																		navigator.notification
+																				.alert(
+																						"Informe um nome válido!",
+																						null,
+																						"e-Mercado",
+																						null);
+																	} else {
+																		renameProduct(
+																				barcode,
+																				name);
+
+																		$(
+																				"#productName")
+																				.text(
+																						name);
+
+																		navigator.notification
+																				.alert(
+																						"Obrigado pela colaboração!",
+																						null,
+																						"e-Mercado",
+																						null);
+																		// searchProduct(barcode);
+																		
+																		$.mobile.pageContainer
+																		.pagecontainer(
+																				"change",
+																				"#ProductsActivity",
+																				{
+																					reverse : false,
+																					changeHash : false
+																				});
+																	}
 																});
 
 												$.mobile.pageContainer
@@ -166,14 +195,14 @@ function searchProduct(barcode) {
 							var foundOnSelectedMarket = false;
 
 							for (i in data) {
-								var $productDiv = $("<div>", {
+								var $productDiv = $('<div>', {
 									id : "productDiv" + i,
-									class : "list-group-item"
+									class : "list-group-item product-info-div",
 								});
 
 								if (data[i].market != null) {
 									$productDiv
-											.append('<h4 class="list-group-item-heading"><p>'
+											.append('<br><h4 class="list-group-item-heading"><p>'
 													+ data[i].market.name
 													+ '</p></h4>');
 									$productDiv
@@ -184,7 +213,9 @@ function searchProduct(barcode) {
 									var $dlElement = $("<dl>");
 
 									$dlElement
-											.append('<dd><code>Preço</code><p>R$ '
+											.append('<dd><code>Preço</code><p id="productPrice'
+													+ data[i].market.id
+													+ '">R$ '
 													+ parseFloat(data[i].price)
 															.toFixed(2)
 													+ '</p></dd>');
@@ -193,10 +224,18 @@ function searchProduct(barcode) {
 											data[i].last_update);
 
 									$dlElement
-											.append('<dd><code>Última Atualização</code><p>'
+											.append('<dd><code>Última Atualização</code><p '
+													.concat(
+															'id= productLastUpdateDateVal')
+													.concat(data[i].market.id)
+													.concat('>')
 													.concat(
 															formatDate(lastUpdate))
-													.concat('</p><p>')
+													.concat('</p><p ')
+													.concat(
+															'id= productLastUpdateHourVal')
+													.concat(data[i].market.id)
+													.concat('>')
 													.concat(
 															formatHour(lastUpdate))
 													.concat('</p></dd>'));
@@ -215,6 +254,7 @@ function searchProduct(barcode) {
 													class : "btn btn-primary",
 													text : "Confirmar preço"
 												})
+												.unbind('click')
 												.click(
 														function() {
 															navigator.notification
@@ -223,10 +263,25 @@ function searchProduct(barcode) {
 																			null,
 																			"e-Mercado",
 																			null);
+
+															$confirmPriceButton
+																	.prop(
+																			'disabled',
+																			true);
+
 															confirmPrice(
 																	marketId,
 																	barcode);
-															searchProduct(barcode);
+															$(
+																	"#productLastUpdateDateVal"
+																			+ marketId)
+																	.text(
+																			formatDate(new Date()));
+															$(
+																	"#productLastUpdateHourVal"
+																			+ marketId)
+																	.text(
+																			formatHour(new Date()));
 														});
 
 										var confirmActived = localStorage
@@ -243,34 +298,83 @@ function searchProduct(barcode) {
 													class : "btn btn-primary",
 													text : "Atualizar preço"
 												})
+												.unbind('click')
 												.click(
 														function() {
 															$(
+																	"#priceUpdatePriceDialog")
+																	.val("");
+
+															$(
 																	"#updatePriceSendButton")
+																	.unbind(
+																			'click')
 																	.click(
 																			function() {
-																				navigator.notification
-																						.alert(
-																								"Obrigado pela colaboração!",
-																								null,
-																								"e-Mercado",
-																								null);
-																				updatePrice(
-																						marketId,
-																						barcode,
-																						$(
-																								"#priceUpdatePriceDialog")
-																								.maskMoney('unmasked')[0]);
-																				searchProduct(barcode);
+																				var productNewPrice = $(
+																						"#priceUpdatePriceDialog")
+																						.val();
+																				// .maskMoney(
+																				// 'unmasked')[0];
+																				if (productNewPrice != null
+																						&& productNewPrice > 0) {
+
+																					$confirmPriceButton
+																							.prop(
+																									'disabled',
+																									true);
+
+																					navigator.notification
+																							.alert(
+																									"Obrigado pela colaboração!",
+																									null,
+																									"e-Mercado",
+																									null);
+																					updatePrice(
+																							marketId,
+																							barcode,
+																							productNewPrice);
+																					// searchProduct(barcode);
+
+																					$(
+																							"#productPrice"
+																									+ marketId)
+																							.text(
+																									"R$"
+																											+ productNewPrice);
+
+																					$.mobile.pageContainer
+																							.pagecontainer(
+																									"change",
+																									"#ProductsActivity",
+																									{
+																										reverse : false,
+																										changeHash : false
+																									});
+
+																				} else {
+																					navigator.notification
+																							.alert(
+																									"Informe o preço do produto!",
+																									null,
+																									"e-Mercado",
+																									null);
+																				}
 																			});
 
 															$(
 																	"#priceUpdatePriceDialog")
 																	.text("");
 
-															$(
-																	"#priceUpdatePriceDialog")
-																	.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
+															// $(
+															// "#priceUpdatePriceDialog")
+															// .maskMoney(
+															// {
+															// thousands : '.',
+															// decimal : ',',
+															// allowZero : true,
+															// prefix : ' R$'
+															// });
 
 															$.mobile.pageContainer
 																	.pagecontainer(
@@ -282,18 +386,20 @@ function searchProduct(barcode) {
 										$productDiv.append($confirmPriceButton);
 										$productDiv.append("&nbsp;");
 										$productDiv.append($updatePriceButton);
+										$productDiv.append("<br><br>");
 										$listGroupDiv.prepend($productDiv);
 										foundOnSelectedMarket = true;
 									} else {
 										$productDiv
 												.attr('style',
 														'background-color: #ADD8E6 !important');
+										$productDiv.append("<br>");
 										$listGroupDiv.append($productDiv);
 									}
 								} else {
 									if (marketId == null || marketId == 0) {
 										$listGroupDiv
-												.append("<h4 class='list-group-item-heading'><p>Sem registros!</p></h4>'");
+												.append("<h4 id='noRegistryAlert' class='list-group-item-heading'><p>Sem registros!</p></h4>");
 									}
 								}
 							}
@@ -302,7 +408,7 @@ function searchProduct(barcode) {
 								var $selectedMarketDiv = $("<div>", {
 									class : "list-group-item"
 								}).attr('style',
-										'background-color: #F5F5DC !important');
+										'background-color: #FF5A5A !important');
 
 								$selectedMarketDiv
 										.append('<h4 class="list-group-item-heading"><p>'
@@ -313,21 +419,22 @@ function searchProduct(barcode) {
 								$selectedMarketDiv
 										.append('<div class="list-group-item-text"><p>Sem registro para esse mercado!</p></div>');
 
-								var addProductActivityButton = $("<button>", {
-									id : "addProductActivityButton",
+								var $addProductActivityButton = $("<button>", {
+									id : "$addProductActivityButton",
 									type : "button",
 									"data-role" : "none",
 									class : "btn btn-success",
 									text : "Adicionar produto"
 								})
+										.unbind('click')
 										.click(
 												function() {
 													$.mobile.pageContainer
-													.pagecontainer(
-															"change",
-															"#AddProductActivity",
-															null);
-													
+															.pagecontainer(
+																	"change",
+																	"#AddProductActivity",
+																	null);
+
 													$("#barcodeAddProduct")
 															.val(barcode);
 
@@ -348,17 +455,24 @@ function searchProduct(barcode) {
 																			"#marketsSelect option:selected")
 																			.text());
 
-													$("#priceAddProduct").text(
+													$("#priceAddProduct").val(
 															"");
-													
-													$("#priceAddProduct").textinput("enable");
 
 													$("#priceAddProduct")
-															.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
+															.textinput("enable");
+
+													// $("#priceAddProduct")
+													// .maskMoney(
+													// {
+													// thousands : '',
+													// decimal : '.',
+													// allowZero : true,
+													// prefix : ' R$'
+													// });
 
 													$("#addProdutctButton")
-															.on(
-																	"click",
+															.unbind('click')
+															.click(
 																	function() {
 																		var market = $(
 																				"#marketsSelect")
@@ -368,30 +482,60 @@ function searchProduct(barcode) {
 																				.val();
 																		var price = $(
 																				"#priceAddProduct")
-																				.maskMoney('unmasked')[0];
-																		addProduct(
-																				market,
-																				barcode,
-																				name,
-																				price);
-																		navigator.notification
-																				.alert(
-																						"Obrigado pela colaboração!",
-																						null,
-																						"e-Mercado",
-																						null);
-																		searchProduct(barcode);
+																				.val();
+																		// .maskMoney(
+																		// 'unmasked')[0];
+																		if ((market != "" && market != null)
+																				&& (name != "" && name != null)
+																				&& (price != "" && price != null)) {
+																			addProduct(
+																					market,
+																					barcode,
+																					name,
+																					price);
+																			navigator.notification
+																					.alert(
+																							"Obrigado pela colaboração!",
+																							null,
+																							"e-Mercado",
+																							null);
+
+																			// $(
+																			// "#noRegistryAlert")
+																			// .remove();
+																			// $selectedMarketDiv
+																			// .remove();
+																			// $addProductActivityButton
+																			// .remove();
+																			//																			
+																			//																			
+																			//																			
+																			// $.mobile.pageContainer
+																			// .pagecontainer(
+																			// "change",
+																			// "#ProductsActivity",
+																			// null);
+
+																			searchProduct(barcode);
+																		} else {
+																			navigator.notification
+																					.alert(
+																							"Preencha os campos necessários!",
+																							null,
+																							"e-Mercado",
+																							null);
+																		}
 																	});
 
-//													$.mobile.pageContainer
-//															.pagecontainer(
-//																	"change",
-//																	"#AddProductActivity",
-//																	null);
+													// $.mobile.pageContainer
+													// .pagecontainer(
+													// "change",
+													// "#AddProductActivity",
+													// null);
 												});
 
 								$selectedMarketDiv
-										.append(addProductActivityButton);
+										.append($addProductActivityButton);
 
 								$listGroupDiv.prepend($selectedMarketDiv);
 							}
@@ -401,45 +545,56 @@ function searchProduct(barcode) {
 							$productFieldSet
 									.prepend('<legend class="scheduler-border">Não encontrado!!</legend>');
 
-							var addProductActivityButton = $("<button>", {
+							var $addProductActivityButton = $("<button>", {
 								type : "button",
 								"data-role" : "none",
 								class : "btn btn-success",
 								text : "Adicionar produto"
 							})
+									.unbind('click')
 									.click(
 											function() {
 												$.mobile.pageContainer
-												.pagecontainer(
-														"change",
-														"#AddProductActivity",
-														null);
-												
+														.pagecontainer(
+																"change",
+																"#AddProductActivity",
+																null);
+
 												$("#barcodeAddProduct").val(
 														barcode);
 
 												$("#nameAddProduct").val("");
 
-												$("#nameAddProduct").textinput("enable");
+												$("#nameAddProduct").textinput(
+														"enable");
 
 												if (marketId != null
 														&& marketId > 0) {
-													
-													$("#marketAddProduct").textinput("disable");
-													
+
+													$("#marketAddProduct")
+															.textinput(
+																	"disable");
+
 													$("#marketAddProduct")
 															.val(
 																	$(
 																			"#marketsSelect option:selected")
 																			.text());
 
-													$("#priceAddProduct").textinput("enable");
+													$("#priceAddProduct")
+															.textinput("enable");
 
 													$("#priceAddProduct").val(
 															"");
 
-													$("#priceAddProduct")
-															.maskMoney({thousands:'', decimal:'.', allowZero:true, prefix: ' R$'});
+													// $("#priceAddProduct")
+													// .maskMoney(
+													// {
+													// thousands : '',
+													// decimal : '.',
+													// allowZero : true,
+													// prefix : ' R$'
+													// });
 												} else {
 													$("#marketAddProduct").val(
 															"");
@@ -447,32 +602,56 @@ function searchProduct(barcode) {
 													$("#priceAddProduct").val(
 															"");
 
-													$("#marketAddProduct").textinput("disable");
-													
-//													$("#marketAddProduct")
-//															.prop('disabled',
-//																	true);
+													$("#marketAddProduct")
+															.textinput(
+																	"disable");
 
-													
-													$("#priceAddProduct").textinput("disable");
+													// $("#marketAddProduct")
+													// .prop('disabled',
+													// true);
 
-//													$("#priceAddProduct").prop(
-//															'disabled', true);
+													$("#priceAddProduct")
+															.textinput(
+																	"disable");
+
+													// $("#priceAddProduct").prop(
+													// 'disabled', true);
 												}
 
 												$("#addProdutctButton")
-														.on(
-																"click",
-																function() {																	
+														.unbind('click')
+														.click(
+																function() {
 																	var market = $(
 																			"#marketsSelect")
 																			.val();
 																	var name = $(
 																			"#nameAddProduct")
 																			.val();
+
 																	var price = $(
 																			"#priceAddProduct")
-																			.maskMoney('unmasked')[0];
+																			.val();
+
+																	// var price
+																	// = $(
+																	// "#priceAddProduct")
+																	// .maskMoney(
+																	// 'unmasked')[0];
+
+																	if ((name == null || name == "")
+																			|| ((market != null
+																					&& market != "" && market > 0) && (price == null || price == ""))) {
+
+																		navigator.notification
+																				.alert(
+																						"Por favor, preencha os campos necessários.",
+																						null,
+																						"e-Mercado",
+																						null);
+																		return;
+																	}
+
 																	addProduct(
 																			market,
 																			barcode,
@@ -495,14 +674,14 @@ function searchProduct(barcode) {
 																	searchProduct(barcode);
 																});
 
-//												$.mobile.pageContainer
-//														.pagecontainer(
-//																"change",
-//																"#AddProductActivity",
-//																null);
+												// $.mobile.pageContainer
+												// .pagecontainer(
+												// "change",
+												// "#AddProductActivity",
+												// null);
 											});
 
-							$productFieldSet.append(addProductActivityButton);
+							$productFieldSet.append($addProductActivityButton);
 
 						}
 
@@ -527,24 +706,26 @@ function searchProduct(barcode) {
 }
 
 function suggestMarket(city, place, market) {
+	showLoading();
+	if ((city == null || city == "") || (place == null || place == "")
+			|| (market == null || market == "")) {
+		return;
+	}
 	$.getJSON(rest_url + '/collaboration/suggest-market', {
 		city : city,
 		place : place,
 		name : market
 	}, function(data) {
 	});
-	navigator.notification.alert("Obrigado pela colaboração!", null,
-			"e-Mercado", null);
-	$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
-		reverse : false,
-		changeHash : false
-	});
-	document.addEventListener('backbutton', function() {
-
-	}, false);
+	hideLoading();
 }
 
 function addProduct(market, barcode, name, price) {
+	showLoading();
+	if ((barcode == null || barcode == "") || (name == null || name == "")) {
+		return;
+	}
+
 	localStorage.setItem("confirmActived", false);
 	$.getJSON(rest_url + '/collaboration/suggest-product', {
 		market : market,
@@ -552,42 +733,42 @@ function addProduct(market, barcode, name, price) {
 		name : name,
 		price : price
 	}, function(data) {
+		hideLoading();
 	});
-
-	showLoading();
 	sleep(7000);
-	hideLoading();
 }
 
 function updatePrice(market, barcode, price) {
+	showLoading();
 	localStorage.setItem("confirmActived", false);
 	$.getJSON(rest_url + '/collaboration/suggest-price', {
 		market : market,
 		product : barcode,
 		price : price
 	}, function(data) {
+		hideLoading();
 	});
-	showLoading();
-	sleep(7000);
-	hideLoading();
+	// sleep(7000);
 }
 
 function confirmPrice(market, barcode) {
+	showLoading();
 	localStorage.setItem("confirmActived", false);
 	$.getJSON(rest_url + '/collaboration/confirm-price', {
 		market : market,
 		barcode : barcode
 	}, function(data) {
+		hideLoading();
 	});
-	showLoading();
-	sleep(7000);
-	hideLoading();
+	// sleep(7000);
 }
 
 function renameProduct(barcode, name) {
+	showLoading();
 	$.getJSON(rest_url + '/collaboration/suggest-name', {
 		product : barcode,
 		name : name
 	}, function(data) {
+		hideLoading();
 	});
 }

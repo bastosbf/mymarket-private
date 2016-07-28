@@ -38,12 +38,6 @@
 <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <title>e-Mercado</title>
-<script type="text/javascript">
-	$(document).bind("mobileinit", function() {
-		//para resolver problema do jQuery de avançar para página seguinte, mas depois retornar
-		$.mobile.pushStateEnabled = false;
-	});
-</script>
 <script type="text/javascript" src="js/external/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/external/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript" src="js/external/jquery.maskMoney.min.js"></script>
@@ -51,10 +45,8 @@
 </head>
 <body>
   <div class="app" data-role="main">
-    <div id="loading-indicator" class="loading">
-      <img src="img/loading.gif" />
-    </div>
-    <div data-role="page" id="MainActivity">
+    <div class="ui-loader-background"></div>
+    <div data-role="page" id="MainActivity" class="ui-responsive">
       <div data-role="header" class="ui-header ui-bar-a">
         <h1>e-Mercado</h1>
       </div>
@@ -71,7 +63,13 @@
       <br>
       <br>
       <button id="suggestMarketActivityButton" type="button" data-role="none" class="btn btn-primary">Sugerir Mercado</button>
+
+      <div class="info-div" style="background-color: #96EEB5 !important">
+        <small>Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre comprar
+          produtos com preços justos e saber que estamos pagando o melhor preço!</small>
+      </div>
     </div>
+
 
     <div id="ProductsActivity" data-role="page">
       <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">

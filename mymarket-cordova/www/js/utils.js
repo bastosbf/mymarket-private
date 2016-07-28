@@ -1,19 +1,31 @@
-function showLoading(id) {
-	if (id == null) {
-		id = "loading-indicator";
-	}
-	$('#' + id).modal({
-		"backdrop" : "static",
-		"keyboard" : true,
-		"show" : true
-	});
+function showLoading() {
+
+//	if (id == null) {
+//		id = "loading-indicator";
+//	}
+//	$('#' + id).modal({
+//		"backdrop" : "static",
+//		"keyboard" : true,
+//		"show" : true
+//	});
+
+	var intervalShowLoading = setInterval(function() {
+		$.mobile.loading('show');
+		clearInterval(intervalShowLoading);
+	}, 1);
 }
 
-function hideLoading(id) {
-	if (id == null) {
-		id = "loading-indicator";
-	}
-	$('#' + id).modal('hide');
+function hideLoading() {
+	// if (id == null) {
+	// id = "loading-indicator";
+	// }
+	// $('#' + id).modal('hide');
+
+	var intervalHideLoading = setInterval(function() {
+		$.mobile.loading('hide');
+		clearInterval(intervalHideLoading);
+	}, 1);
+
 }
 
 function formatDate(date) {
@@ -36,15 +48,15 @@ function formatHour(date) {
 		minutes = "0" + minutes;
 	var seconds = date.getSeconds();
 	if (seconds.toString().length == 1)
-		seconds = "0" + seconds;	
+		seconds = "0" + seconds;
 	return String(hours + ":" + minutes + ":" + seconds);
 }
 
 function sleep(milliseconds) {
-	  var start = new Date().getTime();
-	  for (var i = 0; i < 1e7; i++) {
-	    if ((new Date().getTime() - start) > milliseconds){
-	      break;
-	    }
-	  }
+	var start = new Date().getTime();
+	for (var i = 0; i < 1e7; i++) {
+		if ((new Date().getTime() - start) > milliseconds) {
+			break;
+		}
 	}
+}

@@ -1,8 +1,11 @@
 <div data-role="header" class="ui-header ui-bar-a">
   <h1>Atualizar</h1>
 </div>
-<div role="main" class="ui-content">
+<div data-role="main" class="ui-content ui-responsive">
   <label for="priceUpdatePriceDialog">Preço atualizado:</label>
-  <input id="priceUpdatePriceDialog" class="form-control" type="number" name="priceUpdatePriceDialog">
+  <div data-role="controlgroup" data-type="horizontal">
+    <button>R$</button>
+    <input id="priceUpdatePriceDialog" type="number" name="priceUpdatePriceDialog" data-wrapper-class="controlgroup-textinput ui-btn">
+  </div>
   <button id="updatePriceSendButton" type="button" data-role="none" class="btn btn-primary">Enviar</button>
 </div>
