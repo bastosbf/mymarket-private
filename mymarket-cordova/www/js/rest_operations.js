@@ -165,15 +165,15 @@ function searchProduct(barcode) {
 																						"e-Mercado",
 																						null);
 																		// searchProduct(barcode);
-																		
+
 																		$.mobile.pageContainer
-																		.pagecontainer(
-																				"change",
-																				"#ProductsActivity",
-																				{
-																					reverse : false,
-																					changeHash : false
-																				});
+																				.pagecontainer(
+																						"change",
+																						"#ProductsActivity",
+																						{
+																							reverse : false,
+																							changeHash : false
+																						});
 																	}
 																});
 
@@ -727,15 +727,31 @@ function addProduct(market, barcode, name, price) {
 	}
 
 	localStorage.setItem("confirmActived", false);
-	$.getJSON(rest_url + '/collaboration/suggest-product', {
-		market : market,
-		barcode : barcode,
-		name : name,
-		price : price
-	}, function(data) {
-		hideLoading();
+//	$.getJSON(rest_url + '/collaboration/suggest-product', {
+//		market : market,
+//		barcode : barcode,
+//		name : name,
+//		price : price
+//	}, function(data) {
+//		hideLoading();
+//	});
+
+	$.ajax({
+		url : rest_url + '/collaboration/suggest-product',
+		dataType : 'json',
+		async : false,
+		data : {
+			"market" : market,
+			"barcode" : barcode,
+			"name" : name,
+			"price" : price
+		},
+		type : "GET",
+		success : function(data) {
+			hideLoading();
+		}
 	});
-	sleep(7000);
+
 }
 
 function updatePrice(market, barcode, price) {
@@ -748,7 +764,6 @@ function updatePrice(market, barcode, price) {
 	}, function(data) {
 		hideLoading();
 	});
-	// sleep(7000);
 }
 
 function confirmPrice(market, barcode) {
@@ -760,7 +775,6 @@ function confirmPrice(market, barcode) {
 	}, function(data) {
 		hideLoading();
 	});
-	// sleep(7000);
 }
 
 function renameProduct(barcode, name) {
