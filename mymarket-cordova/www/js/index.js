@@ -45,10 +45,14 @@ var app = {
 
 		showLoading();
 		$("#AddProductActivity").load("activities/addProductActivity.html");
+		$("#AddMarketProductActivity").load(
+				"activities/addMarketProductActivity.html");
+		$("#AddMarketPriceActivity").load("activities/addMarketPriceActivity.html");
+
 		$("#SuggestMarketActivity").load(
 				"activities/suggestMarketActivity.html");
 		$("#dialogLocation").load("dialogs/dialogLocation.html");
-		$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
+		// $("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
 		$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
 
 		var onSuccessGetUserLocation = function(position) {
@@ -70,7 +74,7 @@ var app = {
 		$.mobile.loading("show");
 		navigator.geolocation.getCurrentPosition(onSuccessGetUserLocation,
 				onErrorGetUserLocation, {
-					timeout : 7000,
+					timeout : 6000,
 					enableHighAccuracy : true
 				});
 	},
@@ -111,7 +115,7 @@ $('#scanBarcodeButton')
 										}
 									},
 									function(error) {
-										alert("Scanning failed: " + error);
+										// alert("Scanning failed: " + error);
 									},
 									{
 										"preferFrontCamera" : false, // iOS
@@ -120,7 +124,7 @@ $('#scanBarcodeButton')
 										"showFlipCameraButton" : false, // iOS
 										// and
 										// Android
-										"prompt" : "Place a barcode inside the scan area", // supported
+										"prompt" : "Posicione o código de barras na área de leitura", // supported
 										// on
 										// Android
 										// only
@@ -139,42 +143,61 @@ $('#scanBarcodeButton')
 
 				});
 
-$('#suggestMarketActivityButton').unbind('click').on(
-		"click",
-		function() {
-			$.mobile.pageContainer.pagecontainer("change",
-					"#SuggestMarketActivity", null);
+$('#suggestMarketActivityButton')
+		.unbind('click')
+		.on(
+				"click",
+				function() {
+					$.mobile.pageContainer.pagecontainer("change",
+							"#SuggestMarketActivity", null);
 
-			$('#suggestMarketSendButton').unbind('click').on("click",
-					function() {
-						var city = $("#citySuggestMarketActivity").val();
-						var place = $("#placeSuggestMarketActivity").val();
-						var market = $("#marketSuggestMarketActivity").val();
+					$('#suggestMarketSendButton')
+							.unbind('click')
+							.on(
+									"click",
+									function() {
+										var city = $(
+												"#citySuggestMarketActivity")
+												.val();
+										var place = $(
+												"#placeSuggestMarketActivity")
+												.val();
+										var market = $(
+												"#marketSuggestMarketActivity")
+												.val();
 
-						if ((city == null || city == "") || (place == null || place == "")
-								|| (market == null || market == "")) {
-							navigator.notification.alert(
-									"Por favor, preencha os campos necessários!", null,
-									"e-Mercado", null);
-							return;
-						}
-						
-						showLoading();
-						suggestMarket(city, place, market);
-						hideLoading();
-						
-						navigator.notification.alert("Obrigado pela colaboração!", null,
-								"e-Mercado", null);
-						$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
-							reverse : false,
-							changeHash : false
-						});
-						
-						$("#citySuggestMarketActivity").val("");
-						$("#placeSuggestMarketActivity").val("");
-						$("#marketSuggestMarketActivity").val("");
-					});
+										if ((city == null || city == "")
+												|| (place == null || place == "")
+												|| (market == null || market == "")) {
+											navigator.notification
+													.alert(
+															"Por favor, preencha os campos necessários!",
+															null, "e-Mercado",
+															null);
+											return;
+										}
 
-		});
+										showLoading();
+										suggestMarket(city, place, market);
+										hideLoading();
+
+										navigator.notification
+												.alert(
+														"Obrigado pela colaboração!\nEm breve o mercado será adicionado!",
+														null, "e-Mercado", null);
+										$.mobile.pageContainer.pagecontainer(
+												"change", "#MainActivity", {
+													reverse : false,
+													changeHash : false
+												});
+
+										$("#citySuggestMarketActivity").val("");
+										$("#placeSuggestMarketActivity")
+												.val("");
+										$("#marketSuggestMarketActivity").val(
+												"");
+									});
+
+				});
 
 app.initialize();

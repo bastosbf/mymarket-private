@@ -22,8 +22,7 @@ public class ProductDAO extends GenericDAO<Product> {
 	public List<Product> listByMarket(int market) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class).add(
-				Restrictions.eq("market.id", market));
+		Criteria criteria = session.createCriteria(MarketProduct.class).add(Restrictions.eq("market.id", market));
 		List<MarketProduct> list = criteria.list();
 		List<Product> products = new ArrayList<Product>();
 		for (MarketProduct mp : list) {
@@ -32,13 +31,11 @@ public class ProductDAO extends GenericDAO<Product> {
 		}
 		return products;
 	}
-	
+
 	public List<Product> listByPlace(int place) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class)
-				.createAlias("market", "m")
-				.add(Restrictions.eq("m.place.id", place));
+		Criteria criteria = session.createCriteria(MarketProduct.class).createAlias("market", "m").add(Restrictions.eq("m.place.id", place));
 		List<MarketProduct> list = criteria.list();
 		List<Product> products = new ArrayList<Product>();
 		for (MarketProduct mp : list) {
@@ -50,26 +47,29 @@ public class ProductDAO extends GenericDAO<Product> {
 
 	public Product get(String barcode) {
 		Session session = factory.openSession();
-		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Product.class).add(
-				Restrictions.eq("barcode", barcode));
-		List<Product> list = criteria.list();
-		if (!list.isEmpty()) {
-			return list.get(0);
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("barcode", barcode));
+			List<Product> list = criteria.list();
+			if (!list.isEmpty()) {
+				return list.get(0);
+			}
+			return null;
+		} finally {
+			session.flush();
+			session.close();
 		}
-		return null;
 	}
-	
+
 	public void updateName(String barcode, String name) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Product.class)
-				.add(Restrictions.eq("barcode", barcode));
+		Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("barcode", barcode));
 		List<Product> list = criteria.list();
-		if(!list.isEmpty()) {
+		if (!list.isEmpty()) {
 			Product p = list.get(0);
 			p.setName(name);
 			update(p);
-		}		
+		}
 	}
 }

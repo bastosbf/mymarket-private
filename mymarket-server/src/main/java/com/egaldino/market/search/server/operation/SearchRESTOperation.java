@@ -9,6 +9,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+
 import com.egaldino.market.search.server.HibernateConfig;
 import com.egaldino.market.search.server.dao.MarketProductDAO;
 import com.egaldino.market.search.server.dao.ProductDAO;
@@ -54,21 +57,21 @@ public class SearchRESTOperation {
 
 			searchList.add(price);
 		}
-		if(results.isEmpty()) {
-			//busca produto por barcode
+		if (results.isEmpty()) {
+			// busca produto por barcode
 			ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
 			Product product = productDAO.get(barcode);
-			if(product != null){
+			if (product != null) {
 				Search productSearch = new Search();
 				productSearch.setProduct(product);
-				
+
 				searchList.add(productSearch);
 			}
 		}
-		
+
 		return searchList;
 	}
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/prices-by-city")
@@ -84,18 +87,31 @@ public class SearchRESTOperation {
 			price.setLastUpdate(result.getLastUpdate());
 
 			searchList.add(price);
-		} 
-		if(results.isEmpty()) {
-			//busca produto por barcode
+		}
+		if (results.isEmpty()) {
+			// busca produto por barcode
 			ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
 			Product product = productDAO.get(barcode);
-			if(product != null){
+			if (product != null) {
 				Search productSearch = new Search();
 				productSearch.setProduct(product);
-				
+
 				searchList.add(productSearch);
 			}
 		}
+
+		/**
+		 * TODO: Soluçao temporaria para armazenar consultas
+		 */
+		Session session = HibernateConfig.factory.openSession();
+		try {
+			SQLQuery query = session.createSQLQuery("INSERT INTO search_accounting (barcode, date) VALUES ('" + barcode + "', now())");
+			query.executeUpdate();
+		} finally {
+			session.flush();
+			session.close();
+		}
+
 		return searchList;
 	}
 

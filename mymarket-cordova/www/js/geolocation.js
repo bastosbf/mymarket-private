@@ -40,24 +40,17 @@ function onSuccessGetLocation(latitude, longitude, data, select) {
 				}
 			});
 			$(select).change();
-			$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
-				reverse : false,
-				changeHash : false
-			});
+			$('[data-role=dialog]').dialog("close");
 		});
 
 		$('#locationNoButton').on("click", function() {
-			$.mobile.pageContainer.pagecontainer("change", "#MainActivity", {
-				reverse : false,
-				changeHash : false
-			});
+			$('[data-role=dialog]').dialog("close");
 		});
 
 		hideLoading();
 
-		$.mobile.pageContainer.pagecontainer("change", "#dialogLocation", {
-			reverse : false,
-			changeHash : false
+		$.mobile.changePage('#dialogLocation', {
+			role : 'dialog'
 		});
 	}
 

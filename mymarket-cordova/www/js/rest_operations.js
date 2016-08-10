@@ -95,530 +95,381 @@ function searchProduct(barcode) {
 	showLoading();
 	var cityId = $("#citiesSelect").val();
 	var marketId = $("#marketsSelect").val();
+
 	$
-			.getJSON(
-					rest_url + '/search/prices-by-city',
-					{
-						city : cityId,
-						barcode : barcode
-					},
-					function(data) {
-						var $productFieldSet = $("<fieldset>", {
-							id : "productsFieldset",
-							class : "scheduler-border"
+			.ajax({
+				url : rest_url + '/search/prices-by-city',
+				dataType : 'json',
+				async : false,
+				data : {
+					"city" : cityId,
+					"barcode" : barcode
+				},
+				type : "GET",
+				success : function(data) {
+
+					//	
+					// $
+					// .getJSON(
+					// rest_url + '/search/prices-by-city',
+					// {
+					// city : cityId,
+					// barcode : barcode
+					// },
+					// function(data) {
+					var $productFieldSet = $("<fieldset>", {
+						id : "productsFieldset",
+						class : "scheduler-border"
+					});
+
+					$productFieldSet.append('<p data-position="fixed">'
+							+ barcode + '</p>');
+
+					if (data.length > 0 && typeof data[0] !== 'undefined'
+							&& data[0] !== null) {
+
+						$legendName = $("<legend>", {
+							id : "productName",
+							class : "scheduler-border",
+							text : data[0].product.name,
+							"data-position" : "fixed"
 						});
 
-						$productFieldSet.append('<p data-position="fixed">'
-								+ barcode + '</p>');
+						// $renameButton = $("<span>", {
+						// class : "glyphicon glyphicon-pencil",
+						// "data-role" : "none",
+						// "aria-hidden" : true
+						// })
+						// .unbind('click')
+						// .click(
+						// function() {
+						// $("#productNameRenameDialog")
+						// .val(
+						// data[0].product.name);
+						//
+						// $("#renameSendButton")
+						// .unbind('click')
+						// .click(
+						// function() {
+						// var name = $(
+						// "#productNameRenameDialog")
+						// .val();
+						// if (name == null
+						// || name == "") {
+						// navigator.notification
+						// .alert(
+						// "Informe um nome válido!",
+						// null,
+						// "e-Mercado",
+						// null);
+						// } else {
+						// renameProduct(
+						// barcode,
+						// name);
+						//
+						// $(
+						// "#productName")
+						// .text(
+						// name);
+						//
+						// navigator.notification
+						// .alert(
+						// "Obrigado pela colaboração!",
+						// null,
+						// "e-Mercado",
+						// null);
+						// // searchProduct(barcode);
+						//
+						// $.mobile.pageContainer
+						// .pagecontainer(
+						// "change",
+						// "#ProductsActivity",
+						// {
+						// reverse : false,
+						// changeHash : false
+						// });
+						// }
+						// });
+						//
+						// $.mobile.pageContainer
+						// .pagecontainer(
+						// "change",
+						// "#dialogRenameProduct",
+						// null);
+						// });
+						//
+						// $legendName.append($renameButton);
 
-						if (data.length > 0 && typeof data[0] !== 'undefined'
-								&& data[0] !== null) {
+						$productFieldSet.prepend($legendName);
 
-							$legendName = $("<legend>", {
-								id : "productName",
-								class : "scheduler-border",
-								text : data[0].product.name,
-								"data-position" : "fixed"
+						$listGroupDiv = $("<div>", {
+							class : "list-group"
+						});
+
+						var foundOnSelectedMarket = false;
+
+						for (i in data) {
+							var $productDiv = $('<div>', {
+								id : "productDiv" + i,
+								class : "list-group-item product-info-div",
 							});
 
-							$renameButton = $("<span>", {
-								class : "glyphicon glyphicon-pencil",
-								"data-role" : "none",
-								"aria-hidden" : true
-							})
-									.unbind('click')
-									.click(
-											function() {
-												$("#productNameRenameDialog")
-														.val(
-																data[0].product.name);
+							if (data[i].market != null) {
+								$productDiv
+										.append('<br><h4 class="list-group-item-heading"><p>'
+												+ data[i].market.name
+												+ '</p></h4>');
+								$productDiv
+										.append('<div class="list-group-item-text"><p>'
+												+ data[i].market.address
+												+ '</p></div>');
 
-												$("#renameSendButton")
-														.unbind('click')
-														.click(
-																function() {
-																	var name = $(
-																			"#productNameRenameDialog")
-																			.val();
-																	if (name == null
-																			|| name == "") {
-																		navigator.notification
-																				.alert(
-																						"Informe um nome válido!",
-																						null,
-																						"e-Mercado",
-																						null);
-																	} else {
-																		renameProduct(
-																				barcode,
-																				name);
+								var $dlElement = $("<dl>");
 
-																		$(
-																				"#productName")
-																				.text(
-																						name);
+								$dlElement
+										.append('<dd><code>Preço</code><p id="productPrice'
+												+ data[i].market.id
+												+ '">R$ '
+												+ parseFloat(data[i].price)
+														.toFixed(2)
+												+ '</p></dd>');
 
-																		navigator.notification
-																				.alert(
-																						"Obrigado pela colaboração!",
-																						null,
-																						"e-Mercado",
-																						null);
-																		// searchProduct(barcode);
+								var lastUpdate = new Date(data[i].last_update);
 
-																		$.mobile.pageContainer
-																				.pagecontainer(
-																						"change",
-																						"#ProductsActivity",
-																						{
-																							reverse : false,
-																							changeHash : false
-																						});
-																	}
-																});
+								$dlElement
+										.append('<dd><code>Última Atualização</code><p '
+												.concat(
+														'id= productLastUpdateDateVal')
+												.concat(data[i].market.id)
+												.concat('>')
+												.concat(formatDate(lastUpdate))
+												.concat('</p><p ')
+												.concat(
+														'id= productLastUpdateHourVal')
+												.concat(data[i].market.id)
+												.concat('>').concat(
+														formatHour(lastUpdate))
+												.concat('</p></dd>'));
 
-												$.mobile.pageContainer
-														.pagecontainer(
-																"change",
-																"#dialogRenameProduct",
-																null);
-											});
+								$productDiv.append($dlElement);
 
-							$legendName.append($renameButton);
-
-							$productFieldSet.prepend($legendName);
-
-							$listGroupDiv = $("<div>", {
-								class : "list-group"
-							});
-
-							var foundOnSelectedMarket = false;
-
-							for (i in data) {
-								var $productDiv = $('<div>', {
-									id : "productDiv" + i,
-									class : "list-group-item product-info-div",
-								});
-
-								if (data[i].market != null) {
+								if (data[i].market.id == marketId) {
 									$productDiv
-											.append('<br><h4 class="list-group-item-heading"><p>'
-													+ data[i].market.name
-													+ '</p></h4>');
-									$productDiv
-											.append('<div class="list-group-item-text"><p>'
-													+ data[i].market.address
-													+ '</p></div>');
+											.attr('style',
+													'background-color: #96EEB5 !important');
 
-									var $dlElement = $("<dl>");
+									var $confirmPriceButton = $("<button>", {
+										type : "button",
+										"data-role" : "none",
+										class : "btn btn-primary",
+										text : "Confirmar preço"
+									})
+											.unbind('click')
+											.click(
+													function() {
+														navigator.notification
+																.alert(
+																		"Obrigado pela colaboração!",
+																		null,
+																		"e-Mercado",
+																		null);
 
-									$dlElement
-											.append('<dd><code>Preço</code><p id="productPrice'
-													+ data[i].market.id
-													+ '">R$ '
-													+ parseFloat(data[i].price)
-															.toFixed(2)
-													+ '</p></dd>');
+														$confirmPriceButton
+																.prop(
+																		'disabled',
+																		true);
 
-									var lastUpdate = new Date(
-											data[i].last_update);
+														confirmPrice(marketId,
+																barcode);
+														$(
+																"#productLastUpdateDateVal"
+																		+ marketId)
+																.text(
+																		formatDate(new Date()));
+														$(
+																"#productLastUpdateHourVal"
+																		+ marketId)
+																.text(
+																		formatHour(new Date()));
+													});
 
-									$dlElement
-											.append('<dd><code>Última Atualização</code><p '
-													.concat(
-															'id= productLastUpdateDateVal')
-													.concat(data[i].market.id)
-													.concat('>')
-													.concat(
-															formatDate(lastUpdate))
-													.concat('</p><p ')
-													.concat(
-															'id= productLastUpdateHourVal')
-													.concat(data[i].market.id)
-													.concat('>')
-													.concat(
-															formatHour(lastUpdate))
-													.concat('</p></dd>'));
-
-									$productDiv.append($dlElement);
-
-									if (data[i].market.id == marketId) {
-										$productDiv
-												.attr('style',
-														'background-color: #96EEB5 !important');
-
-										var $confirmPriceButton = $("<button>",
-												{
-													type : "button",
-													"data-role" : "none",
-													class : "btn btn-primary",
-													text : "Confirmar preço"
-												})
-												.unbind('click')
-												.click(
-														function() {
-															navigator.notification
-																	.alert(
-																			"Obrigado pela colaboração!",
-																			null,
-																			"e-Mercado",
-																			null);
-
-															$confirmPriceButton
-																	.prop(
-																			'disabled',
-																			true);
-
-															confirmPrice(
-																	marketId,
-																	barcode);
-															$(
-																	"#productLastUpdateDateVal"
-																			+ marketId)
-																	.text(
-																			formatDate(new Date()));
-															$(
-																	"#productLastUpdateHourVal"
-																			+ marketId)
-																	.text(
-																			formatHour(new Date()));
-														});
-
-										var confirmActived = localStorage
-												.getItem("confirmActived");
-										if (confirmActived == "false") {
-											$confirmPriceButton.prop(
-													'disabled', true);
-										}
-
-										var $updatePriceButton = $("<button>",
-												{
-													type : "button",
-													"data-role" : "none",
-													class : "btn btn-primary",
-													text : "Atualizar preço"
-												})
-												.unbind('click')
-												.click(
-														function() {
-															$(
-																	"#priceUpdatePriceDialog")
-																	.val("");
-
-															$(
-																	"#updatePriceSendButton")
-																	.unbind(
-																			'click')
-																	.click(
-																			function() {
-																				var productNewPrice = $(
-																						"#priceUpdatePriceDialog")
-																						.val();
-																				// .maskMoney(
-																				// 'unmasked')[0];
-																				if (productNewPrice != null
-																						&& productNewPrice > 0) {
-
-																					$confirmPriceButton
-																							.prop(
-																									'disabled',
-																									true);
-
-																					navigator.notification
-																							.alert(
-																									"Obrigado pela colaboração!",
-																									null,
-																									"e-Mercado",
-																									null);
-																					updatePrice(
-																							marketId,
-																							barcode,
-																							productNewPrice);
-																					// searchProduct(barcode);
-
-																					$(
-																							"#productPrice"
-																									+ marketId)
-																							.text(
-																									"R$"
-																											+ productNewPrice);
-
-																					$.mobile.pageContainer
-																							.pagecontainer(
-																									"change",
-																									"#ProductsActivity",
-																									{
-																										reverse : false,
-																										changeHash : false
-																									});
-
-																				} else {
-																					navigator.notification
-																							.alert(
-																									"Informe o preço do produto!",
-																									null,
-																									"e-Mercado",
-																									null);
-																				}
-																			});
-
-															$(
-																	"#priceUpdatePriceDialog")
-																	.text("");
-
-															// $(
-															// "#priceUpdatePriceDialog")
-															// .maskMoney(
-															// {
-															// thousands : '.',
-															// decimal : ',',
-															// allowZero : true,
-															// prefix : ' R$'
-															// });
-
-															$.mobile.pageContainer
-																	.pagecontainer(
-																			"change",
-																			"#dialogUpdatePrice",
-																			null);
-														});
-
-										$productDiv.append($confirmPriceButton);
-										$productDiv.append("&nbsp;");
-										$productDiv.append($updatePriceButton);
-										$productDiv.append("<br><br>");
-										$listGroupDiv.prepend($productDiv);
-										foundOnSelectedMarket = true;
-									} else {
-										$productDiv
-												.attr('style',
-														'background-color: #ADD8E6 !important');
-										$productDiv.append("<br>");
-										$listGroupDiv.append($productDiv);
+									var confirmActived = localStorage
+											.getItem("confirmActived");
+									if (confirmActived == "false") {
+										$confirmPriceButton.prop('disabled',
+												true);
 									}
+
+									var $updatePriceButton = $("<button>", {
+										type : "button",
+										"data-role" : "none",
+										class : "btn btn-primary",
+										text : "Atualizar preço"
+									})
+											.unbind('click')
+											.click(
+													function() {
+														$(
+																"#priceUpdatePriceDialog")
+																.val("");
+
+														$(
+																"#updatePriceSendButton")
+																.unbind('click')
+																.click(
+																		function() {
+																			var productNewPrice = $(
+																					"#priceUpdatePriceDialog")
+																					.val();
+																			// .maskMoney(
+																			// 'unmasked')[0];
+																			if (productNewPrice != null
+																					&& productNewPrice > 0) {
+
+																				$confirmPriceButton
+																						.prop(
+																								'disabled',
+																								true);
+
+																				navigator.notification
+																						.alert(
+																								"Obrigado pela colaboração!",
+																								null,
+																								"e-Mercado",
+																								null);
+																				updatePrice(
+																						marketId,
+																						barcode,
+																						productNewPrice);
+																				// searchProduct(barcode);
+
+																				$(
+																						"#productPrice"
+																								+ marketId)
+																						.text(
+																								"R$"
+																										+ productNewPrice);
+
+																				$(
+																						'[data-role=dialog]')
+																						.dialog(
+																								"close");
+
+																			} else {
+																				navigator.notification
+																						.alert(
+																								"Informe o preço do produto!",
+																								null,
+																								"e-Mercado",
+																								null);
+																			}
+																		});
+
+														$(
+																"#priceUpdatePriceDialog")
+																.text("");
+
+														$.mobile
+																.changePage(
+																		'#dialogUpdatePrice',
+																		{
+																			role : 'dialog'
+																		});
+													});
+
+									$productDiv.append($confirmPriceButton);
+									$productDiv.append("&nbsp;");
+									$productDiv.append($updatePriceButton);
+									$productDiv.append("<br><br>");
+									$listGroupDiv.prepend($productDiv);
+									foundOnSelectedMarket = true;
 								} else {
-									if (marketId == null || marketId == 0) {
-										$listGroupDiv
-												.append("<h4 id='noRegistryAlert' class='list-group-item-heading'><p>Sem registros!</p></h4>");
-									}
+									$productDiv
+											.attr('style',
+													'background-color: #ADD8E6 !important');
+									$productDiv.append("<br>");
+									$listGroupDiv.append($productDiv);
+								}
+							} else {
+								if (marketId == null || marketId == 0) {
+									$listGroupDiv
+											.append("<h4 id='noRegistryAlert' class='list-group-item-heading'><p>Sem registros!</p></h4>");
 								}
 							}
-							if (!foundOnSelectedMarket && marketId != null
-									&& marketId > 0) {
-								var $selectedMarketDiv = $("<div>", {
-									class : "list-group-item"
-								}).attr('style',
-										'background-color: #FF5A5A !important');
+						}
+						if (!foundOnSelectedMarket && marketId != null
+								&& marketId > 0) {
+							var $selectedMarketDiv = $("<div>", {
+								class : "list-group-item"
+							}).attr('style',
+									'background-color: #FF5A5A !important');
 
-								$selectedMarketDiv
-										.append('<h4 class="list-group-item-heading"><p>'
-												+ $(
-														"#marketsSelect option:selected")
-														.text() + '</p></h4>');
+							$selectedMarketDiv
+									.append('<h4 class="list-group-item-heading"><p>'
+											+ $(
+													"#marketsSelect option:selected")
+													.text() + '</p></h4>');
 
-								$selectedMarketDiv
-										.append('<div class="list-group-item-text"><p>Sem registro para esse mercado!</p></div>');
-
-								var $addProductActivityButton = $("<button>", {
-									id : "$addProductActivityButton",
-									type : "button",
-									"data-role" : "none",
-									class : "btn btn-success",
-									text : "Adicionar produto"
-								})
-										.unbind('click')
-										.click(
-												function() {
-													$.mobile.pageContainer
-															.pagecontainer(
-																	"change",
-																	"#AddProductActivity",
-																	null);
-
-													$("#barcodeAddProduct")
-															.val(barcode);
-
-													$("#nameAddProduct")
-															.val(
-																	data[0].product.name);
-
-													// $("#nameAddProduct").prop(
-													// 'disabled', true);
-
-													$("#nameAddProduct")
-															.textinput(
-																	'disable');
-
-													$("#marketAddProduct")
-															.val(
-																	$(
-																			"#marketsSelect option:selected")
-																			.text());
-
-													$("#priceAddProduct").val(
-															"");
-
-													$("#priceAddProduct")
-															.textinput("enable");
-
-													// $("#priceAddProduct")
-													// .maskMoney(
-													// {
-													// thousands : '',
-													// decimal : '.',
-													// allowZero : true,
-													// prefix : ' R$'
-													// });
-
-													$("#addProdutctButton")
-															.unbind('click')
-															.click(
-																	function() {
-																		var market = $(
-																				"#marketsSelect")
-																				.val();
-																		var name = $(
-																				"#nameAddProduct")
-																				.val();
-																		var price = $(
-																				"#priceAddProduct")
-																				.val();
-																		// .maskMoney(
-																		// 'unmasked')[0];
-																		if ((market != "" && market != null)
-																				&& (name != "" && name != null)
-																				&& (price != "" && price != null)) {
-																			addProduct(
-																					market,
-																					barcode,
-																					name,
-																					price);
-																			navigator.notification
-																					.alert(
-																							"Obrigado pela colaboração!",
-																							null,
-																							"e-Mercado",
-																							null);
-
-																			// $(
-																			// "#noRegistryAlert")
-																			// .remove();
-																			// $selectedMarketDiv
-																			// .remove();
-																			// $addProductActivityButton
-																			// .remove();
-																			//																			
-																			//																			
-																			//																			
-																			// $.mobile.pageContainer
-																			// .pagecontainer(
-																			// "change",
-																			// "#ProductsActivity",
-																			// null);
-
-																			searchProduct(barcode);
-																		} else {
-																			navigator.notification
-																					.alert(
-																							"Preencha os campos necessários!",
-																							null,
-																							"e-Mercado",
-																							null);
-																		}
-																	});
-
-													// $.mobile.pageContainer
-													// .pagecontainer(
-													// "change",
-													// "#AddProductActivity",
-													// null);
-												});
-
-								$selectedMarketDiv
-										.append($addProductActivityButton);
-
-								$listGroupDiv.prepend($selectedMarketDiv);
-							}
-
-							$productFieldSet.append($listGroupDiv);
-						} else {
-							$productFieldSet
-									.prepend('<legend class="scheduler-border">Não encontrado!!</legend>');
+							$selectedMarketDiv
+									.append('<div class="list-group-item-text"><p>Sem registro para esse mercado!</p></div>');
 
 							var $addProductActivityButton = $("<button>", {
+								id : "$addProductActivityButton",
 								type : "button",
 								"data-role" : "none",
 								class : "btn btn-success",
-								text : "Adicionar produto"
+								text : "Adicionar preço"
 							})
 									.unbind('click')
 									.click(
 											function() {
-												$.mobile.pageContainer
-														.pagecontainer(
-																"change",
-																"#AddProductActivity",
-																null);
+//												$.mobile.pageContainer
+//														.pagecontainer(
+//																"change",
+//																"#AddMarketPriceActivity",
+//																null);
+												
+												$.mobile
+												.changePage(
+														'#AddMarketPriceActivity',
+														{
+															role : 'dialog'
+														});
 
-												$("#barcodeAddProduct").val(
-														barcode);
+												$("#barcodeAddMarketPrice")
+														.text(barcode);
 
-												$("#nameAddProduct").val("");
+												$("#nameAddMarketPrice").text(
+														data[0].product.name);
 
-												$("#nameAddProduct").textinput(
-														"enable");
+												// $("#nameAddProduct").prop(
+												// 'disabled', true);
 
-												if (marketId != null
-														&& marketId > 0) {
+												// $("#nameAddProduct").textinput(
+												// 'disable');
 
-													$("#marketAddProduct")
-															.textinput(
-																	"disable");
+												$("#marketAddMarketPrice")
+														.text(
+																$(
+																		"#marketsSelect option:selected")
+																		.text());
 
-													$("#marketAddProduct")
-															.val(
-																	$(
-																			"#marketsSelect option:selected")
-																			.text());
+												$("#priceAddMarketPrice").val(
+														"");
 
-													$("#priceAddProduct")
-															.textinput("enable");
+												// $("#priceAddProduct")
+												// .textinput("enable");
 
-													$("#priceAddProduct").val(
-															"");
+												// $("#priceAddProduct")
+												// .maskMoney(
+												// {
+												// thousands : '',
+												// decimal : '.',
+												// allowZero : true,
+												// prefix : ' R$'
+												// });
 
-													// $("#priceAddProduct")
-													// .maskMoney(
-													// {
-													// thousands : '',
-													// decimal : '.',
-													// allowZero : true,
-													// prefix : ' R$'
-													// });
-												} else {
-													$("#marketAddProduct").val(
-															"");
-
-													$("#priceAddProduct").val(
-															"");
-
-													$("#marketAddProduct")
-															.textinput(
-																	"disable");
-
-													// $("#marketAddProduct")
-													// .prop('disabled',
-													// true);
-
-													$("#priceAddProduct")
-															.textinput(
-																	"disable");
-
-													// $("#priceAddProduct").prop(
-													// 'disabled', true);
-												}
-
-												$("#addProdutctButton")
+												$("#addMarketPriceButton")
 														.unbind('click')
 														.click(
 																function() {
@@ -626,11 +477,137 @@ function searchProduct(barcode) {
 																			"#marketsSelect")
 																			.val();
 																	var name = $(
-																			"#nameAddProduct")
+																			"#nameAddMarketPrice")
+																			.text();
+																	var price = $(
+																			"#priceAddMarketPrice")
+																			.val();
+																	// .maskMoney(
+																	// 'unmasked')[0];
+																	if ((market != "" && market != null)
+																			&& (name != "" && name != null)
+																			&& (price != "" && price != null)) {
+																		addProduct(
+																				market,
+																				barcode,
+																				name,
+																				price);
+																		navigator.notification
+																				.alert(
+																						"Obrigado pela colaboração!",
+																						null,
+																						"e-Mercado",
+																						null);
+
+																		// $(
+																		// "#noRegistryAlert")
+																		// .remove();
+																		// $selectedMarketDiv
+																		// .remove();
+																		// $addProductActivityButton
+																		// .remove();
+																		//																			
+																		//																			
+																		//																			
+																		// $.mobile.pageContainer
+																		// .pagecontainer(
+																		// "change",
+																		// "#ProductsActivity",
+																		// null);
+
+																		$('[data-role=dialog]').dialog("close");
+																		searchProduct(barcode);
+																		hideLoading();
+																	} else {
+																		navigator.notification
+																				.alert(
+																						"Preencha os campos necessários!",
+																						null,
+																						"e-Mercado",
+																						null);
+																	}
+																});
+
+												// $.mobile.pageContainer
+												// .pagecontainer(
+												// "change",
+												// "#AddProductActivity",
+												// null);
+											});
+
+							$selectedMarketDiv
+									.append($addProductActivityButton);
+
+							$listGroupDiv.prepend($selectedMarketDiv);
+						}
+
+						$productFieldSet.append($listGroupDiv);
+					} else {
+						$productFieldSet
+								.prepend('<legend class="scheduler-border">Não encontrado!!</legend>');
+
+						var $addProductActivityButton = $("<button>", {
+							type : "button",
+							"data-role" : "none",
+							class : "btn btn-success",
+							text : "Adicionar produto"
+						})
+								.unbind('click')
+								.click(
+										function() {
+											if (marketId != null
+													&& marketId > 0) {
+
+//												$.mobile.pageContainer
+//														.pagecontainer(
+//																"change",
+//																"#AddMarketProductActivity",
+//																null);
+												
+												$.mobile
+												.changePage(
+														'#AddMarketProductActivity',
+														{
+															role : 'dialog'
+														});
+
+												$("#barcodeAddMarketProduct")
+														.text(barcode);
+
+												$("#nameAddMarketProduct").val(
+														"");
+
+												// $("#nameAddMarketProduct").textinput(
+												// "enable");
+
+												// $("#marketAddProduct")
+												// .textinput("disable");
+
+												$("#marketAddMarketProduct")
+														.text(
+																$(
+																		"#marketsSelect option:selected")
+																		.text());
+
+												// $("#priceAddMarketProduct")
+												// .textinput("enable");
+
+												$("#priceAddMarketProduct")
+														.val("");
+
+												$("#addMarketProductButton")
+														.unbind('click')
+														.click(
+																function() {
+																	var market = $(
+																			"#marketsSelect")
+																			.val();
+																	var name = $(
+																			"#nameAddMarketProduct")
 																			.val();
 
 																	var price = $(
-																			"#priceAddProduct")
+																			"#priceAddMarketProduct")
 																			.val();
 
 																	// var price
@@ -640,8 +617,8 @@ function searchProduct(barcode) {
 																	// 'unmasked')[0];
 
 																	if ((name == null || name == "")
-																			|| ((market != null
-																					&& market != "" && market > 0) && (price == null || price == ""))) {
+																			|| ((market == null
+																					|| market == "" || market <= 0) || (price == null || price == ""))) {
 
 																		navigator.notification
 																				.alert(
@@ -664,6 +641,76 @@ function searchProduct(barcode) {
 																					"e-Mercado",
 																					null);
 																	$(
+																			"#nameMarketProduct")
+																			.val(
+																					"");
+																	$(
+																			"#priceMarketProduct")
+																			.val(
+																					"");
+																	$('[data-role=dialog]').dialog("close");
+																	searchProduct(barcode);
+																	hideLoading();
+																});
+
+											} else {
+//												$.mobile.pageContainer
+//														.pagecontainer(
+//																"change",
+//																"#AddProductActivity",
+//																null);
+												
+												$.mobile
+												.changePage(
+														'#AddProductActivity',
+														{
+															role : 'dialog'
+														});
+
+												$("#barcodeAddProduct").text(
+														barcode);
+
+												$("#nameAddProduct").val("");
+
+												$("#addProdutctButton")
+														.unbind('click')
+														.click(
+																function() {
+
+																	var name = $(
+																			"#nameAddProduct")
+																			.val();
+
+																	// var price
+																	// = $(
+																	// "#priceAddProduct")
+																	// .maskMoney(
+																	// 'unmasked')[0];
+
+																	if ((name == null || name == "")
+																			|| (barcode == null || barcode == "")) {
+
+																		navigator.notification
+																				.alert(
+																						"Por favor, preencha os campos necessários.",
+																						null,
+																						"e-Mercado",
+																						null);
+																		return;
+																	}
+
+																	addProduct(
+																			null,
+																			barcode,
+																			name,
+																			null);
+																	navigator.notification
+																			.alert(
+																					"Obrigado pela colaboração!",
+																					null,
+																					"e-Mercado",
+																					null);
+																	$(
 																			"#nameAddProduct")
 																			.val(
 																					"");
@@ -671,38 +718,30 @@ function searchProduct(barcode) {
 																			"#priceAddProduct")
 																			.val(
 																					"");
+																	$('[data-role=dialog]').dialog("close");
 																	searchProduct(barcode);
+																	hideLoading();
 																});
 
-												// $.mobile.pageContainer
-												// .pagecontainer(
-												// "change",
-												// "#AddProductActivity",
-												// null);
-											});
+											}
 
-							$productFieldSet.append($addProductActivityButton);
+										});
 
-						}
+						$productFieldSet.append($addProductActivityButton);
 
-						$("#productsFieldset").remove();
+					}
 
-						$("#ProductsActivity").append($productFieldSet);
+					$("#productsFieldset").remove();
 
-						if ($.mobile.activePage.is('#MainActivity')) {
-							$.mobile.pageContainer.pagecontainer("change",
-									"#ProductsActivity", null);
-						} else {
-							// não funciona
-							$.mobile.pageContainer.pagecontainer("change",
-									"#ProductsActivity", {
-										reverse : true,
-										changeHash : false
-									});
-						}
-						hideLoading();
-					});
+					$("#ProductsActivity").append($productFieldSet);
 
+					$.mobile.pageContainer.pagecontainer("change",
+							"#ProductsActivity", null);
+
+					hideLoading();
+				}
+			});
+	hideLoading();
 }
 
 function suggestMarket(city, place, market) {
@@ -727,14 +766,6 @@ function addProduct(market, barcode, name, price) {
 	}
 
 	localStorage.setItem("confirmActived", false);
-//	$.getJSON(rest_url + '/collaboration/suggest-product', {
-//		market : market,
-//		barcode : barcode,
-//		name : name,
-//		price : price
-//	}, function(data) {
-//		hideLoading();
-//	});
 
 	$.ajax({
 		url : rest_url + '/collaboration/suggest-product',
@@ -751,7 +782,6 @@ function addProduct(market, barcode, name, price) {
 			hideLoading();
 		}
 	});
-
 }
 
 function updatePrice(market, barcode, price) {
