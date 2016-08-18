@@ -77,4 +77,10 @@
 		<icon src="img/ios/icon-50.png" width="50" height="50" />
 		<icon src="img/ios/icon-50@2x.png" width="100" height="100" />
 	</platform>
+	<feature name="Device">
+		<param name="android-package" value="com.mymarket.cordova.app" />
+		<param name="ios-package" value="eMercado" />
+		<param name="osx-package" value="eMercado" />
+		<param name="onload" value="true" />
+	</feature>
 </widget>
