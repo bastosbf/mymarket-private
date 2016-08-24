@@ -1,86 +1,93 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mymarket.cordova.app" version="0.0.7"
-	xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-	<name>e-Mercado</name>
-	<description>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<widget id="com.mymarket.cordova.app" version="0.0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>e-Mercado</name>
+  <description>
 		Veja se o preço do produto é o mesmo em todos os mercados
 		da região e colabore com seus amigos informando os preços mais atuais.
 		Usuários podem sugerir mercados e produtos que ainda não estejam
 		cadastrados, assim como atualizar preços de produtos que estejam
 		desatualizados.
 	</description>
-	<author email="edson1galdino@gmail.com" href="">
+  <author email="edson1galdino@gmail.com" href="">
 		Edson Galdino da
 		Silva Alves
 	</author>
-	<content src="index.html" />
-	<plugin name="cordova-plugin-whitelist" spec="1" />
-	<allow-navigation href="http://mymarket.bastosbf.com/*" />
-	<access origin="*" />
-	<allow-intent href="http://*/*" />
-	<allow-intent href="https://*/*" />
-	<allow-intent href="tel:*" />
-	<allow-intent href="sms:*" />
-	<allow-intent href="mailto:*" />
-	<allow-intent href="geo:*" />
-	<platform name="windows">
-		<preference name="windows-phone-target-version" value="8.1" />
-		<preference name="windows-target-version" value="8.1" />
-		<preference name="Windows.Universal" value="10.0.10240.0" />
-		<preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
-		<preference name="Windows.Mobile-MaxVersionTested" value="10.0.10031.0" />
-		<preference name="Windows.Universal-MinVersion" value="10.0.0.0" />
-		<preference name="WindowsStoreIdentityName" value="Cordova.Example.ApplicationDataSample" />
-		<preference name="WindowsStorePublisherName"
-			value="CN=Contoso Corp, O=Contoso Corp, L=Redmond, S=Washington, C=US" />
-		<preference name="WindowsToastCapable" value="true" />
-		<preference name="uap-target-min-version" value="10.0.10586.0" />
-	</platform>
-	<platform name="android">
-		<preference name="DisallowOverscroll" value="true" />
-		<preference name="android-minSdkVersion" value="19" />
-		<icon src="img/android/mipmap-hdpi/logo_72w_72h.png" density="hdpi" />
-		<icon src="img/android/mipmap-mdpi/logo_48w_48h.png" density="mdpi" />
-		<icon src="img/android/mipmap-xhdpi/logo_96w_96h.png" density="xhdpi" />
-		<icon src="img/android/mipmap-xxhdpi/logo_144w_144h.png" density="xxhdpi" />
-		<allow-intent href="market:*" />
-	</platform>
-	<platform name="ios">
-		<preference name="DisallowOverscroll" value="true" />
-		<allow-intent href="itms:*" />
-		<allow-intent href="itms-apps:*" />
-
-		<!-- iOS 8.0+ -->
-		<!-- iPhone 6 Plus -->
-		<icon src="img/ios/icon-60@3x.png" width="180" height="180" />
-		<!-- iOS 7.0+ -->
-		<!-- iPhone / iPod Touch -->
-		<icon src="img/ios/icon-60.png" width="60" height="60" />
-		<icon src="img/ios/icon-60@2x.png" width="120" height="120" />
-		<!-- iPad -->
-		<icon src="img/ios/icon-76.png" width="76" height="76" />
-		<icon src="img/ios/icon-76@2x.png" width="152" height="152" />
-		<!-- iOS 6.1 -->
-		<!-- Spotlight Icon -->
-		<icon src="img/ios/icon-40.png" width="40" height="40" />
-		<icon src="img/ios/icon-40@2x.png" width="80" height="80" />
-		<!-- iPhone / iPod Touch -->
-		<icon src="img/ios/icon.png" width="57" height="57" />
-		<icon src="img/ios/icon@2x.png" width="114" height="114" />
-		<!-- iPad -->
-		<icon src="img/ios/icon-72.png" width="72" height="72" />
-		<icon src="img/ios/icon-72@2x.png" width="144" height="144" />
-		<!-- iPhone Spotlight and Settings Icon -->
-		<icon src="img/ios/icon-small.png" width="29" height="29" />
-		<icon src="img/ios/icon-small@2x.png" width="58" height="58" />
-		<!-- iPad Spotlight and Settings Icon -->
-		<icon src="img/ios/icon-50.png" width="50" height="50" />
-		<icon src="img/ios/icon-50@2x.png" width="100" height="100" />
-	</platform>
-	<feature name="Device">
-		<param name="android-package" value="com.mymarket.cordova.app" />
-		<param name="ios-package" value="eMercado" />
-		<param name="osx-package" value="eMercado" />
-		<param name="onload" value="true" />
-	</feature>
+  <content src="index.html" />
+  <plugin name="cordova-plugin-whitelist" spec="1" />
+  <allow-navigation href="http://mymarket.bastosbf.com/*" />
+  <access origin="*" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="sms:*" />
+  <allow-intent href="mailto:*" />
+  <allow-intent href="geo:*" />
+  <platform name="windows">
+    <preference name="windows-phone-target-version" value="8.1" />
+    <!-- <preference name="windows-target-version" value="8.1" /> -->
+    <preference name="windows-target-version" value="8.1" />
+    <preference name="Windows.Universal" value="10.0.10240.0" />
+    <preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
+    <preference name="Windows.Mobile-MaxVersionTested" value="10.0.10031.0" />
+    <preference name="Windows.Universal-MinVersion" value="10.0.0.0" />
+    <preference name="WindowsStoreIdentityName" value="Cordova.Example.ApplicationDataSample" />
+    <preference name="WindowsStorePublisherName" value="CN=Contoso Corp, O=Contoso Corp, L=Redmond, S=Washington, C=US" />
+    <preference name="WindowsToastCapable" value="true" />
+    <preference name="uap-target-min-version" value="10.0.10586.0" />
+  </platform>
+  <platform name="android">
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="19" />
+    <icon src="img/android/mipmap-hdpi/logo_72w_72h.png" density="hdpi" />
+    <icon src="img/android/mipmap-mdpi/logo_48w_48h.png" density="mdpi" />
+    <icon src="img/android/mipmap-xhdpi/logo_96w_96h.png" density="xhdpi" />
+    <icon src="img/android/mipmap-xxhdpi/logo_144w_144h.png" density="xxhdpi" />
+    <allow-intent href="market:*" />
+  </platform>
+  <platform name="ios">
+    <preference name="DisallowOverscroll" value="true" />
+    <allow-intent href="itms:*" />
+    <allow-intent href="itms-apps:*" />
+    <!-- iOS 8.0+ -->
+    <!-- iPhone 6 Plus -->
+    <icon src="img/ios/icon-60@3x.png" width="180" height="180" />
+    <!-- iOS 7.0+ -->
+    <!-- iPhone / iPod Touch -->
+    <icon src="img/ios/icon-60.png" width="60" height="60" />
+    <icon src="img/ios/icon-60@2x.png" width="120" height="120" />
+    <!-- iPad -->
+    <icon src="img/ios/icon-76.png" width="76" height="76" />
+    <icon src="img/ios/icon-76@2x.png" width="152" height="152" />
+    <!-- iOS 6.1 -->
+    <!-- Spotlight Icon -->
+    <icon src="img/ios/icon-40.png" width="40" height="40" />
+    <icon src="img/ios/icon-40@2x.png" width="80" height="80" />
+    <!-- iPhone / iPod Touch -->
+    <icon src="img/ios/icon.png" width="57" height="57" />
+    <icon src="img/ios/icon@2x.png" width="114" height="114" />
+    <!-- iPad -->
+    <icon src="img/ios/icon-72.png" width="72" height="72" />
+    <icon src="img/ios/icon-72@2x.png" width="144" height="144" />
+    <!-- iPhone Spotlight and Settings Icon -->
+    <icon src="img/ios/icon-small.png" width="29" height="29" />
+    <icon src="img/ios/icon-small@2x.png" width="58" height="58" />
+    <!-- iPad Spotlight and Settings Icon -->
+    <icon src="img/ios/icon-50.png" width="50" height="50" />
+    <icon src="img/ios/icon-50@2x.png" width="100" height="100" />
+  </platform>
+  <feature name="Device">
+    <param name="android-package" value="com.mymarket.cordova.app" />
+    <param name="ios-package" value="eMercado" />
+    <param name="osx-package" value="eMercado" />
+    <param name="onload" value="true" />
+  </feature>
+  <plugin name="cordova-plugin-compat" version="1.0.0" />
+  <plugin name="cordova-plugin-device" version="1.1.2" />
+  <plugin name="cordova-plugin-dialogs" version="1.0.0" />
+  <plugin name="cordova-plugin-geolocation" version="2.2.0" />
+  <plugin name="phonegap-plugin-barcodescanner" version="5.0.0" />
+  <preference name="WindowsStoreDisplayName" value="e-Mercado" />
+  <vs:platformSpecificValues xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
+    <vs:platformSpecificWidget platformName="windows" id="com.emercado.cordova.windows" />
+  </vs:platformSpecificValues>
 </widget>
