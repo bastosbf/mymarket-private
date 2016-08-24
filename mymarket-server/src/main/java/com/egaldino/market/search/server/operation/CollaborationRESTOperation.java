@@ -19,10 +19,12 @@ import com.egaldino.market.search.server.dao.MarketDAO;
 import com.egaldino.market.search.server.dao.MarketProductDAO;
 import com.egaldino.market.search.server.dao.MarketSuggestionDAO;
 import com.egaldino.market.search.server.dao.ProductDAO;
+import com.egaldino.market.search.server.dao.ProductNameSuggestionDAO;
 import com.egaldino.market.search.server.model.Market;
 import com.egaldino.market.search.server.model.MarketProduct;
 import com.egaldino.market.search.server.model.MarketSuggestion;
 import com.egaldino.market.search.server.model.Product;
+import com.egaldino.market.search.server.model.ProductNameSuggestion;
 
 @Path("/collaboration")
 public class CollaborationRESTOperation {
@@ -118,14 +120,41 @@ public class CollaborationRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/suggest-name")
-	public void suggestName(@QueryParam("product") String product, @QueryParam("name") String name) {
-		Product p = null;
-		{
-			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-			p = dao.get(product);
-			if (p != null) {
-				dao.updateName(product, name.toUpperCase());
-			}
+	public void suggestName(@QueryParam("barcode") String barcode, @QueryParam("name") String name) {
+		// Product p = null;
+		// {
+		// ProductDAO dao = new ProductDAO(HibernateConfig.factory);
+		// p = dao.get(product);
+		// if (p != null) {
+		// dao.updateName(product, name.toUpperCase());
+		// }
+		// }
+
+		ProductNameSuggestion suggestion = new ProductNameSuggestion();
+		suggestion.setSuggestedName(name);
+		suggestion.setBarcode(barcode);
+
+		ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
+		Product product = productDAO.get(barcode);
+		suggestion.setCurrentName(product.getName());
+		suggestion.setDate(new Date());
+
+		ProductNameSuggestionDAO dao = new ProductNameSuggestionDAO(HibernateConfig.factory);
+		dao.add(suggestion);
+
+		try {
+			Properties props = System.getProperties();
+			Session session = Session.getDefaultInstance(props);
+			Message msn = new MimeMessage(session);
+			msn.setFrom(new InternetAddress("eMercado@mail.com"));
+			msn.setRecipients(Message.RecipientType.TO, InternetAddress.parse("edson1galdino@gmail.com", false));
+			msn.setSubject("Product Name collaboration");
+			msn.setText("Barcode: " + barcode + "\nCurrent Name: " + product.getName() + "\nSuggested Name: " + name);
+			msn.setHeader("e-Marcado", "PRODUCT-NAME-SUGGESTION");
+			msn.setSentDate(new Date());
+			Transport.send(msn);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
