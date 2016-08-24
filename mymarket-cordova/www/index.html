@@ -19,80 +19,80 @@
 -->
 <html>
 <head>
-<!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-<meta http-equiv="Content-Security-Policy"
-  content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; child-src http://mymarket.bastosbf.com/*">
-<meta name="format-detection" content="telephone=no">
-<meta name="msapplication-tap-highlight" content="no">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-<link rel="stylesheet" type="text/css" href="css/index.css">
-<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
-<link rel="stylesheet" href="css/bootstrap.css">
-<title>e-Mercado</title>
-<script type="text/javascript" src="js/external/jquery-1.10.2.js"></script>
-<script type="text/javascript" src="js/external/jquery.mobile-1.4.5.min.js"></script>
-<script type="text/javascript" src="js/external/jquery.maskMoney.min.js"></script>
-<script type="text/javascript" src="js/external/bootstrap.js"></script>
+    <!--
+            Customize this policy to fit your own app's needs. For more guidance, see:
+                https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+            Some notes:
+                * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+                * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+                * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                    * Enable inline JS: add 'unsafe-inline' to default-src
+            -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; child-src http://mymarket.bastosbf.com/*">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <title>e-Mercado</title>
+    <script type="text/javascript" src="js/external/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/external/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/external/jquery.maskMoney.min.js"></script>
+    <script type="text/javascript" src="js/external/bootstrap.js"></script>
 </head>
 <body>
-  <div class="app" data-role="main">
-    <div class="ui-loader-background"></div>
-    <div data-role="page" id="MainActivity" class="ui-responsive">
-      <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
-        <h1 class="header-title">e-Mercado</h1>
-      </div>
-      <select class="form-control btn btn-default dropdown-toggle" name="citiesSelect" id="citiesSelect">
-      </select>
-      <br>
-      <select class="form-control btn btn-default dropdown-toggle" name="placesSelect" id="placesSelect">
-      </select>
-      <br>
-      <select class="form-control btn btn-default dropdown-toggle" name="marketsSelect" id="marketsSelect">
-      </select>
-      <br>
-      <div style="white-space: nowrap; margin: 1%; min-width: 100px; width: auto !important;">
-        <button class="indexButton" id="scanBarcodeButton" type="button" data-role="none" disabled>Escanear Código</button>
-        <button class="indexButton" id="enterBarcodeButton" type="button" data-role="none" disabled>Digitar Código</button>
-        <br>
-      </div>
-      <button style="background-color: #008CBA;" class="indexButton" id="suggestMarketActivityButton" type="button" data-role="none">Sugerir Mercado</button>
+    <div class="app" data-role="main">
+        <div class="ui-loader-background"></div>
+        <div data-role="page" id="MainActivity" class="ui-responsive">
+            <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
+                <h1 class="header-title">e-Mercado</h1>
+            </div>
+            <div style="margin: 2%">
+                <select name="citiesSelect" id="citiesSelect"></select>
+                <br>
+                <select name="placesSelect" id="placesSelect"></select>
+                <br>
+                <select name="marketsSelect" id="marketsSelect"></select>
+            </div>
+            <div style="white-space: nowrap; margin: 5%; min-width: 100px; width: auto !important;">
+                <button class="indexButton" id="scanBarcodeButton" type="button" data-role="none" disabled>Escanear Código</button>
+                <button class="indexButton" id="enterBarcodeButton" type="button" data-role="none" disabled>Digitar Código</button>
+                <br>
+            </div>
+            <button class="indexButton" style="background-color: #008CBA; width : auto" id="suggestMarketActivityButton" type="button" data-role="none">Sugerir Mercado</button>
 
-      <div class="info-div">
-        <small>Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre
-          comprar produtos com preços justos e saber que estamos pagando o melhor preço!</small>
-      </div>
+            <div class="info-div">
+                <small>
+                    Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre
+                    comprar produtos com preços justos e saber que estamos pagando o melhor preço!
+                </small>
+            </div>
+        </div>
+
+        <div id="ProductsActivity" data-role="page">
+            <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
+                <h1 class="header-title">Produto</h1>
+                <a class="header-back-button" href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
+            </div>
+        </div>
+        <div id="AddProductActivity" data-role="page"></div>
+        <div id="AddMarketProductActivity" data-role="page"></div>
+        <div id="AddMarketPriceActivity" data-role="page"></div>
+        <div id="SuggestMarketActivity" data-role="page"></div>
+        <div id="dialogLocation" data-role="page"></div>
+        <div id="dialogRenameProduct" data-role="page"></div>
+        <div id="dialogUpdatePrice" data-role="page"></div>
+        <div id="dialogEnterBarcode" data-role="page"></div>
+
     </div>
-
-    <div id="ProductsActivity" data-role="page">
-      <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
-        <h1 class="header-title">Produto</h1>
-        <a class="header-back-button" href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
-      </div>
-    </div>
-    <div id="AddProductActivity" data-role="page"></div>
-    <div id="AddMarketProductActivity" data-role="page"></div>
-    <div id="AddMarketPriceActivity" data-role="page"></div>
-    <div id="SuggestMarketActivity" data-role="page"></div>
-    <div id="dialogLocation" data-role="page"></div>
-    <div id="dialogRenameProduct" data-role="page"></div>
-    <div id="dialogUpdatePrice" data-role="page"></div>
-    <div id="dialogEnterBarcode" data-role="page"></div>
-
-  </div>
-  <script type="text/javascript" src="cordova.js"></script>
-  <script type="text/javascript" src="js/properties.js"></script>
-  <script type="text/javascript" src="js/utils.js"></script>
-  <script type="text/javascript" src="js/geolocation.js"></script>
-  <script type="text/javascript" src="js/rest_operations.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/properties.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/geolocation.js"></script>
+    <script type="text/javascript" src="js/rest_operations.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
