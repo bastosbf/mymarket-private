@@ -47,8 +47,8 @@
   <div class="app" data-role="main">
     <div class="ui-loader-background"></div>
     <div data-role="page" id="MainActivity" class="ui-responsive">
-      <div data-role="header" class="ui-header ui-bar-a">
-        <h1>e-Mercado</h1>
+      <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
+        <h1 class="header-title">e-Mercado</h1>
       </div>
       <select class="form-control" name="citiesSelect" id="citiesSelect" class="btn btn-default dropdown-toggle">
       </select>
@@ -59,12 +59,14 @@
       <select class="form-control" name="marketsSelect" id="marketsSelect" class="btn btn-default dropdown-toggle">
       </select>
       <br>
-      <button id="scanBarcodeButton" type="button" data-role="none" class="btn btn-primary" disabled>Ler Código de Barras</button>
-      <br>
-      <br>
-      <button id="suggestMarketActivityButton" type="button" data-role="none" class="btn btn-primary">Sugerir Mercado</button>
+      <div style="white-space: nowrap; margin: 1%; min-width: 100px; width: auto !important;">
+        <button class="indexButton" id="scanBarcodeButton" type="button" data-role="none" disabled>Escanear Código</button>
+        <button class="indexButton" id="enterBarcodeButton" type="button" data-role="none" disabled>Digitar Código</button>
+        <br>
+      </div>
+      <button style="background-color: #008CBA;" class="indexButton" id="suggestMarketActivityButton" type="button" data-role="none">Sugerir Mercado</button>
 
-      <div class="info-div" style="background-color: #96EEB5 !important">
+      <div class="info-div">
         <small>Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre
           comprar produtos com preços justos e saber que estamos pagando o melhor preço!</small>
       </div>
@@ -72,8 +74,8 @@
 
     <div id="ProductsActivity" data-role="page">
       <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
-        <h1>Produto</h1>
-        <a href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
+        <h1 class="header-title">Produto</h1>
+        <a class="header-back-button" href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
       </div>
     </div>
     <div id="AddProductActivity" data-role="page"></div>
@@ -81,8 +83,9 @@
     <div id="AddMarketPriceActivity" data-role="page"></div>
     <div id="SuggestMarketActivity" data-role="page"></div>
     <div id="dialogLocation" data-role="page"></div>
-    <!--     <div id="dialogRenameProduct" data-role="page" data-dialog="true"></div> -->
+    <div id="dialogRenameProduct" data-role="page"></div>
     <div id="dialogUpdatePrice" data-role="page"></div>
+    <div id="dialogEnterBarcode" data-role="page"></div>
 
   </div>
   <script type="text/javascript" src="cordova.js"></script>

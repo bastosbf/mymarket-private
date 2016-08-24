@@ -27,33 +27,45 @@ var app = {
 	// 'load', 'deviceready', 'offline', and 'online'.
 	bindEvents : function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
-
-		// $(document).bind("mobileinit", function() {
-		// // para resolver problema do jQuery de avançar para página seguinte,
-		// // mas depois retornar
-		// $.mobile.pushStateEnabled = false;
-		// });
-
+	},
+	// deviceready Event Handler
+	//
+	// The scope of 'this' is the event. In order to call the 'receivedEvent'
+	// function, we must explicitly call 'app.receivedEvent(...);'
+	onDeviceReady : function() {
+		app.receivedEvent('deviceready');
+	},
+	// Update DOM on a Received Event
+	receivedEvent : function(id) {
 		$(document).bind('mobileinit', function() {
 			$.mobile.loader.prototype.options.text = "Aguarde";
 			$.mobile.loader.prototype.options.textVisible = true;
 			$.mobile.loader.prototype.options.theme = "a";
-			// $.mobile.loader.prototype.options.html = '"<div
-			// id="loading-indicator" class="loading"> <img
-			// src="img/loading.gif" /></div>";'
 		});
 
 		showLoading();
 		$("#AddProductActivity").load("activities/addProductActivity.html");
 		$("#AddMarketProductActivity").load(
 				"activities/addMarketProductActivity.html");
-		$("#AddMarketPriceActivity").load("activities/addMarketPriceActivity.html");
+		$("#AddMarketPriceActivity").load(
+				"activities/addMarketPriceActivity.html");
 
 		$("#SuggestMarketActivity").load(
 				"activities/suggestMarketActivity.html");
 		$("#dialogLocation").load("dialogs/dialogLocation.html");
-		// $("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
+		$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
 		$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
+		$("#dialogEnterBarcode").load("dialogs/dialogEnterBarcode.html");
+
+		if (device.platform == "iOS") {
+			$('.header-title').each(function() {
+				$(this).addClass('header-title-ios');
+			});
+
+			$('.header-back-button').each(function() {
+				$(this).addClass('header-back-button-ios');
+			});
+		}
 
 		var onSuccessGetUserLocation = function(position) {
 			var latitude = position.coords.latitude;
@@ -77,29 +89,22 @@ var app = {
 					timeout : 6000,
 					enableHighAccuracy : true
 				});
-	},
-	// deviceready Event Handler
-	//
-	// The scope of 'this' is the event. In order to call the 'receivedEvent'
-	// function, we must explicitly call 'app.receivedEvent(...);'
-	onDeviceReady : function() {
-		app.receivedEvent('deviceready');
-	},
-	// Update DOM on a Received Event
-	receivedEvent : function(id) {
-		var parentElement = document.getElementById(id);
-		var listeningElement = parentElement.querySelector('.listening');
-		var receivedElement = parentElement.querySelector('.received');
-
-		listeningElement.setAttribute('style', 'display:none;');
-		receivedElement.setAttribute('style', 'display:block;');
-
-		console.log('Received Event: ' + id);
 	}
 };
 
 $('#citiesSelect').on("change", getPlaces);
 $('#placesSelect').on("change", getMarkets);
+
+$('#enterBarcodeButton').unbind('click').on("click", function() {
+	$("#barcodeEnterBarcodeDialog").val("");
+	$('#enterBarcodeSendButton').unbind('click').on("click", function() {
+		searchProduct($("#barcodeEnterBarcodeDialog").val());
+		$('[data-role=dialog]').dialog("close");
+	});
+	$.mobile.changePage('#dialogEnterBarcode', {
+		role : 'dialog'
+	});
+});
 
 $('#scanBarcodeButton')
 		.on(
@@ -111,7 +116,7 @@ $('#scanBarcodeButton')
 										if (!result.cancelled) {
 											localStorage.setItem(
 													"confirmActived", true);
-											searchProduct(result.text)
+											searchProduct(result.text);
 										}
 									},
 									function(error) {
@@ -148,8 +153,8 @@ $('#suggestMarketActivityButton')
 		.on(
 				"click",
 				function() {
-					$.mobile.pageContainer.pagecontainer("change",
-							"#SuggestMarketActivity", null);
+					// $.mobile.pageContainer.pagecontainer("change",
+					// "#SuggestMarketActivity", null);
 
 					$('#suggestMarketSendButton')
 							.unbind('click')
@@ -185,11 +190,13 @@ $('#suggestMarketActivityButton')
 												.alert(
 														"Obrigado pela colaboração!\nEm breve o mercado será adicionado!",
 														null, "e-Mercado", null);
-										$.mobile.pageContainer.pagecontainer(
-												"change", "#MainActivity", {
-													reverse : false,
-													changeHash : false
-												});
+										// $.mobile.pageContainer.pagecontainer(
+										// "change", "#MainActivity", {
+										// reverse : false,
+										// changeHash : false
+										// });
+
+										$('[data-role=dialog]').dialog("close");
 
 										$("#citySuggestMarketActivity").val("");
 										$("#placeSuggestMarketActivity")
@@ -197,6 +204,10 @@ $('#suggestMarketActivityButton')
 										$("#marketSuggestMarketActivity").val(
 												"");
 									});
+
+					$.mobile.changePage('#SuggestMarketActivity', {
+						role : 'dialog'
+					});
 
 				});
 
