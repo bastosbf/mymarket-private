@@ -143,6 +143,12 @@ h1 {
 	width: 40%;
 }
 
+.priceDiv {
+	left: 50%;
+	margin-left: 26% !important;
+	margin-bottom: 2%;
+}
+
 .ui-loader-background {
 	width: 100%;
 	height: 100%;
@@ -169,11 +175,12 @@ h1 {
 	color: white;
 	padding: 15px 32px;
 	text-align: center;
-	text-decoration: none;
+	word-spacing: normal;
 	white-space: nowrap;
 	/*display: inline-block;*/
-	font-size: 16px; 
-    max-width: 50%
+	font-size: 16px;
+	max-width: 50%;
+	white-space: nowrap;
 }
 
 /* .event { */
