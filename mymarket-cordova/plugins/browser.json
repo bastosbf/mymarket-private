@@ -16,6 +16,9 @@
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.mymarket.cordova.app"
         },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.mymarket.cordova.app"
+        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.mymarket.cordova.app"
         },

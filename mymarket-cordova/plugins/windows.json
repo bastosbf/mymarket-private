@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "e-Mercado"
+        },
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "e-Mercado"
         },
@@ -17,6 +20,9 @@
             "PACKAGE_NAME": "e-Mercado"
         },
         "phonegap-plugin-barcodescanner": {
+            "PACKAGE_NAME": "e-Mercado"
+        },
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "e-Mercado"
         }
     },
