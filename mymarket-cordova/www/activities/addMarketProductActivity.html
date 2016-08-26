@@ -1,6 +1,6 @@
 <div data-role="header" class="ui-header ui-bar-a">
   <h1>Adicionar</h1>
-<!--   <a href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a> -->
+  <!--   <a href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a> -->
 </div>
 <div data-role="content" class="ui-responsive">
   <label for="barcodeAddMarketProduct">Barcode:</label>
@@ -10,9 +10,11 @@
   <label for="marketAddMarketProduct">Mercado:</label>
   <strong id="marketAddMarketProduct" name="marketAddMarketProduct"></strong>
   <label for="priceAddMarketProduct">Preço:</label>
-  <div class="priceDiv" data-role="controlgroup" data-type="horizontal" style="display: inline">
-    <button>R$</button>
-    <input id="priceAddMarketProduct" type="number" name="priceAddMarketProduct" data-wrapper-class="controlgroup-textinput ui-btn">
+  <div class="priceDiv">
+    <div data-role="controlgroup" data-type="horizontal" style="display: inline">
+      <button>R$</button>
+      <input id="priceAddMarketProduct" type="number" name="priceAddMarketProduct" data-wrapper-class="controlgroup-textinput ui-btn">
+    </div>
   </div>
   <button id="addMarketProductButton" type="button" data-role="none" class="btn btn-primary">Enviar</button>
 </div>
