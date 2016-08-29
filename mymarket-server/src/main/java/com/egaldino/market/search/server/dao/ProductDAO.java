@@ -1,15 +1,14 @@
 package com.egaldino.market.search.server.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
-import com.egaldino.market.search.server.model.Market;
 import com.egaldino.market.search.server.model.MarketProduct;
 import com.egaldino.market.search.server.model.Product;
 
@@ -34,15 +33,31 @@ public class ProductDAO extends GenericDAO<Product> {
 
 	public List<Product> listByPlace(int place) {
 		Session session = factory.openSession();
-		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class).createAlias("market", "m").add(Restrictions.eq("m.place.id", place));
-		List<MarketProduct> list = criteria.list();
-		List<Product> products = new ArrayList<Product>();
-		for (MarketProduct mp : list) {
-			Product product = mp.getProduct();
-			products.add(product);
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(MarketProduct.class).createAlias("market", "m").add(Restrictions.eq("m.place.id", place));
+			List<MarketProduct> list = criteria.list();
+			List<Product> products = new ArrayList<Product>();
+			for (MarketProduct mp : list) {
+				Product product = mp.getProduct();
+				products.add(product);
+			}
+			return products;
+		} finally {
+			session.close();
 		}
-		return products;
+	}
+
+	public List<Product> listByName(String name) {
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.like("name", name.toUpperCase(), MatchMode.START));
+			List<Product> products = criteria.list();
+			return products;
+		} finally {
+			session.close();
+		}
 	}
 
 	public Product get(String barcode) {
