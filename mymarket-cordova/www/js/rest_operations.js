@@ -115,8 +115,9 @@ function searchProduct(barcode) {
 						class : "scheduler-border"
 					});
 
-					$productFieldSet.append('<p data-position="fixed">'
-							+ barcode + '</p>');
+					$productFieldSet
+							.append('<div style="height: 20%;"><div style="width: 50%; height: 100%; float: left;"><img src="http://146.134.100.70/no-image.png" data-keyboard="true" data-toggle="modal" class="img-responsive"></div><div style="width: 50%; height: 100%; float: right;"><p data-position="fixed">'
+									+ barcode + '</p></div></div>');
 
 					if (data.length > 0 && typeof data[0] !== 'undefined'
 							&& data[0] !== null) {
@@ -510,13 +511,11 @@ function searchProduct(barcode) {
 												$("#nameAddMarketProduct").val(
 														"");
 
-
 												$("#marketAddMarketProduct")
 														.text(
 																$(
 																		"#marketsSelect option:selected")
 																		.text());
-
 
 												$("#priceAddMarketProduct")
 														.val("");
@@ -535,7 +534,6 @@ function searchProduct(barcode) {
 																	var price = $(
 																			"#priceAddMarketProduct")
 																			.val();
-
 
 																	if ((name == null || name == "")
 																			|| ((market == null
@@ -598,7 +596,6 @@ function searchProduct(barcode) {
 																	var name = $(
 																			"#nameAddProduct")
 																			.val();
-
 
 																	if ((name == null || name == "")
 																			|| (barcode == null || barcode == "")) {

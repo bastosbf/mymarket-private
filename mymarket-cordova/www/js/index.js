@@ -36,7 +36,7 @@ var app = {
 		app.receivedEvent('deviceready');
 	},
 	// Update DOM on a Received Event
-	receivedEvent : function(id) {
+	receivedEvent : function(id) {		
 		$(document).bind('mobileinit', function() {
 			$.mobile.loader.prototype.options.text = "Aguarde";
 			$.mobile.loader.prototype.options.textVisible = true;
