@@ -41,21 +41,29 @@
 <script type="text/javascript" src="js/external/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/external/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript" src="js/external/bootstrap.js"></script>
+<!-- <script type="text/javascript" src="js/external/angular.min.js"></script> -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+
 </head>
 <body>
-  <div ng-app="mymarketAngularApp" class="app" data-role="main">
+  <div class="app" data-role="main">
     <div class="ui-loader-background"></div>
     <div data-role="page" id="MainActivity" class="ui-responsive">
       <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
         <h1 class="header-title">e-Mercado</h1>
       </div>
-      <div style="margin: 2%">
-        <select name="citiesSelect" id="citiesSelect"></select>
+      <div style="margin: 2%" ng-controller="LocationSelectsController">
+        <select name="citiesSelect" id="citiesSelect" ng-model="selectedCity" ng-options="city.id as city.name for city in cities track by city.id">
+          <option value=0>Selecione a Cidade</option>
+        </select>
         <br>
-        <select name="placesSelect" id="placesSelect"></select>
+        <select name="placesSelect" id="placesSelect" ng-model="selectedPlace" ng-options="place.id as place.name for place in places track by place.id">
+          <option value=0>Selecione o Bairro</option>
+        </select>
         <br>
-        <select name="marketsSelect" id="marketsSelect"></select>
+        <select name="marketsSelect" id="marketsSelect" ng-model="selectedMarket" ng-options="market.id as market.name for market in markets track by market.id">
+          <option value=0>Selecione o Mercado</option>
+        </select>
       </div>
       <div style="white-space: nowrap; margin: 5%; min-width: 100px; width: auto !important;">
         <!--                 http://marcj.github.io/css-element-queries/ -->
@@ -93,5 +101,6 @@
   <script type="text/javascript" src="js/geolocation.js"></script>
   <script type="text/javascript" src="js/rest_operations.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/angular_app.js"></script>
 </body>
 </html>
