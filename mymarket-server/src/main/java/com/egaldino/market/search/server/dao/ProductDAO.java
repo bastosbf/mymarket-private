@@ -1,14 +1,18 @@
 package com.egaldino.market.search.server.dao;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import com.egaldino.market.search.server.model.EnhancedProduct;
 import com.egaldino.market.search.server.model.MarketProduct;
 import com.egaldino.market.search.server.model.Product;
 
@@ -48,13 +52,53 @@ public class ProductDAO extends GenericDAO<Product> {
 		}
 	}
 
-	public List<Product> listByName(String name) {
+	public List<Product> listByName(String[] tokens) {
 		Session session = factory.openSession();
 		try {
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.like("name", name.toUpperCase(), MatchMode.START));
+			Criteria criteria = session.createCriteria(Product.class);
+			for (String token : tokens) {
+				if (token.length() < 3) {
+					return new ArrayList<Product>();
+				}
+				criteria = criteria.add(Restrictions.like("name", token.toUpperCase(), MatchMode.ANYWHERE));
+			}
 			List<Product> products = criteria.list();
 			return products;
+		} finally {
+			session.close();
+		}
+	}
+
+	public List<EnhancedProduct> listWithPriceByName(String[] tokens, int city, int place) {
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(MarketProduct.class)
+					.createAlias("product", "p")
+					.createAlias("market", "m")
+					.createAlias("m.place", "pl");
+			if (place > 0) {
+				criteria = criteria.add(Restrictions.eq("m.place.id", place));
+			} else if (city > 0) {
+				criteria = criteria.add(Restrictions.eq("pl.city.id", city));
+			}
+			for (String token : tokens) {
+				if (token.length() < 3) {
+					return new ArrayList<EnhancedProduct>();
+				}
+				criteria = criteria.add(Restrictions.like("p.name", token.toUpperCase(), MatchMode.ANYWHERE));
+			}			
+			criteria.addOrder(Order.asc("price"));
+			List<MarketProduct> list = criteria.list();
+			Set<EnhancedProduct> products = new LinkedHashSet<EnhancedProduct>();
+			for (MarketProduct mp : list) {
+				Product product = mp.getProduct();
+				EnhancedProduct enhancedProduct = new EnhancedProduct(product);
+				enhancedProduct.setLowestPrice(mp.getPrice());
+				products.add(enhancedProduct);
+			}
+			return new ArrayList<EnhancedProduct>(products);
 		} finally {
 			session.close();
 		}
