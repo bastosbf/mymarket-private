@@ -36,7 +36,8 @@ var app = {
 		app.receivedEvent('deviceready');
 	},
 	// Update DOM on a Received Event
-	receivedEvent : function(id) {
+	receivedEvent : function(id) {		
+		
 		$(document).bind('mobileinit', function() {
 			$.mobile.loader.prototype.options.text = "Aguarde";
 			$.mobile.loader.prototype.options.textVisible = true;
@@ -72,7 +73,7 @@ var app = {
 			var longitude = position.coords.longitude;
 			localStorage.setItem("latitude", latitude);
 			localStorage.setItem("longitude", longitude);
-			getCities();
+			angular.bootstrap($(".app"), ["mymarketAngularApp"]);
 			hideLoading();
 		}
 
@@ -80,7 +81,7 @@ var app = {
 			navigator.notification.alert(
 					"Não foi possível adquirir localização por GPS!", null,
 					"e-Mercado", null);
-			getCities();
+			angular.bootstrap($(".app"), ["mymarketAngularApp"]);
 		}
 
 		$.mobile.loading("show");
@@ -92,8 +93,8 @@ var app = {
 	}
 };
 
-$('#citiesSelect').on("change", getPlaces);
-$('#placesSelect').on("change", getMarkets);
+//$('#citiesSelect').on("change", getPlaces);
+//$('#placesSelect').on("change", getMarkets);
 
 $('#enterBarcodeButton').unbind('click').on("click", function() {
 	$("#barcodeEnterBarcodeDialog").val("");
