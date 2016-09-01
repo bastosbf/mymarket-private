@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="images/favicon.ico">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+ crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+ crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.1.3/ui-bootstrap.min.js"></script>
+<script type="text/javascript" src="js/mymarket.js"></script>
+<title>e-Mercado: Uma plataforma colaborativa para consulta de pre ̧cos de produtos em diferentes estabelecimentos</title>
+</head>
+<body ng-app="myMarketApp">
+ <div class="container" ng-controller="myMarketController">
+  <h1 style="text-align: center">Lista de Compras</h1>
+  <div align="center">
+   <img src="images/logo_512w_512h.png" style="width: 30%;" />
+  </div>
+  <div class="form-group">
+   <button type="button" class="btn btn-primary pull-right" ng-click="open()">Minha lista de compras ({{ total() }})</button>
+  </div>
+  <div class="form-group">
+     <select class="form-control" ng-model="city" ng-init="listCities()" ng-change="listPlaces()" ng-options="city.id as city.name for city in cities track by city.id" ng-disabled="cities == null">
+      <option value="">Selecione a cidade</option>      
+    </select>     
+  </div>
+  <div class="form-group">
+     <select class="form-control" ng-model="place" ng-options="place.id as place.name for place in places track by place.id" ng-disabled="city == null || places == null">
+      <option value="">Selecione o bairro</option>      
+    </select>     
+  </div>  
+  <h3 style="text-align: center">Digite o produto que você procura: (mínimo de 3 caracteres)</h3>  
+  <div class="input-group">
+   <span class="input-group-addon">
+    <i class="glyphicon glyphicon-search"></i>
+   </span>
+   <input type="text" class="form-control" ng-model="product" ng-keyup="$event.keyCode == 13 && searchProducts()" ng-disabled="city == null" />
+   <span class="input-group-btn">
+    <button type="button" class="btn btn-success" ng-click="searchProducts()">Procurar</button>
+   </span>
+  </div>
+  <div class="input-group pull-right">   
+   <input type="checkbox" ng-model="searchWithoutPrices">
+   Buscar produtos sem preço
+  </div>  
+  <p ng-show="minlength" align="center">DIGITE NO MÍNIMO 3 CARACTERES!</p>
+  <p ng-show="loading" align="center">...CARREGANDO...</p>
+  <p ng-show="results && (products.length === 0 || productsTable.data.length === 0)" align="center">NENHUM PRODUTO ENCONTRADO</p>
+  <table class="table" ng-model="productsTable" ng-controller="myMarketCartController">
+   <tr ng-repeat="product in products" ng-show="!searchOnlyWithPrices || product.lowestPrice > 0">
+    <td>{{ product.name }}</td>
+    <td>
+     <button type="button" class="btn pull-right btn-success" ng-click="add(product)">
+      <span class="glyphicon glyphicon-plus"></span>
+     </button>
+    </td>
+    <td>
+     <button type="button" class="btn pull-left btn-danger" ng-click="remove(product)" ng-disabled="canRemove(product)">
+      <span class="glyphicon glyphicon-minus"></span>
+     </button>
+    </td>
+    <td>Quantidade: {{ getQuantity(product) }}</td>
+    <td>Menor preço: {{ product.lowestPrice ? (product.lowestPrice | currency:'R$ ') : 'não informado' }} </td>
+   </tr>
+  </table>
+  <div id="modal" class="modal fade">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-body">
+      <button type="button" class="close" data-dismiss="modal">&times;</button> 
+      <h1>Lista de Compras</h1>
+       <table class="table">
+        <tr ng-repeat="product in cartProducts">
+         <td>{{ product.name }}</td>
+         <td>{{ product.quantity }}</td>
+        </tr>
+       </table>    
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-success">Localizar mercado mais barato!</button>     
+     </div>
+   </div>
+  </div>
+ </div> 
+ </div> 
+</body>
+</html>
