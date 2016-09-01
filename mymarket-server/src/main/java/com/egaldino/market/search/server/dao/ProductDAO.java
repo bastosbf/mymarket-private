@@ -63,6 +63,7 @@ public class ProductDAO extends GenericDAO<Product> {
 				}
 				criteria = criteria.add(Restrictions.like("name", token.toUpperCase(), MatchMode.ANYWHERE));
 			}
+			criteria.addOrder(Order.asc("name"));
 			List<Product> products = criteria.list();
 			return products;
 		} finally {
