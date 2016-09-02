@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.hibernate.SQLQuery;
@@ -24,8 +24,8 @@ public class SearchRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/products")
-	public List<Search> products(@QueryParam("market") int market) {
+	@Path("/products/{market}")
+	public List<Search> products(@PathParam("market") int market) {
 		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
 		List<MarketProduct> results = dao.getByMarket(market);
 		List<Search> prices = new ArrayList<Search>();
@@ -43,8 +43,8 @@ public class SearchRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/prices-by-place")
-	public List<Search> pricesByPlace(@QueryParam("barcode") String barcode, @QueryParam("place") int place) {
+	@Path("/prices-by-place/{barcode}/{place}")
+	public List<Search> pricesByPlace(@PathParam("barcode") String barcode, @PathParam("place") int place) {
 		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
 		List<MarketProduct> results = dao.getByBarcodeAndPlace(barcode, place);
 		List<Search> searchList = new ArrayList<Search>();
@@ -74,8 +74,8 @@ public class SearchRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/prices-by-city")
-	public List<Search> pricesByCity(@QueryParam("barcode") String barcode, @QueryParam("city") int city) {
+	@Path("/prices-by-city/{barcode}/{city}")
+	public List<Search> pricesByCity(@PathParam("barcode") String barcode, @PathParam("city") int city) {
 		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
 		List<MarketProduct> results = dao.getByBarcodeAndCity(barcode, city);
 		List<Search> searchList = new ArrayList<Search>();

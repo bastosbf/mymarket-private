@@ -5,13 +5,12 @@ import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.egaldino.market.search.server.HibernateConfig;
@@ -31,8 +30,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/suggest-market")
-	public void suggestMarket(@QueryParam("name") String name, @QueryParam("place") String place, @QueryParam("city") String city) {
+	@Path("/suggest-market/{name}/{place}/{city}")
+	public void suggestMarket(@PathParam("name") String name, @PathParam("place") String place, @PathParam("city") String city) {
 		MarketSuggestion suggestion = new MarketSuggestion();
 		suggestion.setName(name);
 		suggestion.setPlace(place);
@@ -50,7 +49,7 @@ public class CollaborationRESTOperation {
 			msn.setText("Mercado: " + name + "\nLocal: " + place + "\nCidade: " + city);
 			msn.setHeader("e-Marcado", "MARKET-SUGGESTION");
 			msn.setSentDate(new Date());
-			Transport.send(msn);
+			// Transport.send(msn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -59,8 +58,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/suggest-product")
-	public void suggestProduct(@QueryParam("market") int market, @QueryParam("barcode") String barcode, @QueryParam("name") String name, @QueryParam("price") double price) {
+	@Path("/suggest-product/{market}/{barcode}/{name}/{price}")
+	public void suggestProduct(@PathParam("market") int market, @PathParam("barcode") String barcode, @PathParam("name") String name, @PathParam("price") double price) {
 		Product product = null;
 		{
 			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
@@ -96,8 +95,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/suggest-price")
-	public void suggestPrice(@QueryParam("market") int market, @QueryParam("product") String product, @QueryParam("price") double price) {
+	@Path("/suggest-price/{market}/{product}/{price}")
+	public void suggestPrice(@PathParam("market") int market, @PathParam("product") String product, @PathParam("price") double price) {
 		Market m = null;
 		{
 			MarketDAO dao = new MarketDAO(HibernateConfig.factory);
@@ -119,17 +118,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/suggest-name")
-	public void suggestName(@QueryParam("barcode") String barcode, @QueryParam("name") String name) {
-		// Product p = null;
-		// {
-		// ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-		// p = dao.get(product);
-		// if (p != null) {
-		// dao.updateName(product, name.toUpperCase());
-		// }
-		// }
-
+	@Path("/suggest-name/{barcode}/{name}")
+	public void suggestName(@PathParam("barcode") String barcode, @PathParam("name") String name) {
 		ProductNameSuggestion suggestion = new ProductNameSuggestion();
 		suggestion.setSuggestedName(name);
 		suggestion.setBarcode(barcode);
@@ -152,7 +142,7 @@ public class CollaborationRESTOperation {
 			msn.setText("Barcode: " + barcode + "\nCurrent Name: " + product.getName() + "\nSuggested Name: " + name);
 			msn.setHeader("e-Marcado", "PRODUCT-NAME-SUGGESTION");
 			msn.setSentDate(new Date());
-			Transport.send(msn);
+			// Transport.send(msn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,8 +150,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/confirm-price")
-	public void confirmPrice(@QueryParam("market") int market, @QueryParam("barcode") String product) {
+	@Path("/confirm-price/{market}/{barcode}")
+	public void confirmPrice(@PathParam("market") int market, @PathParam("barcode") String product) {
 		Market m = null;
 		{
 			MarketDAO dao = new MarketDAO(HibernateConfig.factory);
