@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.mymarket.server.model.Market"
+		table="market" lazy="false">
+		<id name="id" column="id" />
+		<property name="name" />
+		<property name="latitude" />
+		<property name="longitude" />
+		<many-to-one name="place"
+			class="com.mymarket.server.model.Place" fetch="select" />
+		<property name="address" />
+	</class>
+</hibernate-mapping>
