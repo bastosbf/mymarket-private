@@ -41,9 +41,6 @@
 <script type="text/javascript" src="js/external/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/external/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript" src="js/external/bootstrap.js"></script>
-<!-- <script type="text/javascript" src="js/external/angular.min.js"></script> -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-
 </head>
 <body>
   <div class="app" data-role="main">
@@ -52,26 +49,23 @@
       <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
         <h1 class="header-title">e-Mercado</h1>
       </div>
-      <div style="margin: 2%" ng-controller="LocationSelectsController">
-        <select name="citiesSelect" id="citiesSelect" ng-model="selectedCity" ng-options="city.id as city.name for city in cities track by city.id">
-          <option value=0>Selecione a Cidade</option>
+      <div style="margin: 2%">
+        <select name="citiesSelect" id="citiesSelect">
         </select>
         <br>
-        <select name="placesSelect" id="placesSelect" ng-model="selectedPlace" ng-options="place.id as place.name for place in places track by place.id">
-          <option value=0>Selecione o Bairro</option>
+        <select name="placesSelect" id="placesSelect">
         </select>
         <br>
-        <select name="marketsSelect" id="marketsSelect" ng-model="selectedMarket" ng-options="market.id as market.name for market in markets track by market.id">
-          <option value=0>Selecione o Mercado</option>
+        <select name="marketsSelect" id="marketsSelect">
         </select>
       </div>
       <div style="white-space: nowrap; margin: 5%; min-width: 100px; width: auto !important;">
         <!--                 http://marcj.github.io/css-element-queries/ -->
-        <button class="indexButton" id="scanBarcodeButton" type="button" data-role="none" disabled>Escanear Código</button>
-        <button class="indexButton" id="enterBarcodeButton" type="button" data-role="none" disabled>Digitar Código</button>
+        <button class="btn btn-primary ui-responsive" id="scanBarcodeButton" type="button" data-role="none" disabled>Escanear Código</button>
+        <button class="btn btn-primary ui-responsive" id="enterBarcodeButton" type="button" data-role="none" disabled>Digitar Código</button>
         <br>
       </div>
-      <button class="indexButton" style="background-color: #008CBA; width: auto" id="suggestMarketActivityButton" type="button" data-role="none">Sugerir Mercado</button>
+      <button class="btn btn-primary ui-responsive" style="background-color: #008CBA; width: auto" id="suggestMarketActivityButton" type="button" data-role="none">Sugerir Mercado</button>
 
       <div class="info-div">
         <small> Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre
@@ -101,6 +95,5 @@
   <script type="text/javascript" src="js/geolocation.js"></script>
   <script type="text/javascript" src="js/rest_operations.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
-  <script type="text/javascript" src="js/angular_app.js"></script>
 </body>
 </html>

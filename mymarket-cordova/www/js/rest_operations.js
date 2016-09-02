@@ -1,105 +1,94 @@
-//function getCities($scope) {
-//	showLoading();
-//	latitude = localStorage.getItem("latitude");
-//	longitude = localStorage.getItem("longitude");
-//	$.getJSON(rest_url + '/city/list',
-//			function(data) {
-//				// $('#citiesSelect').prepend($('<option>', {
-//				// value : 0,
-//				// text : "Selecione a cidade"
-//				// }));
-//				// $('#citiesSelect').change();
-//				var scope = angular.element(
-//						'[ng-controller=LocationSelectsController]').scope();
-//				scope.$apply(function() {
-//					scope.cities = data;
-//				});
-//
-//				if (latitude != null && longitude != null) {
-//					onSuccessGetLocation(latitude, longitude, data,
-//							$("#citiesSelect"));
-//				}
-//				hideLoading();
-//			});
-//}
-//
-//function getPlaces() {
-//	latitude = localStorage.getItem("latitude");
-//	longitude = localStorage.getItem("longitude");
-//	showLoading();
-//	// $('#placesSelect').find('option').remove();
-//	var cityId = $("#citiesSelect").val();
-//
-//	if (cityId > 0) {
-//		$("#scanBarcodeButton").prop('disabled', null);
-//		$('#enterBarcodeButton').prop('disabled', null);
-//	} else {
-//		$("#scanBarcodeButton").prop('disabled', true);
-//		$('#enterBarcodeButton').prop('disabled', true);
-//	}
-//	$.getJSON(rest_url + '/place/list?city=' + cityId,
-//			function(data) {
-//				// $('#placesSelect').append($('<option>', {
-//				// value : 0,
-//				// text : "Selecione o bairro"
-//				// }));
-//				// $('#placesSelect').change();
-//				// for (i in data) {
-//				// $('#placesSelect').append($('<option>', {
-//				// value : data[i].id,
-//				// text : data[i].name
-//				// }));
-//				// }
-//
-//				var scope = angular.element(
-//						'[ng-controller=LocationSelectsController]').scope();
-//				scope.$apply(function() {
-//					scope.places = data;
-//				});
-//
-//				if (latitude != null && longitude != null) {
-//					onSuccessGetLocation(latitude, longitude, data,
-//							$("#placesSelect"));
-//				}
-//				$('#placesSelect').selectmenu("refresh", true);
-//				hideLoading();
-//			});
-//}
-//
-//function getMarkets() {
-//	latitude = localStorage.getItem("latitude");
-//	longitude = localStorage.getItem("longitude");
-//	showLoading();
-//	// $('#marketsSelect').find('option').remove();
-//	var placeId = $("#placesSelect").val();
-//	if (placeId != null) {
-//		$.getJSON(rest_url + '/market/list?place=' + placeId, function(data) {
-//			// $('#marketsSelect').append($('<option>', {
-//			// value : 0,
-//			// text : "Selecione o mercado"
-//			// }));
-//			// for (i in data) {
-//			// $('#marketsSelect').append($('<option>', {
-//			// value : data[i].id,
-//			// text : data[i].name
-//			// }));
-//			// }
-//
-//			var scope = angular.element(
-//					'[ng-controller=LocationSelectsController]').scope();
-//			scope.$apply(function() {
-//				scope.markets = data;
-//			})
-//
-//			if (latitude != null && longitude != null) {
-//				onSuccessGetLocation(latitude, longitude, data,
-//						$("#marketsSelect"));
-//			}
-//			$('#marketsSelect').selectmenu("refresh", true);
-//			hideLoading();
-//		});
-//	}
-//}
+function getCities($scope) {
+	showLoading();
+	latitude = localStorage.getItem("latitude");
+	longitude = localStorage.getItem("longitude");
+	$.getJSON(rest_url + '/city/list',
+			function(data) {
+				$('#citiesSelect').prepend($('<option>', {
+					value : 0,
+					text : "Selecione a cidade"
+				}));
+				for (i in data) {
+					$('#citiesSelect').append($('<option>', {
+						value : data[i].id,
+						text : data[i].name
+					}));
+				}
+				$('#citiesSelect').change();
+
+				if (latitude != null && longitude != null) {
+					onSuccessGetLocation(latitude, longitude, data,
+							$("#citiesSelect"));
+				}
+				hideLoading();
+			});
+}
+
+function getPlaces() {
+	latitude = localStorage.getItem("latitude");
+	longitude = localStorage.getItem("longitude");
+	showLoading();
+	$('#placesSelect').find('option').remove();
+	var cityId = $("#citiesSelect").val();
+
+	if (cityId > 0) {
+		$("#scanBarcodeButton").prop('disabled', null);
+		$('#enterBarcodeButton').prop('disabled', null);
+	} else {
+		$("#scanBarcodeButton").prop('disabled', true);
+		$('#enterBarcodeButton').prop('disabled', true);
+	}
+	$.getJSON(rest_url + '/place/list?city=' + cityId,
+			function(data) {
+				$('#placesSelect').append($('<option>', {
+					value : 0,
+					text : "Selecione o bairro"
+				}));
+				$('#placesSelect').change();
+				for (i in data) {
+					$('#placesSelect').append($('<option>', {
+						value : data[i].id,
+						text : data[i].name
+					}));
+				}
+
+				if (latitude != null && longitude != null) {
+					onSuccessGetLocation(latitude, longitude, data,
+							$("#placesSelect"));
+				}
+				$('#placesSelect').selectmenu("refresh", true);
+				hideLoading();
+			});
+}
+
+function getMarkets() {
+	latitude = localStorage.getItem("latitude");
+	longitude = localStorage.getItem("longitude");
+	showLoading();
+	$('#marketsSelect').find('option').remove();
+	var placeId = $("#placesSelect").val();
+	if (placeId != null) {
+		$.getJSON(rest_url + '/market/list?place=' + placeId, function(data) {
+			$('#marketsSelect').append($('<option>', {
+				value : 0,
+				text : "Selecione o mercado"
+			}));
+			for (i in data) {
+				$('#marketsSelect').append($('<option>', {
+					value : data[i].id,
+					text : data[i].name
+				}));
+			}
+
+			if (latitude != null && longitude != null) {
+				onSuccessGetLocation(latitude, longitude, data,
+						$("#marketsSelect"));
+			}
+			$('#marketsSelect').selectmenu("refresh", true);
+			hideLoading();
+		});
+	}
+}
 
 function searchProduct(barcode) {
 	if (barcode == null) {
@@ -126,9 +115,8 @@ function searchProduct(barcode) {
 						class : "scheduler-border"
 					});
 
-					$productFieldSet
-							.append('<div style="height: 20%;"><div style="width: 50%; height: 100%; float: left;"><img src="http://146.134.100.70/no-image.png" data-keyboard="true" data-toggle="modal" class="img-responsive"></div><div style="width: 50%; height: 100%; float: right;"><p data-position="fixed">'
-									+ barcode + '</p></div></div>');
+					$productFieldSet.append('<p data-position="fixed">'
+							+ barcode + '</p>');
 
 					if (data.length > 0 && typeof data[0] !== 'undefined'
 							&& data[0] !== null) {
