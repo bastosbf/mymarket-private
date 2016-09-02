@@ -38,7 +38,7 @@ function getPlaces() {
 		$("#scanBarcodeButton").prop('disabled', true);
 		$('#enterBarcodeButton').prop('disabled', true);
 	}
-	$.getJSON(rest_url + '/place/list?city=' + cityId,
+	$.getJSON(rest_url + '/place/list/' + cityId,
 			function(data) {
 				$('#placesSelect').append($('<option>', {
 					value : 0,
@@ -68,7 +68,7 @@ function getMarkets() {
 	$('#marketsSelect').find('option').remove();
 	var placeId = $("#placesSelect").val();
 	if (placeId != null) {
-		$.getJSON(rest_url + '/market/list?place=' + placeId, function(data) {
+		$.getJSON(rest_url + '/market/list/' + placeId, function(data) {
 			$('#marketsSelect').append($('<option>', {
 				value : 0,
 				text : "Selecione o mercado"
@@ -98,18 +98,12 @@ function searchProduct(barcode) {
 	var cityId = $("#citiesSelect").val();
 	var marketId = $("#marketsSelect").val();
 
-	$
-			.ajax({
-				url : rest_url + '/search/prices-by-city',
+	$.ajax({
+				url : rest_url + '/search/prices-by-city/' + barcode + '/' + cityId,
 				dataType : 'json',
-				async : false,
-				data : {
-					"city" : cityId,
-					"barcode" : barcode
-				},
+				async : false,				
 				type : "GET",
 				success : function(data) {
-
 					var $productFieldSet = $("<fieldset>", {
 						id : "productsFieldset",
 						class : "scheduler-border"
@@ -662,12 +656,7 @@ function suggestMarket(city, place, market) {
 			|| (market == null || market == "")) {
 		return;
 	}
-	$.getJSON(rest_url + '/collaboration/suggest-market', {
-		city : city,
-		place : place,
-		name : market
-	}, function(data) {
-	});
+	$.getJSON(rest_url + '/collaboration/suggest-market/' + market + '/' + place + '/' + city);
 	hideLoading();
 }
 
@@ -680,15 +669,9 @@ function addProduct(market, barcode, name, price) {
 	localStorage.setItem("confirmActived", false);
 
 	$.ajax({
-		url : rest_url + '/collaboration/suggest-product',
+		url : rest_url + '/collaboration/suggest-product/' + market + '/' + barcode + '/' + name + '/' + price,
 		dataType : 'json',
-		async : false,
-		data : {
-			"market" : market,
-			"barcode" : barcode,
-			"name" : name,
-			"price" : price
-		},
+		async : false,		
 		type : "GET",
 		success : function(data) {
 			hideLoading();
@@ -699,32 +682,19 @@ function addProduct(market, barcode, name, price) {
 function updatePrice(market, barcode, price) {
 	showLoading();
 	localStorage.setItem("confirmActived", false);
-	$.getJSON(rest_url + '/collaboration/suggest-price', {
-		market : market,
-		product : barcode,
-		price : price
-	}, function(data) {
-		hideLoading();
-	});
+	$.getJSON(rest_url + '/collaboration/suggest-price/' + market + '/' + barcode + '/' + price);
+	hideLoading();
 }
 
 function confirmPrice(market, barcode) {
 	showLoading();
 	localStorage.setItem("confirmActived", false);
-	$.getJSON(rest_url + '/collaboration/confirm-price', {
-		market : market,
-		barcode : barcode
-	}, function(data) {
-		hideLoading();
-	});
+	$.getJSON(rest_url + '/collaboration/confirm-price/' + market + '/' + barcode);
+	hideLoading();
 }
 
 function renameProduct(barcode, name) {
 	showLoading();
-	$.getJSON(rest_url + '/collaboration/suggest-name', {
-		barcode : barcode,
-		name : name
-	}, function(data) {
-		hideLoading();
-	});
+	$.getJSON(rest_url + '/collaboration/suggest-name/' + barcode + '/' + name);
+	hideLoading();
 }
