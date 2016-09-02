@@ -111,7 +111,7 @@ function searchProduct(barcode) {
 
 	$
 			.ajax({
-				url : rest_url + '/search/prices-by-city',
+				url : rest_url + '/search/prices-by-city/' + barcode + "/" + cityId,
 				dataType : 'json',
 				async : false,
 				data : {
