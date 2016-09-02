@@ -1,9 +1,64 @@
+(function(d, s, id) {
+ 	  var js, fjs = d.getElementsByTagName(s)[0];
+ 	  if (d.getElementById(id)) return;
+ 	  js = d.createElement(s); js.id = id;
+ 	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1781335808818687";
+ 	  fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
+
 var CONFIG = {
 		ROOT_URL: "http://146.134.100.70:8080/mymarket-server"
 };
 
 var app = angular.module('myMarketApp', ["ui.bootstrap.modal"]);
-app.controller('myMarketController', function($scope, $rootScope, $http) {
+app.controller('myMarketController', function($scope, $rootScope, $window, $http) {
+	//will check if the user is already logged in
+	window.fbAsyncInit = function() {
+		FB.Event.subscribe('auth.statusChange', function(response) {
+		    if(response.status == 'connected') {
+		    	$scope.$apply(function() {		    		  
+					  $scope.uid = response.authResponse.userID;
+					  $scope.accessToken = response.authResponse.accessToken;					  
+				});
+		    }		    
+		});
+	    FB.init({
+	        appId      : '1781335808818687',
+	        status     : true,
+	        cookie     : true,
+	        xfbml      : true,
+	        version    : 'v2.4',
+	 	    oauth      : true
+	    });
+	 };	
+	//will login the user or get its credentials if the user is already logged in	
+	$scope.login = function(){
+		FB.getLoginStatus(function(response) {
+			  if (!(response.status === 'connected')) {
+				  FB.login(function(response) {
+					  $scope.$apply(function() {
+						  $scope.uid = response.authResponse.userID;
+						  $scope.accessToken = response.authResponse.accessToken;
+					  });
+			      });
+			  } else {				  
+				 $scope.uid = response.authResponse.userID;
+				 $scope.accessToken = response.authResponse.accessToken;				  
+			  } 
+		});        
+    }
+	$scope.logout = function() {
+		FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				FB.logout(function(response) {
+					$scope.$apply(function() {
+						$scope.uid = null;
+						$scope.accessToken = null;
+					});
+				});
+			}
+		});
+	}	
 	$scope.total = function() {
 		return sessionStorage.total ? sessionStorage.total : 0;
 	}
