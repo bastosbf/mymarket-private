@@ -99,6 +99,8 @@ $('#placesSelect').on("change", getMarkets);
 $('#enterBarcodeButton').unbind('click').on("click", function() {
 	$("#barcodeEnterBarcodeDialog").val("");
 	$('#enterBarcodeSendButton').unbind('click').on("click", function() {
+		localStorage.setItem(
+				"confirmActived", true);
 		searchProduct($("#barcodeEnterBarcodeDialog").val());
 		$('[data-role=dialog]').dialog("close");
 	});
