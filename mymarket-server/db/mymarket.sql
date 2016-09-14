@@ -84,12 +84,12 @@ DROP TABLE IF EXISTS `market_product_accounting`;
 CREATE TABLE `market_product_accounting` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `market` int(11) NOT NULL,
-  `barcode` varchar(255) NOT NULL,
+  `product` int(11) NOT NULL,
   `price` float NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`market`) REFERENCES market(`id`) ON UPDATE CASCADE,
-  FOREIGN KEY (`barcode`) REFERENCES product_barcode(`barcode`) ON UPDATE CASCADE
+  FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `search_accounting`;
@@ -121,3 +121,13 @@ CREATE TABLE `product_name_suggestion` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado';
+
+DELIMITER // 
+CREATE TRIGGER TRG_ProductAccounting_Update AFTER UPDATE ON market_product
+FOR EACH ROW       
+    BEGIN         
+        INSERT INTO market_product_accounting(market, product, price) VALUES (NEW.market, NEW.product,  NEW.price);
+    END;
+//
+DELIMITER ;
+
