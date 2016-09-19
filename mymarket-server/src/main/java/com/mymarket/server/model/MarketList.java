@@ -5,9 +5,9 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Product implements Serializable {
-	private Integer id;;
-	private String name;
+public class MarketList implements Serializable {
+	private Integer id;
+	private User user;
 
 	public Integer getId() {
 		return id;
@@ -17,12 +17,12 @@ public class Product implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public User getUser() {
+		return user;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

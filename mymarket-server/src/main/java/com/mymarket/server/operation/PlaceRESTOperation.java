@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
-import com.mymarket.server.dao.PlaceDAO;
+import com.mymarket.server.dao.impl.PlaceDAO;
 import com.mymarket.server.model.Place;
 
 @Path("/place")

@@ -1,4 +1,4 @@
-package com.mymarket.server.dao;
+package com.mymarket.server.dao.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import com.mymarket.server.dao.GenericDAO;
 import com.mymarket.server.model.City;
 import com.mymarket.server.model.Place;
 

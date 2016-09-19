@@ -6,7 +6,7 @@ import java.util.Date;
 public class MarketProduct implements Serializable {
 	private Market market;
 	private Product product;
-	private Double price;
+	private Float price;
 	private Date lastUpdate;
 
 	public Market getMarket() {
@@ -25,11 +25,11 @@ public class MarketProduct implements Serializable {
 		this.product = product;
 	}
 
-	public Double getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 

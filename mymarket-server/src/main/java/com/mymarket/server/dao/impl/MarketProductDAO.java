@@ -1,6 +1,5 @@
-package com.mymarket.server.dao;
+package com.mymarket.server.dao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -9,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import com.mymarket.server.dao.GenericDAO;
 import com.mymarket.server.model.MarketProduct;
 
 public class MarketProductDAO extends GenericDAO<MarketProduct> {
@@ -29,35 +29,33 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 		return list;
 	}
 	
-	public void updatePrice(int market, String barcode, double price) {
+	public void updatePrice(int market, int product, float price) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(MarketProduct.class)
 				.createAlias("product", "p")
 				.createAlias("market", "m")
-				.add(Restrictions.eq("p.barcode", barcode))
+				.add(Restrictions.eq("p.id", product))
 				.add(Restrictions.eq("m.id", market));
 		List<MarketProduct> list = criteria.list();
 		if(!list.isEmpty()) {
 			MarketProduct mp = list.get(0);
-			mp.setLastUpdate(new Date());
 			mp.setPrice(price);
 			update(mp);
 		}		
 	}
 	
-	public void confirmPrice(int market, String barcode, Date date) {
+	public void confirmPrice(int market, int product) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(MarketProduct.class)
 				.createAlias("product", "p")
 				.createAlias("market", "m")
-				.add(Restrictions.eq("p.barcode", barcode))
+				.add(Restrictions.eq("p.id", product))
 				.add(Restrictions.eq("m.id", market));
 		List<MarketProduct> list = criteria.list();
 		if(!list.isEmpty()) {
 			MarketProduct mp = list.get(0);
-			mp.setLastUpdate(date);
 			update(mp);
 		}		
 	}
@@ -65,10 +63,12 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 	public List<MarketProduct> getByBarcodeAndPlace(String barcode, int place, int maxResults) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class)
+		Criteria criteria = session.createCriteria(MarketProduct.class)				
+				.createAlias("product_barcode", "pb")
 				.createAlias("product", "p")
 				.createAlias("market", "m")
-				.add(Restrictions.eq("p.barcode", barcode))
+				.add(Restrictions.eq("pb.barcode", barcode))
+				.add(Restrictions.eq("p.id", "pb.product"))
 				.add(Restrictions.eq("m.place.id", place))
 				.addOrder(Order.asc("price"));
 		criteria.setMaxResults(maxResults);
@@ -80,11 +80,13 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(MarketProduct.class)
+				.createAlias("product_barcode", "pb")
 				.createAlias("product", "p")
 				.createAlias("market", "m")
-				.createAlias("m.place", "mp")
-				.add(Restrictions.eq("p.barcode", barcode))
-				.add(Restrictions.eq("mp.city.id", city))
+				.createAlias("m.place", "mpl")
+				.add(Restrictions.eq("pb.barcode", barcode))
+				.add(Restrictions.eq("p.id", "pb.product"))
+				.add(Restrictions.eq("mpl.city.id", city))
 				.addOrder(Order.asc("price"));
 		criteria.setMaxResults(maxResults);
 		List<MarketProduct> list = criteria.list();		

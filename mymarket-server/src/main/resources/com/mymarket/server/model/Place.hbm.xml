@@ -2,12 +2,10 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.mymarket.server.model.Place"
-		table="place" lazy="false">
+	<class name="com.mymarket.server.model.Place" table="place" lazy="false">
 		<id name="id" column="id" />
-		<property name="name" />
-		<many-to-one name="city"
-			class="com.mymarket.server.model.City" fetch="select" />
+		<many-to-one name="city" class="com.mymarket.server.model.City" fetch="select" />
+		<property name="name" />		
 		<property name="latitude" />
 		<property name="longitude" />
 	</class>

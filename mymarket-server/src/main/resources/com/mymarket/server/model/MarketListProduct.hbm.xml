@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.mymarket.server.model.MarketListProduct" table="market_list_product" lazy="false">
+		<composite-id>
+			<key-many-to-one name="list" class="com.mymarket.server.model.MarketList"/>
+			<key-many-to-one name="product" class="com.mymarket.server.model.Product"/>
+		</composite-id>
+		<property name="quantity" />
+	</class>
+</hibernate-mapping>

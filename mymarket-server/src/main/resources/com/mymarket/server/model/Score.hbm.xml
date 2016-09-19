@@ -2,13 +2,12 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.mymarket.server.model.ProductNameSuggestion" table="product_name_suggestion">
+	<class name="com.mymarket.server.model.Score" table="score" lazy="false">
 		<id name="id" column="id">
 			<generator class="identity" />
 		</id>
-		<many-to-one name="product" class="com.mymarket.server.model.Product" fetch="select" />
-		<property name="suggestedName" column="suggested_name"/>
-		<property name="status" />
+		<many-to-one name="user" class="com.mymarket.server.model.User" fetch="select" />
+		<property name="score" />
 		<property name="date" />
 	</class>
 </hibernate-mapping>

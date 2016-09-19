@@ -2,10 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.mymarket.server.model.City" table="city" lazy="false">
-		<id name="id" column="id" />
+	<class name="com.mymarket.server.model.User" table="user" lazy="false">
+		<id name="uid" column="uid" />
 		<property name="name" />
-		<property name="latitude" />
-		<property name="longitude" />
+		<property name="email" />
 	</class>
 </hibernate-mapping>

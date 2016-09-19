@@ -11,19 +11,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
-import com.mymarket.server.dao.ProductDAO;
-import com.mymarket.server.model.EnhancedProduct;
+import com.mymarket.server.dao.impl.ProductDAO;
 import com.mymarket.server.model.Product;
+import com.mymarket.server.model.dto.EnhancedProduct;
 
 @Path("/product")
 public class ProductRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/get/{barcode}")
-	public Product get(@PathParam("barcode") String barcode) {
+	@Path("/get/{product}")
+	public Product get(@PathParam("product") int product) {
 		ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-		return dao.get(barcode);
+		return dao.get(product);
 	}
 
 	@GET

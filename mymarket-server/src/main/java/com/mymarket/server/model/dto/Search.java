@@ -1,4 +1,4 @@
-package com.mymarket.server.to;
+package com.mymarket.server.model.dto;
 
 import java.util.Date;
 
@@ -12,7 +12,7 @@ import com.mymarket.server.model.Product;
 public class Search {
 	private Product product;
 	private Market market;
-	private Double price;
+	private Float price;
 	private Date lastUpdate;
 
 	public Product getProduct() {
@@ -31,11 +31,11 @@ public class Search {
 		this.market = market;
 	}
 
-	public Double getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 

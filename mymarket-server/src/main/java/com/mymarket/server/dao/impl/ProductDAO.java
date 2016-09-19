@@ -1,4 +1,4 @@
-package com.mymarket.server.dao;
+package com.mymarket.server.dao.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -12,9 +12,10 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.mymarket.server.model.EnhancedProduct;
+import com.mymarket.server.dao.GenericDAO;
 import com.mymarket.server.model.MarketProduct;
 import com.mymarket.server.model.Product;
+import com.mymarket.server.model.dto.EnhancedProduct;
 
 public class ProductDAO extends GenericDAO<Product> {
 
@@ -105,11 +106,11 @@ public class ProductDAO extends GenericDAO<Product> {
 		}
 	}
 
-	public Product get(String barcode) {
+	public Product get(int id) {
 		Session session = factory.openSession();
 		try {
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("barcode", barcode));
+			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("id", id));
 			List<Product> list = criteria.list();
 			if (!list.isEmpty()) {
 				return list.get(0);
@@ -121,10 +122,10 @@ public class ProductDAO extends GenericDAO<Product> {
 		}
 	}
 
-	public void updateName(String barcode, String name) {
+	public void updateName(int id, String name) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("barcode", barcode));
+		Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("id", id));
 		List<Product> list = criteria.list();
 		if (!list.isEmpty()) {
 			Product p = list.get(0);

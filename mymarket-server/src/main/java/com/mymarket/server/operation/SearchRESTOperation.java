@@ -13,33 +13,14 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.mymarket.server.HibernateConfig;
-import com.mymarket.server.dao.MarketProductDAO;
-import com.mymarket.server.dao.ProductDAO;
+import com.mymarket.server.dao.impl.MarketProductDAO;
+import com.mymarket.server.dao.impl.ProductBarcodeDAO;
 import com.mymarket.server.model.MarketProduct;
-import com.mymarket.server.model.Product;
-import com.mymarket.server.to.Search;
+import com.mymarket.server.model.ProductBarcode;
+import com.mymarket.server.model.dto.Search;
 
 @Path("/search")
 public class SearchRESTOperation {
-
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/products/{market}")
-	public List<Search> products(@PathParam("market") int market) {
-		MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
-		List<MarketProduct> results = dao.getByMarket(market);
-		List<Search> prices = new ArrayList<Search>();
-		for (MarketProduct result : results) {
-			Search price = new Search();
-			price.setProduct(result.getProduct());
-			price.setMarket(result.getMarket());
-			price.setPrice(result.getPrice());
-			price.setLastUpdate(result.getLastUpdate());
-
-			prices.add(price);
-		}
-		return prices;
-	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -59,11 +40,11 @@ public class SearchRESTOperation {
 		}
 		if (results.isEmpty()) {
 			// busca produto por barcode
-			ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
-			Product product = productDAO.get(barcode);
-			if (product != null) {
+			ProductBarcodeDAO productBarcodeDAO = new ProductBarcodeDAO(HibernateConfig.factory);
+			ProductBarcode productBarcode = productBarcodeDAO.get(barcode);
+			if (productBarcode != null) {
 				Search productSearch = new Search();
-				productSearch.setProduct(product);
+				productSearch.setProduct(productBarcode.getProduct());
 
 				searchList.add(productSearch);
 			}
@@ -90,11 +71,11 @@ public class SearchRESTOperation {
 		}
 		if (results.isEmpty()) {
 			// busca produto por barcode
-			ProductDAO productDAO = new ProductDAO(HibernateConfig.factory);
-			Product product = productDAO.get(barcode);
-			if (product != null) {
+			ProductBarcodeDAO productBarcodeDAO = new ProductBarcodeDAO(HibernateConfig.factory);
+			ProductBarcode productBarcode = productBarcodeDAO.get(barcode);
+			if (productBarcode != null) {
 				Search productSearch = new Search();
-				productSearch.setProduct(product);
+				productSearch.setProduct(productBarcode.getProduct());
 
 				searchList.add(productSearch);
 			}
@@ -105,7 +86,7 @@ public class SearchRESTOperation {
 		 */
 		Session session = HibernateConfig.factory.openSession();
 		try {
-			SQLQuery query = session.createSQLQuery("INSERT INTO search_accounting (barcode, date) VALUES ('" + barcode + "', now())");
+			SQLQuery query = session.createSQLQuery("INSERT INTO search_accounting (product_barcode) VALUES ('" + barcode + "')");
 			query.executeUpdate();
 		} finally {
 			session.flush();

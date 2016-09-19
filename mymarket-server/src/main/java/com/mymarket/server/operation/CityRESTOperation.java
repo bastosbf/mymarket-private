@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
-import com.mymarket.server.dao.CityDAO;
+import com.mymarket.server.dao.impl.CityDAO;
 import com.mymarket.server.model.City;
 
 @Path("/city")

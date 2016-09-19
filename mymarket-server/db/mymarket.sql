@@ -6,6 +6,16 @@ CREATE TABLE `user` (
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS `score`;
+CREATE TABLE `score` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
+  `score` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`uid`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 DROP TABLE IF EXISTS `city`;
 CREATE TABLE `city` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -40,7 +50,7 @@ CREATE TABLE `market` (
 
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -57,7 +67,7 @@ DROP TABLE IF EXISTS `market_product`;
 CREATE TABLE `market_product` (
   `market` int(11) NOT NULL,
   `product` int(11) NOT NULL,
-  `price` double NOT NULL,
+  `price` float NOT NULL,
   `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`market`,`product`),
   FOREIGN KEY (`market`) REFERENCES market(`id`) ON UPDATE CASCADE,
@@ -66,9 +76,9 @@ CREATE TABLE `market_product` (
 
 CREATE TABLE `market_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`uid`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
+  FOREIGN KEY (`user`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `market_list_product` (
@@ -111,12 +121,25 @@ CREATE TABLE `market_suggestion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COMMENT='Status = N - Novo, A - Adicionado, R - Rejeitado';
 
+DROP TABLE IF EXISTS `product_suggestion`;
+CREATE TABLE `product_suggestion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` int(11) NOT NULL,
+  `barcode` varchar(255) NOT NULL,
+  `market` int(11),
+  `price` float,
+  `status` char(1) NOT NULL DEFAULT 'N',  
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`market`) REFERENCES market(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado';
+
 DROP TABLE IF EXISTS `product_name_suggestion`;
 CREATE TABLE `product_name_suggestion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product` int(11) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N',
+  `product` int(11) NOT NULL,  
   `suggested_name` varchar(255) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'N',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE

@@ -1,6 +1,8 @@
-package com.mymarket.server.model;
+package com.mymarket.server.model.dto;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.mymarket.server.model.Product;
 
 @XmlRootElement
 public class EnhancedProduct extends Product {
@@ -8,29 +10,29 @@ public class EnhancedProduct extends Product {
 	public EnhancedProduct() {}
 
 	public EnhancedProduct(Product product) {
-		setBarcode(product.getBarcode());
+		setId(product.getId());
 		setName(product.getName());
 	}
 
-	private Double lowestPrice;
+	private Float lowestPrice;
 
-	public Double getLowestPrice() {
+	public Float getLowestPrice() {
 		return lowestPrice;
 	}
 
-	public void setLowestPrice(Double lowestPrice) {
+	public void setLowestPrice(Float lowestPrice) {
 		this.lowestPrice = lowestPrice;
 	}
 
 	@Override
 	public int hashCode() {
-		return getBarcode().hashCode();
+		return getId().hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof EnhancedProduct) {
-			return ((EnhancedProduct) obj).getBarcode().equals(getBarcode());
+			return ((EnhancedProduct) obj).getId().equals(getId());
 		}
 		return false;
 	}
