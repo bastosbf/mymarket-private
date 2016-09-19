@@ -1,13 +1,19 @@
-<div data-role="header" class="ui-header ui-bar-a">
-  <h1 class="header-title">Sugerir Mercado</h1>
-  <a href="/index.html" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
+<!-- <script type="text/ng-template" id="suggestMarketActivity.html"> -->
+<script type="text/javascript" src="js/external/angular.min.js"></script>
+<div ng-app data-role="page">
+  <div data-role="header" class="ui-header ui-bar-a">
+    <h1 class="header-title">Sugerir Mercado</h1>
+    <a href="/index.html" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
+  </div>
+  <div data-role="content" class="ui-responsive">
+    {{3 + 2}}
+    <label for="citySuggestMarketActivity">Cidade:</label>
+    <input id="citySuggestMarketActivity" type="text" name="citySuggestMarketActivity">
+    <label for="placeSuggestMarketActivity">Bairro:</label>
+    <input id="placeSuggestMarketActivity" type="text" name="placeSuggestMarketActivity">
+    <label for="marketSuggestMarketActivity">Mercado:</label>
+    <input id="marketSuggestMarketActivity" type="text" name="marketSuggestMarketActivity">
+    <button id="suggestMarketSendButton" type="button" data-role="none" class="btn btn-primary">Enviar</button>
+  </div>
 </div>
-<div data-role="content" class="ui-responsive">
-  <label for="citySuggestMarketActivity">Cidade:</label>
-  <input id="citySuggestMarketActivity" type="text" name="citySuggestMarketActivity">
-  <label for="placeSuggestMarketActivity">Bairro:</label>
-  <input id="placeSuggestMarketActivity" type="text" name="placeSuggestMarketActivity">
-  <label for="marketSuggestMarketActivity">Mercado:</label>
-  <input id="marketSuggestMarketActivity" type="text" name="marketSuggestMarketActivity">
-  <button id="suggestMarketSendButton" type="button" data-role="none" class="btn btn-primary">Enviar</button>
-</div>
+<!-- </script> -->

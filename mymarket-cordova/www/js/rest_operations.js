@@ -111,7 +111,7 @@ function searchProduct(barcode) {
 
 	$
 			.ajax({
-				url : rest_url + '/search/prices-by-city/' + barcode + "/" + cityId,
+				url : rest_url + '/search/prices-by-city',
 				dataType : 'json',
 				async : false,
 				data : {
@@ -668,20 +668,20 @@ function searchProduct(barcode) {
 	hideLoading();
 }
 
-function suggestMarket(city, place, market) {
-	showLoading();
-	if ((city == null || city == "") || (place == null || place == "")
-			|| (market == null || market == "")) {
-		return;
-	}
-	$.getJSON(rest_url + '/collaboration/suggest-market', {
-		city : city,
-		place : place,
-		name : market
-	}, function(data) {
-	});
-	hideLoading();
-}
+//function suggestMarket(city, place, market) {
+////	showLoading();
+////	if ((city == null || city == "") || (place == null || place == "")
+////			|| (market == null || market == "")) {
+////		return;
+////	}
+////	$.getJSON(rest_url + '/collaboration/suggest-market', {
+////		city : city,
+////		place : place,
+////		name : market
+////	}, function(data) {
+////	});
+////	hideLoading();
+//}
 
 function addProduct(market, barcode, name, price) {
 	showLoading();
