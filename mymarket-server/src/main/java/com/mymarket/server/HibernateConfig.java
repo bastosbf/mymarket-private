@@ -1,7 +1,5 @@
 package com.mymarket.server;
 
-import java.util.TimeZone;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -20,12 +18,6 @@ import com.mymarket.server.model.Score;
 import com.mymarket.server.model.User;
 
 public class HibernateConfig {
-
-	static {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		System.setProperty("user.timezone", "UTC");
-
-	}
 
 	public static final SessionFactory factory = new Configuration()
 			.configure()

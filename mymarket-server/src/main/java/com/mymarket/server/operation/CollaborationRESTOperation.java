@@ -1,12 +1,5 @@
 package com.mymarket.server.operation;
 
-import java.util.Date;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,7 +14,6 @@ import com.mymarket.server.dao.impl.ProductDAO;
 import com.mymarket.server.dao.impl.ProductNameSuggestionDAO;
 import com.mymarket.server.dao.impl.ProductSuggestionDAO;
 import com.mymarket.server.model.Market;
-import com.mymarket.server.model.MarketProduct;
 import com.mymarket.server.model.MarketSuggestion;
 import com.mymarket.server.model.Product;
 import com.mymarket.server.model.ProductNameSuggestion;
