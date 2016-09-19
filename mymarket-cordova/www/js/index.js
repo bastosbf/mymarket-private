@@ -38,58 +38,62 @@ var app = {
 	// Update DOM on a Received Event
 	receivedEvent : function(id) {
 
-		$(document).bind('mobileinit', function() {
-			$.mobile.loader.prototype.options.text = "Aguarde";
-			$.mobile.loader.prototype.options.textVisible = true;
-			$.mobile.loader.prototype.options.theme = "a";
-		});
-
-		showLoading();
-		$("#AddProductActivity").load("activities/addProductActivity.html");
-		$("#AddMarketProductActivity").load(
-				"activities/addMarketProductActivity.html");
-		$("#AddMarketPriceActivity").load(
-				"activities/addMarketPriceActivity.html");
-
-		$("#SuggestMarketActivity").load(
-				"activities/suggestMarketActivity.html");
-		$("#dialogLocation").load("dialogs/dialogLocation.html");
-		$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
-		$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
-		$("#dialogEnterBarcode").load("dialogs/dialogEnterBarcode.html");
-
-		if (device.platform == "iOS") {
-			$('.header-title').each(function() {
-				$(this).addClass('header-title-ios');
+		if (id == 'deviceready') {
+			$(document).bind('mobileinit', function() {
+				$.mobile.loader.prototype.options.text = "Aguarde";
+				$.mobile.loader.prototype.options.textVisible = true;
+				$.mobile.loader.prototype.options.theme = "a";
 			});
 
-			$('.header-back-button').each(function() {
-				$(this).addClass('header-back-button-ios');
-			});
-		}
+			showLoading();
+			$("#AddProductActivity").load("activities/addProductActivity.html");
+			$("#AddMarketProductActivity").load(
+					"activities/addMarketProductActivity.html");
+			$("#AddMarketPriceActivity").load(
+					"activities/addMarketPriceActivity.html");
 
-		var onSuccessGetUserLocation = function(position) {
-			var latitude = position.coords.latitude;
-			var longitude = position.coords.longitude;
-			localStorage.setItem("latitude", latitude);
-			localStorage.setItem("longitude", longitude);
-			getCities();
-			hideLoading();
-		}
+			$("#SuggestMarketActivity").load(
+					"activities/suggestMarketActivity.html");
+			$("#dialogLocation").load("dialogs/dialogLocation.html");
+			$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
+			$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
+			$("#dialogEnterBarcode").load("dialogs/dialogEnterBarcode.html");
 
-		var onErrorGetUserLocation = function(error) {
-			navigator.notification.alert(
-					"Não foi possível adquirir localização por GPS!", null,
-					"e-Mercado", null);
-			getCities();
-		}
-
-		$.mobile.loading("show");
-		navigator.geolocation.getCurrentPosition(onSuccessGetUserLocation,
-				onErrorGetUserLocation, {
-					timeout : 6000,
-					enableHighAccuracy : true
+			if (device.platform == "iOS") {
+				$('.header-title').each(function() {
+					$(this).addClass('header-title-ios');
 				});
+
+				$('.header-back-button').each(function() {
+					$(this).addClass('header-back-button-ios');
+				});
+			}
+
+			var onSuccessGetUserLocation = function(position) {
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				localStorage.setItem("latitude", latitude);
+				localStorage.setItem("longitude", longitude);
+				getCities();
+				hideLoading();
+			}
+
+			var onErrorGetUserLocation = function(error) {
+				navigator.notification.alert(
+						"Não foi possível adquirir localização por GPS!", null,
+						"e-Mercado", null);
+				getCities();
+			}
+
+			$.mobile.loading("show");
+			navigator.geolocation.getCurrentPosition(onSuccessGetUserLocation,
+					onErrorGetUserLocation, {
+						timeout : 6000,
+						enableHighAccuracy : true
+					});
+
+			checkForMessages();
+		}
 	}
 };
 
@@ -99,8 +103,7 @@ $('#placesSelect').on("change", getMarkets);
 $('#enterBarcodeButton').unbind('click').on("click", function() {
 	$("#barcodeEnterBarcodeDialog").val("");
 	$('#enterBarcodeSendButton').unbind('click').on("click", function() {
-		localStorage.setItem(
-				"confirmActived", true);
+		localStorage.setItem("confirmActived", true);
 		searchProduct($("#barcodeEnterBarcodeDialog").val());
 		$('[data-role=dialog]').dialog("close");
 	});

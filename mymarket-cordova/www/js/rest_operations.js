@@ -1,4 +1,46 @@
-function getCities($scope) {
+function checkForMessages() {
+	$.getJSON(rest_url + '/notification/list/H', function(data) {
+		for (i in data) {
+			switch (data[i].kind) {
+			case 'U':
+				if (localStorage.getItem(data[i].id) != "VISUALISED") {
+					navigator.notification.alert(data[i].message, onConfirm, "e-Mercado", null);
+					function onConfirm(buttonIndex) {
+						switch (buttonIndex) {
+						case 0:
+							localStorage.setItem(data[i].id, "VISUALISED");
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				break;
+			case 'S':
+				navigator.notification.alert(data[i].message, null,
+						"e-Mercado", null);
+				break;
+			case 'F':
+				navigator.notification.alert(data[i].message, onConfirm,
+						"e-Mercado", null);
+				function onConfirm(buttonIndex) {
+					switch (buttonIndex) {
+					case 0:
+						navigator.app.exitApp();
+						break;
+					default:
+						break;
+					}
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	});
+}
+
+function getCities() {
 	showLoading();
 	latitude = localStorage.getItem("latitude");
 	longitude = localStorage.getItem("longitude");
@@ -98,10 +140,12 @@ function searchProduct(barcode) {
 	var cityId = $("#citiesSelect").val();
 	var marketId = $("#marketsSelect").val();
 
-	$.ajax({
-				url : rest_url + '/search/prices-by-city/' + barcode + '/' + cityId,
+	$
+			.ajax({
+				url : rest_url + '/search/prices-by-city/' + barcode + '/'
+						+ cityId,
 				dataType : 'json',
-				async : false,				
+				async : false,
 				type : "GET",
 				success : function(data) {
 					var $productFieldSet = $("<fieldset>", {
@@ -656,7 +700,8 @@ function suggestMarket(city, place, market) {
 			|| (market == null || market == "")) {
 		return;
 	}
-	$.getJSON(rest_url + '/collaboration/suggest-market/' + market + '/' + place + '/' + city);
+	$.getJSON(rest_url + '/collaboration/suggest-market/' + market + '/'
+			+ place + '/' + city);
 	hideLoading();
 }
 
@@ -669,9 +714,10 @@ function addProduct(market, barcode, name, price) {
 	localStorage.setItem("confirmActived", false);
 
 	$.ajax({
-		url : rest_url + '/collaboration/suggest-product/' + market + '/' + barcode + '/' + name + '/' + price,
+		url : rest_url + '/collaboration/suggest-product/' + market + '/'
+				+ barcode + '/' + name + '/' + price,
 		dataType : 'json',
-		async : false,		
+		async : false,
 		type : "GET",
 		success : function(data) {
 			hideLoading();
@@ -682,14 +728,16 @@ function addProduct(market, barcode, name, price) {
 function updatePrice(market, barcode, price) {
 	showLoading();
 	localStorage.setItem("confirmActived", false);
-	$.getJSON(rest_url + '/collaboration/suggest-price/' + market + '/' + barcode + '/' + price);
+	$.getJSON(rest_url + '/collaboration/suggest-price/' + market + '/'
+			+ barcode + '/' + price);
 	hideLoading();
 }
 
 function confirmPrice(market, barcode) {
 	showLoading();
 	localStorage.setItem("confirmActived", false);
-	$.getJSON(rest_url + '/collaboration/confirm-price/' + market + '/' + barcode);
+	$.getJSON(rest_url + '/collaboration/confirm-price/' + market + '/'
+			+ barcode);
 	hideLoading();
 }
 
