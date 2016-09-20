@@ -9,11 +9,11 @@ CREATE TABLE `user` (
 DROP TABLE IF EXISTS `score`;
 CREATE TABLE `score` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
   `score` int(11) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`uid`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
+  FOREIGN KEY (`user`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `city`;
@@ -86,7 +86,7 @@ CREATE TABLE `market_list_product` (
   `product` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`list`, `product`),
-  FOREIGN KEY (`list`) REFERENCES market_list(`uid`) ON UPDATE CASCADE,
+  FOREIGN KEY (`list`) REFERENCES market_list(`id`) ON UPDATE CASCADE,
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -145,12 +145,13 @@ CREATE TABLE `product_name_suggestion` (
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado';
 
-DELIMITER // 
-CREATE TRIGGER TRG_ProductAccounting_Update AFTER UPDATE ON market_product
-FOR EACH ROW       
-    BEGIN         
-        INSERT INTO market_product_accounting(market, product, price) VALUES (NEW.market, NEW.product,  NEW.price);
-    END;
-//
-DELIMITER ;
+CREATE TRIGGER `TRG_ProductAccounting_Insert` AFTER INSERT ON `market_product`
+FOR EACH ROW BEGIN         
+	INSERT INTO market_product_accounting(market, product, price) VALUES (NEW.market, NEW.product,  NEW.price);
+END
+
+CREATE TRIGGER `TRG_ProductAccounting_Update` AFTER UPDATE ON `market_product`
+FOR EACH ROW BEGIN         
+	INSERT INTO market_product_accounting(market, product, price) VALUES (NEW.market, NEW.product,  NEW.price);
+END
 
