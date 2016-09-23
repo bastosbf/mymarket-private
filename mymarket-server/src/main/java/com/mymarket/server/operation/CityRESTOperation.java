@@ -22,6 +22,14 @@ public class CityRESTOperation {
 		CityDAO dao = new CityDAO(HibernateConfig.factory);
 		return dao.list();
 	}
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/list/{state}")
+	public List<City> list(@PathParam("state") int state) {
+		CityDAO dao = new CityDAO(HibernateConfig.factory);
+		return dao.list(state);
+	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

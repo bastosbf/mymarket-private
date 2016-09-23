@@ -15,6 +15,7 @@ import com.mymarket.server.model.Product;
 import com.mymarket.server.model.ProductBarcode;
 import com.mymarket.server.model.ProductNameSuggestion;
 import com.mymarket.server.model.Score;
+import com.mymarket.server.model.State;
 import com.mymarket.server.model.User;
 
 public class HibernateConfig {
@@ -33,6 +34,7 @@ public class HibernateConfig {
 			.addClass(ProductBarcode.class)
 			.addClass(ProductNameSuggestion.class)
 			.addClass(Score.class)
+			.addClass(State.class)
 			.addClass(User.class)			
 			.buildSessionFactory();
 

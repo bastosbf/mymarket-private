@@ -25,6 +25,16 @@ public class CityDAO extends GenericDAO<City> {
 		List<City> list = criteria.list();
 		return list;
 	}
+	
+	public List<City> list(int state) {
+		Session session = factory.openSession();
+		session.beginTransaction();
+		Criteria criteria = session.createCriteria(City.class)
+				.addOrder(Order.asc("name"))
+				.add(Restrictions.eq("state.id", state));
+		List<City> list = criteria.list();
+		return list;
+	}
 
 	public City get(int id) {
 		Session session = factory.openSession();
