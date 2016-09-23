@@ -123,30 +123,30 @@ app.controller('myMarketCartController', function($scope, $rootScope) {
 	if(!sessionStorage.total) {
 		sessionStorage.total = 0;
 	}
-	$scope.add = function(product) {
+	$scope.add = function(product) {		
 		sessionStorage.total++;
-		if(!sessionStorage[product.barcode]) {
-			sessionStorage[product.barcode] = JSON.stringify({'quantity': 1, 'name': product.name});
+		if(!sessionStorage[product.id]) {
+			sessionStorage[product.id] = JSON.stringify({'quantity': 1, 'name': product.name});
 		} else {
-			obj = JSON.parse(sessionStorage[product.barcode]);
-			sessionStorage[product.barcode] = JSON.stringify({'quantity': ++obj.quantity, 'name': obj.name});
+			obj = JSON.parse(sessionStorage[product.id]);
+			sessionStorage[product.id] = JSON.stringify({'quantity': ++obj.quantity, 'name': obj.name});
 		}
 	}
 	$scope.remove = function(product) {		
 		sessionStorage.total--;
-		if(sessionStorage[product.barcode]) {
-			obj = JSON.parse(sessionStorage[product.barcode]);
+		if(sessionStorage[product.id]) {
+			obj = JSON.parse(sessionStorage[product.id]);
 			if(obj.quantity == 1) {
-				sessionStorage.removeItem(product.barcode);
+				sessionStorage.removeItem(product.id);
 			} else {				
-				sessionStorage[product.barcode] = JSON.stringify({'quantity': --obj.quantity, 'name': obj.name});
+				sessionStorage[product.id] = JSON.stringify({'quantity': --obj.quantity, 'name': obj.name});
 			}
 		}
 	}
 	$scope.canRemove = function(product) {		
-		return !sessionStorage[product.barcode];
+		return !sessionStorage[product.id];
 	}
 	$scope.getQuantity = function(product) {		
-		return sessionStorage[product.barcode] ? JSON.parse(sessionStorage[product.barcode]).quantity : 0;
+		return sessionStorage[product.id] ? JSON.parse(sessionStorage[product.id]).quantity : 0;
 	}
 });
