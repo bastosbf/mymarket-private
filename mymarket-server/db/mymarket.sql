@@ -157,6 +157,16 @@ CREATE TABLE `product_name_suggestion` (
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado';
 
+
+CREATE TABLE IF NOT EXISTS `notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kind` char(1) NOT NULL DEFAULT 'U' COMMENT 'S - Sempre (sempre que o usuário ligar o APP) U - Única (só será mostrada uma vez para o usuário) F - Mensagem Fatal',
+  `message` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` char(1) NOT NULL DEFAULT 'H' COMMENT 'H - Habilitada; D - Desabilitada',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='active = 1 - Ativada, 0 - Não ativada' AUTO_INCREMENT=1 ;
+
 CREATE TRIGGER `TRG_ProductAccounting_Insert` AFTER INSERT ON `market_product`
 FOR EACH ROW BEGIN         
 	INSERT INTO market_product_accounting(market, product, price) VALUES (NEW.market, NEW.product,  NEW.price);

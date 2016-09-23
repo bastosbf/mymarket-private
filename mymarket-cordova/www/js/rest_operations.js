@@ -1,5 +1,5 @@
 function checkForMessages() {
-	$.getJSON(rest_url + '/notification/list/H', function(data) {
+	$.getJSON(rest_url + '/notification/list', function(data) {
 		for (i in data) {
 			switch (data[i].kind) {
 			case 'U':

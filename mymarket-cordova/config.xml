@@ -122,11 +122,11 @@
 		<preference name="SplashScreenDelay" value="6000" /> <!-- defaults to "3000" -->
 		<preference name="SplashScreenBackgroundColor" value="white" /> <!-- defaults to "#464646" -->
 		<preference name="ShowSplashScreen" value="true" /> <!-- defaults to "true" -->
-		<preference name="SplashScreenWidth" value="144" /> <!-- defaults to "170" -->
-		<preference name="SplashScreenHeight" value="144" /> <!-- defaults to "200" -->
+<!-- 		<preference name="SplashScreenWidth" value="144" /> defaults to "170" -->
+<!-- 		<preference name="SplashScreenHeight" value="144" /> defaults to "200" -->
 
-		<preference name="SplashScreenWidth" value="144" /> <!-- defaults to "170" -->
-		<preference name="SplashScreenHeight" value="144" />
+<!-- 		<preference name="SplashScreenWidth" value="144" /> defaults to "170" -->
+<!-- 		<preference name="SplashScreenHeight" value="144" /> -->
 		<!-- <feature name="SplashScreen"> -->
 		<!-- <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" 
 			/> -->
