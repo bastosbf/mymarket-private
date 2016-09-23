@@ -5,10 +5,10 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class City implements Serializable {
+public class State implements Serializable {
 	private Integer id;
-	private State state;
 	private String name;
+	private String acronym;
 	private String latitude;
 	private String longitude;
 
@@ -20,20 +20,20 @@ public class City implements Serializable {
 		this.id = id;
 	}
 
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAcronym() {
+		return acronym;
+	}
+
+	public void setAcronym(String acronym) {
+		this.acronym = acronym;
 	}
 
 	public String getLatitude() {
