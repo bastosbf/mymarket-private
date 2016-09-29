@@ -31,12 +31,12 @@
    <img src="images/logo_512w_512h.png" style="width: 30%;" />
   </div>
   <div class="form-group">
-     <select class="form-control" ng-model="city" ng-init="listCities()" ng-change="listPlaces()" ng-options="city.id as city.name for city in cities track by city.id" ng-disabled="cities == null">
+     <select class="form-control" ng-model="city" ng-init="listCities()" ng-change="listPlaces()" ng-options="city as city.name for city in cities track by city.id" ng-disabled="cities == null">
       <option value="">Selecione a cidade</option>      
     </select>     
   </div>
   <div class="form-group">
-     <select class="form-control" ng-model="place" ng-options="place.id as place.name for place in places track by place.id" ng-disabled="city == null || places == null">
+     <select class="form-control" ng-model="place" ng-options="place as place.name for place in places track by place.id" ng-disabled="city == null || places == null">
       <option value="">Todos os bairros</option>      
     </select>     
   </div>
@@ -62,7 +62,7 @@
   <p ng-show="minlength" align="center">DIGITE NO MÍNIMO 3 CARACTERES!</p>
   <p ng-show="loading" align="center">...CARREGANDO...</p>
   <p ng-show="results && (products.length === 0 || productsTable.data.length === 0)" align="center">NENHUM PRODUTO ENCONTRADO</p>
-  <table class="table" ng-model="productsTable" ng-controller="myMarketCartController">
+  <table class="table" ng-model="productsTable">
    <tr ng-repeat="product in products" ng-show="!searchOnlyWithPrices || product.lowestPrice > 0">
     <td>{{ product.name }}</td>
     <td>
@@ -85,18 +85,42 @@
     <div class="modal-body">
       <button type="button" class="close" data-dismiss="modal">&times;</button> 
       <h1>Lista de Compras <button type="button" class="btn btn-primary">Salvar lista e compras</button></h1>
+      <div class="form-group">
+          <select class="form-control" ng-model="place" ng-change="listMarkets()" ng-options="place as place.name for place in places track by place.id" ng-disabled="city == null || places == null">
+          <option value="">Selecione bairro</option>      
+         </select>     
+      </div>
+      <div class="form-group">
+         <select class="form-control" ng-model="market" ng-change="calculateCart()" ng-options="market as market.name for market in markets track by market.id" ng-disabled="city == null || place == null">
+          <option value="">Selecione o mercado</option>      
+         </select>     
+      </div>
       <table class="table">
+       <thead>
+        <tr>
+         <td>Nome</td>
+         <td>Quantidade</td>
+         <td>Preço unitário</td>
+        </tr>
+       </thead>
         <tr ng-repeat="product in cartProducts">
          <td>{{ product.name }}</td>
          <td>{{ product.quantity }}</td>
+         <td>{{ product.price ? (product.price | currency:'R$ ') : '---' }}</td>
         </tr>
+        <tfoot>
+        <tr>
+         <td colspan="2"><b>Total</b></td>
+         <td><b>{{ cartTotal ? (cartTotal | currency:'R$ ') : '---' }}</b></td>
+        </tr>
+        </tfoot>
       </table>
-      <button type="button" class="btn btn-info">Imprimir lista de compras</button>    
+      <button type="button" class="btn btn-info" ng-click="printCart()">Imprimir lista de compras</button>    
      </div>
-     <div class="modal-footer">
+     <!--<div class="modal-footer">
       <button type="button" class="btn btn-success pull-left">Calcular mercado mais barato</button>     
       <button type="button" class="btn btn-warning pull-left">Calcular lista em dois ou mais mercados</button>
-     </div>
+     </div>-->
    </div>
   </div>
  </div> 

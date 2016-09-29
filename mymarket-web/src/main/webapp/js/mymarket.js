@@ -10,6 +10,22 @@ var CONFIG = {
 		ROOT_URL: "http://146.134.100.70:8080/mymarket-server"
 };
 
+function getDistanceFromLocations(lat1, lon1, lat2, lon2) {
+	var R = 6371; // Radius of the earth in km
+	var dLat = degTorad(lat2 - lat1); // degTorad below
+	var dLon = degTorad(lon2 - lon1);
+	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(degTorad(lat1))
+			* Math.cos(degTorad(lat2)) * Math.sin(dLon / 2)
+			* Math.sin(dLon / 2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	var d = R * c; // Distance in km
+	return d;
+}
+
+function degTorad(deg) {
+	return deg * (Math.PI / 180)
+}
+
 var app = angular.module('myMarketApp', ["ui.bootstrap.modal"]);
 app.controller('myMarketController', function($scope, $rootScope, $window, $http) {
 	//will check if the user is already logged in
@@ -58,28 +74,65 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 				});
 			}
 		});
-	}	
-	$scope.total = function() {
-		return sessionStorage.total ? sessionStorage.total : 0;
 	}
 	$scope.listCities = function() {
 		$http.get(CONFIG.ROOT_URL + "/rest/city/list")
-		.then(function success(response) {			
+		.then(function success(response) {
 			$scope.cities = response.data;
+			if (navigator.geolocation) {
+			    navigator.geolocation.getCurrentPosition(function(position){
+			      $scope.$apply(function(){
+			    	var latitude = position.coords.latitude;
+			    	var longitude = position.coords.longitude;
+			    	var locationNear = null;
+		    		var distanceToLocationNear = null;
+		    		for (i in $scope.cities) {
+		    			if (latitude != null && longitude != null) {
+		    				var dist = getDistanceFromLocations(latitude, longitude, $scope.cities[i].latitude, $scope.cities[i].longitude);
+		    				if (distanceToLocationNear == null || distanceToLocationNear > dist) {
+		    					locationNear = i;
+		    					distanceToLocationNear = dist;
+		    				}
+		    			}
+		    		}
+		    		var r = $window.confirm("Você está em " + $scope.cities[locationNear].name + "?");
+		    		if(r) {
+		    			$scope.city = {id: $scope.cities[locationNear].id, name: $scope.cities[locationNear].name};		    			
+		    			$scope.listPlaces();
+		    		}
+			      });
+			    });
+			 }
 		}, 
 		function error(failure) {
 			
 		});		
 	}
 	$scope.listPlaces = function() {
-		$http.get(CONFIG.ROOT_URL + "/rest/place/list/" + $scope.city)
-		.then(function success(response) {			
-			$scope.places = response.data;			
-		}, 
-		function error(failure) {
-			
-		});		
+		if($scope.city) {						
+			$http.get(CONFIG.ROOT_URL + "/rest/place/list/" + $scope.city.id)
+			.then(function success(response) {			
+				$scope.places = response.data;			
+			}, 
+			function error(failure) {
+				
+			});		
+		}
 	}
+	$scope.listMarkets = function() {
+		if($scope.city) {
+			if($scope.place) {
+				var url = CONFIG.ROOT_URL + "/rest/market/list-by-place/" + $scope.place.id						
+				$http.get(url)
+				.then(function success(response) {
+					$scope.markets = response.data;			
+				}, 
+				function error(failure) {
+					
+				});		
+			}
+		}
+	}	
 	$scope.searchProducts = function() {						
 		$scope.products = [];		
 		$scope.results = false;
@@ -89,7 +142,7 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 			return;
 		} 
 		$scope.loading = true;
-		url = CONFIG.ROOT_URL + "/rest/product/get-products-with-price-by-name/" + $scope.product + "/" + $scope.city;
+		url = CONFIG.ROOT_URL + "/rest/product/get-products-with-price-by-name/" + $scope.product + "/" + $scope.city.id;
 		if($scope.place) {
 			url += "/" + $scope.place;
 		}
@@ -109,27 +162,32 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 		});
 	}
 	$scope.open = function() {
-		if(sessionStorage.total && sessionStorage.total > 0) {
+		if(sessionStorage.total && sessionStorage.total > 0) {					    			
+			$scope.listMarkets();
 			$scope.cartProducts = [];
 			for (var i = 0; i < sessionStorage.length; i++){
 				product = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
-				$scope.cartProducts.push(product);
+				if(!angular.isNumber(product)) {
+					$scope.cartProducts.push(product);
+				}
 			}
 			$("#modal").modal('show');
 		}
-	}
-});
-app.controller('myMarketCartController', function($scope, $rootScope) {
+	}	
+	//cart operations
 	if(!sessionStorage.total) {
 		sessionStorage.total = 0;
 	}
+	$scope.total = function() {
+		return sessionStorage.total ? sessionStorage.total : 0;
+	}	
 	$scope.add = function(product) {		
 		sessionStorage.total++;
 		if(!sessionStorage[product.id]) {
-			sessionStorage[product.id] = JSON.stringify({'quantity': 1, 'name': product.name});
+			sessionStorage[product.id] = JSON.stringify({'quantity': 1, 'name': product.name, 'id': product.id});
 		} else {
 			obj = JSON.parse(sessionStorage[product.id]);
-			sessionStorage[product.id] = JSON.stringify({'quantity': ++obj.quantity, 'name': obj.name});
+			sessionStorage[product.id] = JSON.stringify({'quantity': ++obj.quantity, 'name': obj.name, 'id': obj.id});
 		}
 	}
 	$scope.remove = function(product) {		
@@ -139,7 +197,7 @@ app.controller('myMarketCartController', function($scope, $rootScope) {
 			if(obj.quantity == 1) {
 				sessionStorage.removeItem(product.id);
 			} else {				
-				sessionStorage[product.id] = JSON.stringify({'quantity': --obj.quantity, 'name': obj.name});
+				sessionStorage[product.id] = JSON.stringify({'quantity': --obj.quantity, 'name': obj.name, 'id': obj.id});
 			}
 		}
 	}
@@ -148,5 +206,35 @@ app.controller('myMarketCartController', function($scope, $rootScope) {
 	}
 	$scope.getQuantity = function(product) {		
 		return sessionStorage[product.id] ? JSON.parse(sessionStorage[product.id]).quantity : 0;
+	}
+	$scope.calculateCart = function() {
+		if($scope.market) {
+			$scope.cartTotal = 0;
+			var ids = "";
+			angular.forEach($scope.cartProducts, function(product) {
+				ids += "/" + product.id;
+				product.price = null;
+			});
+			var url = CONFIG.ROOT_URL + "/rest/product/get-products-with-price/" + $scope.market.id + ids
+			$http.get(url)
+			.then(function success(response) {			
+				var map = [];
+				angular.forEach(response.data, function(product) {
+					map[product.id] = product.price;
+				});
+				angular.forEach($scope.cartProducts, function(product) {
+					if(map[product.id]) {
+						product.price = map[product.id];
+						$scope.cartTotal += (product.price * product.quantity);
+					}
+				});
+			}, 
+			function error(failure) {
+				
+			});
+		}
+	}
+	$scope.printCart = function() {
+		$window.print();
 	}
 });
