@@ -53,13 +53,19 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 			  if (!(response.status === 'connected')) {
 				  FB.login(function(response) {
 					  $scope.$apply(function() {
-						  $scope.uid = response.authResponse.userID;
+						  $scope.uid = response.authResponse.userID;						  
 						  $scope.accessToken = response.authResponse.accessToken;
+						  FB.api('/me', function(response) {
+							  $scope.name = response.name;
+							  $scope.email = response.email;
+							  var url = CONFIG.ROOT_URL + "/rest/user/add/" + $scope.uid + "/" + $scope.name + "/" + $scope.email;						
+							  $http.get(url);								
+						  });						  
 					  });
-			      });
+			      }, {scope:'public_profile,email'});
 			  } else {				  
-				 $scope.uid = response.authResponse.userID;
-				 $scope.accessToken = response.authResponse.accessToken;				  
+				 $scope.uid = response.authResponse.userID;				 
+				 $scope.accessToken = response.authResponse.accessToken;				 
 			  } 
 		});        
     }
@@ -69,6 +75,8 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 				FB.logout(function(response) {
 					$scope.$apply(function() {
 						$scope.uid = null;
+						$scope.name = null;
+						$scope.email = null;
 						$scope.accessToken = null;
 					});
 				});
@@ -233,6 +241,21 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 				
 			});
 		}
+	}
+	$scope.saveShoppingList = function() {
+		$scope.shoppingListName = $window.prompt("Qual o nome da sua lista de compras?"); 
+		var list = "";
+		angular.forEach($scope.cartProducts, function(product) {
+			list += "/" + product.id + ":" + product.quantity;
+		});
+		var url = CONFIG.ROOT_URL + "/rest/cart/save-shopping-list/" + $scope.uid +  "/" + $scope.shoppingListName + list;
+		$http.get(url)
+		.then(function success(response) {			
+			$window.alert("Lista de compras " + $scope.shoppingListName + " salva com sucesso!");
+		}, 
+		function error(failure) {
+			
+		});
 	}
 	$scope.printCart = function() {
 		$window.print();
