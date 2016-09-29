@@ -16,13 +16,13 @@ import com.mymarket.server.model.MarketListProduct;
 import com.mymarket.server.model.Product;
 import com.mymarket.server.model.User;
 
-@Path("/cart")
-public class CartRESTOperation {
+@Path("/shopping-list")
+public class ShoppingListRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/save-shopping-list/{uid}/{name}/{list: .*}")
-	public void saveShoppingList(@PathParam("uid") String uid, @PathParam("name") String name, @PathParam("list") String list) {
+	@Path("/save/{uid}/{name}/{list: .*}")
+	public void save(@PathParam("uid") String uid, @PathParam("name") String name, @PathParam("list") String list) {
 		MarketList ml = new MarketList();
 		{
 			User user = new User();
@@ -52,8 +52,8 @@ public class CartRESTOperation {
 	
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/list-shopping-lists/{uid}")
-	public List<MarketList> listShoppingLists(@PathParam("uid") String uid) {
+	@Path("/list/{uid}")
+	public List<MarketList> list(@PathParam("uid") String uid) {
 		MarketListDAO dao = new MarketListDAO(HibernateConfig.factory);
 		return dao.list(uid);
 	}

@@ -248,7 +248,7 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 		angular.forEach($scope.cartProducts, function(product) {
 			list += "/" + product.id + ":" + product.quantity;
 		});
-		var url = CONFIG.ROOT_URL + "/rest/cart/save-shopping-list/" + $scope.uid +  "/" + $scope.shoppingListName + list;
+		var url = CONFIG.ROOT_URL + "/rest/shopping-list/save/" + $scope.uid +  "/" + $scope.shoppingListName + list;
 		$http.get(url)
 		.then(function success(response) {			
 			$window.alert("Lista de compras " + $scope.shoppingListName + " salva com sucesso!");
