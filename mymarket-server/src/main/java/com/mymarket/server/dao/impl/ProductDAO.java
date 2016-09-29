@@ -1,6 +1,7 @@
 package com.mymarket.server.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,8 @@ import org.hibernate.criterion.Restrictions;
 import com.mymarket.server.dao.GenericDAO;
 import com.mymarket.server.model.MarketProduct;
 import com.mymarket.server.model.Product;
-import com.mymarket.server.model.dto.EnhancedProduct;
+import com.mymarket.server.model.dto.ProductWithLowestPrice;
+import com.mymarket.server.model.dto.ProductWithPrice;
 
 public class ProductDAO extends GenericDAO<Product> {
 
@@ -71,8 +73,8 @@ public class ProductDAO extends GenericDAO<Product> {
 			session.close();
 		}
 	}
-
-	public List<EnhancedProduct> listWithPriceByName(String[] tokens, int city, int place) {
+	
+	public List<ProductWithLowestPrice> listWithLowestPriceByName(String[] tokens, int city, int place) {
 		Session session = factory.openSession();
 		try {
 			session.beginTransaction();
@@ -87,20 +89,45 @@ public class ProductDAO extends GenericDAO<Product> {
 			}
 			for (String token : tokens) {
 				if (token.length() < 3) {
-					return new ArrayList<EnhancedProduct>();
+					return new ArrayList<ProductWithLowestPrice>();
 				}
 				criteria = criteria.add(Restrictions.like("p.name", token.toUpperCase(), MatchMode.ANYWHERE));
 			}			
 			criteria.addOrder(Order.asc("price"));
 			List<MarketProduct> list = criteria.list();
-			Set<EnhancedProduct> products = new LinkedHashSet<EnhancedProduct>();
+			//will only allow a single product
+			Set<ProductWithLowestPrice> products = new LinkedHashSet<ProductWithLowestPrice>();
 			for (MarketProduct mp : list) {
 				Product product = mp.getProduct();
-				EnhancedProduct enhancedProduct = new EnhancedProduct(product);
+				ProductWithLowestPrice enhancedProduct = new ProductWithLowestPrice(product);
 				enhancedProduct.setLowestPrice(mp.getPrice());
 				products.add(enhancedProduct);
 			}
-			return new ArrayList<EnhancedProduct>(products);
+			return new ArrayList<ProductWithLowestPrice>(products);
+		} finally {
+			session.close();
+		}
+	}
+	
+	public List<ProductWithPrice> getWithPrice(int market, Integer... products) {
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(MarketProduct.class)
+					.createAlias("product", "p")
+					.createAlias("market", "m")			
+				  .add(Restrictions.eq("m.id", market))
+				  .add(Restrictions.in("p.id", Arrays.asList(products)));
+			
+			List<MarketProduct> list = criteria.list();
+			List<ProductWithPrice> productList = new ArrayList<ProductWithPrice>();
+			for (MarketProduct mp : list) {
+				Product product = mp.getProduct();
+				ProductWithPrice enhancedProduct = new ProductWithPrice(product);
+				enhancedProduct.setPrice(mp.getPrice());
+				productList.add(enhancedProduct);
+			}
+			return productList;
 		} finally {
 			session.close();
 		}

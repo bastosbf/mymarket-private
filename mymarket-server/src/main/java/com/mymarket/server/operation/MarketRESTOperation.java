@@ -17,10 +17,18 @@ public class MarketRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/list/{place}")
-	public List<Market> list(@PathParam("place") int place) {
+	@Path("/list-by-city/{city}")
+	public List<Market> listByCity(@PathParam("city") int city) {
 		MarketDAO dao = new MarketDAO(HibernateConfig.factory);
-		return dao.list(place);
+		return dao.listByCity(city);
+	}
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/list-by-place/{place}")
+	public List<Market> listbyPlace(@PathParam("place") int place) {
+		MarketDAO dao = new MarketDAO(HibernateConfig.factory);
+		return dao.listByPlace(place);
 	}
 
 	@GET

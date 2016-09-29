@@ -17,7 +17,18 @@ public class MarketDAO extends GenericDAO<Market> {
 		super(factory);
 	}
 
-	public List<Market> list(int place) {
+	public List<Market> listByCity(int city) {
+		Session session = factory.openSession();
+		session.beginTransaction();
+		Criteria criteria = session.createCriteria(Market.class)
+				.createAlias("place", "pl")
+				.add(Restrictions.eq("pl.city.id", city))
+				.addOrder(Order.asc("name"));
+		List<Market> list = criteria.list();
+		return list;
+	}
+	
+	public List<Market> listByPlace(int place) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(Market.class)

@@ -5,11 +5,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.mymarket.server.model.Product;
 
 @XmlRootElement
-public class EnhancedProduct extends Product {
+public class ProductWithLowestPrice extends Product {
 
-	public EnhancedProduct() {}
+	public ProductWithLowestPrice() {}
 
-	public EnhancedProduct(Product product) {
+	public ProductWithLowestPrice(Product product) {
 		setId(product.getId());
 		setName(product.getName());
 	}
@@ -31,8 +31,8 @@ public class EnhancedProduct extends Product {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof EnhancedProduct) {
-			return ((EnhancedProduct) obj).getId().equals(getId());
+		if (obj instanceof ProductWithLowestPrice) {
+			return ((ProductWithLowestPrice) obj).getId().equals(getId());
 		}
 		return false;
 	}
