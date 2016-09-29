@@ -65,7 +65,7 @@ public class ProductRESTOperation {
 	@Path("/get-products-with-price/{market}/{products: .*}")
 	public List<ProductWithPrice> getProductsWithPrice(@PathParam("market") int market, @PathParam("products") String products) {		
 			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
-			String[] tokens = products.split("/");			
+			String[] tokens = products.split("/");	
 			return dao.getWithPrice(market, Arrays.stream(tokens).distinct().map(Integer::valueOf).collect(Collectors.toList()).toArray(new Integer[]{}));		
 		
 	}

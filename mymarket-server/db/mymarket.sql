@@ -89,6 +89,7 @@ CREATE TABLE `market_product` (
 CREATE TABLE `market_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`user`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

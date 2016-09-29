@@ -7,5 +7,6 @@
 			<generator class="identity" />
 		</id>
 		<many-to-one name="user" class="com.mymarket.server.model.User" fetch="select" />
+		<property name="name" />
 	</class>
 </hibernate-mapping>
