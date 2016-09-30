@@ -3,20 +3,20 @@ package com.mymarket.server;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import com.mymarket.server.model.City;
-import com.mymarket.server.model.Market;
-import com.mymarket.server.model.MarketList;
-import com.mymarket.server.model.MarketListProduct;
-import com.mymarket.server.model.MarketProduct;
-import com.mymarket.server.model.MarketSuggestion;
-import com.mymarket.server.model.Notification;
-import com.mymarket.server.model.Place;
-import com.mymarket.server.model.Product;
-import com.mymarket.server.model.ProductBarcode;
-import com.mymarket.server.model.ProductNameSuggestion;
-import com.mymarket.server.model.Score;
-import com.mymarket.server.model.State;
-import com.mymarket.server.model.User;
+import com.mymarket.server.dto.model.City;
+import com.mymarket.server.dto.model.Market;
+import com.mymarket.server.dto.model.MarketProduct;
+import com.mymarket.server.dto.model.MarketSuggestion;
+import com.mymarket.server.dto.model.Notification;
+import com.mymarket.server.dto.model.Place;
+import com.mymarket.server.dto.model.Product;
+import com.mymarket.server.dto.model.ProductBarcode;
+import com.mymarket.server.dto.model.ProductNameSuggestion;
+import com.mymarket.server.dto.model.Score;
+import com.mymarket.server.dto.model.ShoppingListProduct;
+import com.mymarket.server.dto.model.ShoppingtList;
+import com.mymarket.server.dto.model.State;
+import com.mymarket.server.dto.model.User;
 
 public class HibernateConfig {
 
@@ -24,8 +24,8 @@ public class HibernateConfig {
 			.configure()
 			.addClass(City.class)
 			.addClass(Market.class)
-			.addClass(MarketList.class)
-			.addClass(MarketListProduct.class)
+			.addClass(ShoppingtList.class)
+			.addClass(ShoppingListProduct.class)
 			.addClass(MarketProduct.class)
 			.addClass(MarketSuggestion.class)
 			.addClass(Notification.class)

@@ -1,3 +1,4 @@
+-- APPLICATION TABLES
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `uid` varchar(255) NOT NULL,
@@ -80,13 +81,15 @@ CREATE TABLE `market_product` (
   `market` int(11) NOT NULL,
   `product` int(11) NOT NULL,
   `price` float NOT NULL,
+  `offer` boolean NOT NULL DEFAULT false,
   `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`market`,`product`),
   FOREIGN KEY (`market`) REFERENCES market(`id`) ON UPDATE CASCADE,
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `market_list` (
+DROP TABLE IF EXISTS `shopping_list`;
+CREATE TABLE `shopping_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -94,14 +97,40 @@ CREATE TABLE `market_list` (
   FOREIGN KEY (`user`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `market_list_product` (
+DROP TABLE IF EXISTS `shopping_list_product`;
+CREATE TABLE `shopping_list_product` (
   `list` int(11) NOT NULL,
   `product` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`list`, `product`),
-  FOREIGN KEY (`list`) REFERENCES market_list(`id`) ON UPDATE CASCADE,
+  FOREIGN KEY (`list`) REFERENCES shopping_list(`id`) ON UPDATE CASCADE,
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `notification`;
+CREATE TABLE IF NOT EXISTS `notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kind` char(1) NOT NULL DEFAULT 'U' COMMENT 'S - Sempre (sempre que o usuário ligar o APP) U - Única (só será mostrada uma vez para o usuário) F - Mensagem Fatal',
+  `message` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` char(1) NOT NULL DEFAULT 'H' COMMENT 'H - Habilitada; D - Desabilitada',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=latin1 ;
+
+-- END OF APPLICATION TABLES
+
+-- ACCOUNTING TABLES
+
+DROP TABLE IF EXISTS `login_accounting`;
+CREATE TABLE `login_accounting` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, V - Visualizado, R - Rejeitado',
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `market_product_accounting`;
 CREATE TABLE `market_product_accounting` (
@@ -109,6 +138,7 @@ CREATE TABLE `market_product_accounting` (
   `market` int(11) NOT NULL,
   `product` int(11) NOT NULL,
   `price` float NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, V - Visualizado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`market`) REFERENCES market(`id`) ON UPDATE CASCADE,
@@ -119,20 +149,25 @@ DROP TABLE IF EXISTS `search_accounting`;
 CREATE TABLE `search_accounting` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_barcode` varchar(255) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, V - Visualizado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
+-- END OF ACCOUNTING TABLES
+
+-- SUGGESTION TABLES
+
 DROP TABLE IF EXISTS `market_suggestion`;
 CREATE TABLE `market_suggestion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `status` char(1) NOT NULL DEFAULT 'N',
+  `id` int(11) NOT NULL AUTO_INCREMENT,  
   `name` varchar(255) NOT NULL,
   `place` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, A - Adicionado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COMMENT='Status = N - Novo, A - Adicionado, R - Rejeitado';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `product_suggestion`;
 CREATE TABLE `product_suggestion` (
@@ -141,32 +176,26 @@ CREATE TABLE `product_suggestion` (
   `barcode` varchar(255) NOT NULL,
   `market` int(11),
   `price` float,
-  `status` char(1) NOT NULL DEFAULT 'N',  
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado',  
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`market`) REFERENCES market(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `product_name_suggestion`;
 CREATE TABLE `product_name_suggestion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product` int(11) NOT NULL,  
   `suggested_name` varchar(255) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N',
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- ENF OF SUGGESTION TABLES
 
-CREATE TABLE IF NOT EXISTS `notification` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kind` char(1) NOT NULL DEFAULT 'U' COMMENT 'S - Sempre (sempre que o usuário ligar o APP) U - Única (só será mostrada uma vez para o usuário) F - Mensagem Fatal',
-  `message` varchar(255) NOT NULL,
-  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` char(1) NOT NULL DEFAULT 'H' COMMENT 'H - Habilitada; D - Desabilitada',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='active = 1 - Ativada, 0 - Não ativada' AUTO_INCREMENT=1 ;
+-- TRIGGERS
 
 CREATE TRIGGER `TRG_ProductAccounting_Insert` AFTER INSERT ON `market_product`
 FOR EACH ROW BEGIN         

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.mymarket.server.dto.model.Score" table="score" lazy="false">
+		<id name="id" column="id">
+			<generator class="identity" />
+		</id>
+		<many-to-one name="user" class="com.mymarket.server.dto.model.User" fetch="select" />
+		<property name="score" />
+		<property name="date" />
+	</class>
+</hibernate-mapping>

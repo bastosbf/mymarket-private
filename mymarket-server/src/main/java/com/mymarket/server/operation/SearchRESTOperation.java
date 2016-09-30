@@ -15,9 +15,9 @@ import org.hibernate.Session;
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.MarketProductDAO;
 import com.mymarket.server.dao.impl.ProductBarcodeDAO;
-import com.mymarket.server.model.MarketProduct;
-import com.mymarket.server.model.ProductBarcode;
-import com.mymarket.server.model.dto.Search;
+import com.mymarket.server.dto.Search;
+import com.mymarket.server.dto.model.MarketProduct;
+import com.mymarket.server.dto.model.ProductBarcode;
 
 @Path("/search")
 public class SearchRESTOperation {

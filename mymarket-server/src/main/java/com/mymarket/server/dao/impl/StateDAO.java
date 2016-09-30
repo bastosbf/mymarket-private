@@ -9,7 +9,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.State;
+import com.mymarket.server.dto.model.State;
 
 public class StateDAO extends GenericDAO<State> {
 

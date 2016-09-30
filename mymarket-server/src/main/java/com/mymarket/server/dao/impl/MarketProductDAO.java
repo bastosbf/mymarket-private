@@ -10,8 +10,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.MarketProduct;
-import com.mymarket.server.model.ProductBarcode;
+import com.mymarket.server.dto.model.MarketProduct;
+import com.mymarket.server.dto.model.ProductBarcode;
 
 public class MarketProductDAO extends GenericDAO<MarketProduct> {
 
@@ -31,7 +31,7 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 		return list;
 	}
 	
-	public void updatePrice(int market, int product, float price) {
+	public void updatePrice(int market, int product, float price, boolean offer) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(MarketProduct.class)
@@ -43,6 +43,7 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 		if(!list.isEmpty()) {
 			MarketProduct mp = list.get(0);
 			mp.setPrice(price);
+			mp.setOffer(offer);
 			update(mp);
 		}		
 	}

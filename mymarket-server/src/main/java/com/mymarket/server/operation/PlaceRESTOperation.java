@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.PlaceDAO;
-import com.mymarket.server.model.Place;
+import com.mymarket.server.dto.model.Place;
 
 @Path("/place")
 public class PlaceRESTOperation {

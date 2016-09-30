@@ -13,9 +13,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.ProductDAO;
-import com.mymarket.server.model.Product;
-import com.mymarket.server.model.dto.ProductWithLowestPrice;
-import com.mymarket.server.model.dto.ProductWithPrice;
+import com.mymarket.server.dto.ProductWithLowestPrice;
+import com.mymarket.server.dto.ProductWithPrice;
+import com.mymarket.server.dto.model.Product;
 
 @Path("/product")
 public class ProductRESTOperation {

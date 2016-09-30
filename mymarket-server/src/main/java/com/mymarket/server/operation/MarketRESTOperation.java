@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.MarketDAO;
-import com.mymarket.server.model.Market;
+import com.mymarket.server.dto.model.Market;
 
 @Path("/market")
 public class MarketRESTOperation {

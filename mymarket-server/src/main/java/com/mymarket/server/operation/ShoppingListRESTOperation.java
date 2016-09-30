@@ -9,12 +9,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
-import com.mymarket.server.dao.impl.MarketListDAO;
-import com.mymarket.server.dao.impl.MarketListProductDAO;
-import com.mymarket.server.model.MarketList;
-import com.mymarket.server.model.MarketListProduct;
-import com.mymarket.server.model.Product;
-import com.mymarket.server.model.User;
+import com.mymarket.server.dao.impl.ShoppingListDAO;
+import com.mymarket.server.dao.impl.ShoppingListProductDAO;
+import com.mymarket.server.dto.model.Product;
+import com.mymarket.server.dto.model.ShoppingListProduct;
+import com.mymarket.server.dto.model.ShoppingtList;
+import com.mymarket.server.dto.model.User;
 
 @Path("/shopping-list")
 public class ShoppingListRESTOperation {
@@ -23,23 +23,23 @@ public class ShoppingListRESTOperation {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/save/{uid}/{name}/{list: .*}")
 	public void save(@PathParam("uid") String uid, @PathParam("name") String name, @PathParam("list") String list) {
-		MarketList ml = new MarketList();
+		ShoppingtList ml = new ShoppingtList();
 		{
 			User user = new User();
 			user.setUid(uid);
 			ml.setUser(user);
 			ml.setName(name);
-			MarketListDAO dao = new MarketListDAO(HibernateConfig.factory);
+			ShoppingListDAO dao = new ShoppingListDAO(HibernateConfig.factory);
 			dao.add(ml);
 		}
-		MarketListProductDAO dao = new MarketListProductDAO(HibernateConfig.factory);
+		ShoppingListProductDAO dao = new ShoppingListProductDAO(HibernateConfig.factory);
 		String[] tokens = list.split("/");
 		for (String token : tokens) {
 			String[] data = token.split(":");
 			int product = Integer.parseInt(data[0]);
 			int quantity = Integer.parseInt(data[1]);
 
-			MarketListProduct mlp = new MarketListProduct();
+			ShoppingListProduct mlp = new ShoppingListProduct();
 			mlp.setList(ml);
 			Product p = new Product();
 			p.setId(product);
@@ -53,8 +53,8 @@ public class ShoppingListRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/list/{uid}")
-	public List<MarketList> list(@PathParam("uid") String uid) {
-		MarketListDAO dao = new MarketListDAO(HibernateConfig.factory);
+	public List<ShoppingtList> list(@PathParam("uid") String uid) {
+		ShoppingListDAO dao = new ShoppingListDAO(HibernateConfig.factory);
 		return dao.list(uid);
 	}
 }

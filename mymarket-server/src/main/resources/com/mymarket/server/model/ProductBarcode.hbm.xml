@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
-	<class name="com.mymarket.server.model.ProductBarcode" table="product_barcode" lazy="false">
-		<id name="barcode" column="barcode" />		
-		<many-to-one name="product" class="com.mymarket.server.model.Product" fetch="select" />
-	</class>
-</hibernate-mapping>

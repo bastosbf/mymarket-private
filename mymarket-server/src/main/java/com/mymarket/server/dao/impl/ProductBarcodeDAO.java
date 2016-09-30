@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.ProductBarcode;
+import com.mymarket.server.dto.model.ProductBarcode;
 
 public class ProductBarcodeDAO extends GenericDAO<ProductBarcode> {
 

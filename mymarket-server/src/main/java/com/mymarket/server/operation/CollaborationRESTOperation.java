@@ -13,11 +13,11 @@ import com.mymarket.server.dao.impl.MarketSuggestionDAO;
 import com.mymarket.server.dao.impl.ProductDAO;
 import com.mymarket.server.dao.impl.ProductNameSuggestionDAO;
 import com.mymarket.server.dao.impl.ProductSuggestionDAO;
-import com.mymarket.server.model.Market;
-import com.mymarket.server.model.MarketSuggestion;
-import com.mymarket.server.model.Product;
-import com.mymarket.server.model.ProductNameSuggestion;
-import com.mymarket.server.model.ProductSuggestion;
+import com.mymarket.server.dto.model.Market;
+import com.mymarket.server.dto.model.MarketSuggestion;
+import com.mymarket.server.dto.model.Product;
+import com.mymarket.server.dto.model.ProductNameSuggestion;
+import com.mymarket.server.dto.model.ProductSuggestion;
 
 @Path("/collaboration")
 public class CollaborationRESTOperation {
@@ -75,8 +75,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/update-price/{market}/{product}/{price}")
-	public void suggestPrice(@PathParam("market") int market, @PathParam("product") int product, @PathParam("price") float price) {
+	@Path("/update-price/{market}/{product}/{price}/{offer : (/offer)?}")
+	public void suggestPrice(@PathParam("market") int market, @PathParam("product") int product, @PathParam("price") float price, @PathParam("offer") boolean offer) {
 		Market m = null;
 		{
 			MarketDAO dao = new MarketDAO(HibernateConfig.factory);
@@ -90,7 +90,7 @@ public class CollaborationRESTOperation {
 			}
 			if (p != null) {
 				MarketProductDAO dao = new MarketProductDAO(HibernateConfig.factory);
-				dao.updatePrice(market, product, price);
+				dao.updatePrice(market, product, price, offer);
 			}
 		}
 	}

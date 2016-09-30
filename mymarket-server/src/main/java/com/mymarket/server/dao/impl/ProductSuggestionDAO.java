@@ -3,7 +3,7 @@ package com.mymarket.server.dao.impl;
 import org.hibernate.SessionFactory;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.ProductSuggestion;
+import com.mymarket.server.dto.model.ProductSuggestion;
 
 public class ProductSuggestionDAO extends GenericDAO<ProductSuggestion> {
 

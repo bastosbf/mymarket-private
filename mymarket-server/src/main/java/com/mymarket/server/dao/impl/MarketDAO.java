@@ -9,7 +9,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.Market;
+import com.mymarket.server.dto.model.Market;
 
 public class MarketDAO extends GenericDAO<Market> {
 

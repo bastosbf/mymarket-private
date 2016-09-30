@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.StateDAO;
-import com.mymarket.server.model.State;
+import com.mymarket.server.dto.model.State;
 
 @Path("/state")
 public class StateRESTOperation {

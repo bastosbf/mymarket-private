@@ -14,10 +14,10 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.MarketProduct;
-import com.mymarket.server.model.Product;
-import com.mymarket.server.model.dto.ProductWithLowestPrice;
-import com.mymarket.server.model.dto.ProductWithPrice;
+import com.mymarket.server.dto.ProductWithLowestPrice;
+import com.mymarket.server.dto.ProductWithPrice;
+import com.mymarket.server.dto.model.MarketProduct;
+import com.mymarket.server.dto.model.Product;
 
 public class ProductDAO extends GenericDAO<Product> {
 

@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
-import com.mymarket.server.model.User;
+import com.mymarket.server.dto.model.User;
 
 public class UserDAO extends GenericDAO<User> {
 

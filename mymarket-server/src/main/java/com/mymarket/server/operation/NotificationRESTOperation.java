@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.NotificationDAO;
-import com.mymarket.server.model.Notification;
+import com.mymarket.server.dto.model.Notification;
 
 @Path("/notification")
 public class NotificationRESTOperation {

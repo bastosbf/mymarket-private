@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.UserDAO;
-import com.mymarket.server.model.User;
+import com.mymarket.server.dto.model.User;
 
 @Path("/user")
 public class UserRESTOperation {
