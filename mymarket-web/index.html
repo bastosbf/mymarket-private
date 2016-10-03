@@ -104,7 +104,7 @@
         </tr>
        </thead>
         <tr ng-repeat="product in shoppingListProducts">
-         <td>{{ product.name }}</td>
+         <td><img src="images/offer.png" width="5%" ng-show="product.offer"> {{ product.name }}</td>
          <td>{{ product.quantity }}</td>
          <td>{{ product.price ? (product.price | currency:'R$ ') : '---' }}</td>
         </tr>
@@ -113,8 +113,11 @@
          <td colspan="2"><b>Total</b></td>
          <td><b>{{ shoppingListTotal ? (shoppingListTotal | currency:'R$ ') : '---' }}</b></td>
         </tr>
-        </tfoot>
+        </tfoot>        
       </table>
+      <div class="text-right">
+       <img src="images/offer.png" width="5%"/> Produto em oferta
+      </div>
       <button type="button" class="btn btn-info" ng-click="printShoppingList()">Imprimir lista de compras</button>    
      </div>
      <!--<div class="modal-footer">

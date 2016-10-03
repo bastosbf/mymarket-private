@@ -15,7 +15,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
 import com.mymarket.server.dto.ProductWithLowestPrice;
-import com.mymarket.server.dto.ProductWithPrice;
+import com.mymarket.server.dto.ProductWithOfferAndPrice;
 import com.mymarket.server.dto.model.MarketProduct;
 import com.mymarket.server.dto.model.Product;
 
@@ -109,7 +109,7 @@ public class ProductDAO extends GenericDAO<Product> {
 		}
 	}
 	
-	public List<ProductWithPrice> getWithPrice(int market, Integer... products) {
+	public List<ProductWithOfferAndPrice> getWithPrice(int market, Integer... products) {
 		Session session = factory.openSession();
 		try {
 			session.beginTransaction();
@@ -120,11 +120,12 @@ public class ProductDAO extends GenericDAO<Product> {
 				  .add(Restrictions.in("p.id", Arrays.asList(products)));
 			
 			List<MarketProduct> list = criteria.list();
-			List<ProductWithPrice> productList = new ArrayList<ProductWithPrice>();
+			List<ProductWithOfferAndPrice> productList = new ArrayList<ProductWithOfferAndPrice>();
 			for (MarketProduct mp : list) {
 				Product product = mp.getProduct();
-				ProductWithPrice enhancedProduct = new ProductWithPrice(product);
+				ProductWithOfferAndPrice enhancedProduct = new ProductWithOfferAndPrice(product);
 				enhancedProduct.setPrice(mp.getPrice());
+				enhancedProduct.setOffer(mp.getOffer());
 				productList.add(enhancedProduct);
 			}
 			return productList;

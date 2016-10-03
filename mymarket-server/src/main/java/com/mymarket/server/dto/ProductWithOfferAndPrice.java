@@ -5,16 +5,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.mymarket.server.dto.model.Product;
 
 @XmlRootElement
-public class ProductWithPrice extends Product {
+public class ProductWithOfferAndPrice extends Product {
 
-	public ProductWithPrice() {}
+	public ProductWithOfferAndPrice() {}
 
-	public ProductWithPrice(Product product) {
+	public ProductWithOfferAndPrice(Product product) {
 		setId(product.getId());
 		setName(product.getName());
 	}
 
 	private Float price;
+	private Boolean offer;
 
 	public Float getPrice() {
 		return price;
@@ -24,6 +25,14 @@ public class ProductWithPrice extends Product {
 		this.price = price;
 	}
 
+	public Boolean getOffer() {
+		return offer;
+	}
+
+	public void setOffer(Boolean offer) {
+		this.offer = offer;
+	}
+
 	@Override
 	public int hashCode() {
 		return getId().hashCode();
@@ -31,8 +40,8 @@ public class ProductWithPrice extends Product {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ProductWithPrice) {
-			return ((ProductWithPrice) obj).getId().equals(getId());
+		if (obj instanceof ProductWithOfferAndPrice) {
+			return ((ProductWithOfferAndPrice) obj).getId().equals(getId());
 		}
 		return false;
 	}

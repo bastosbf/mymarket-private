@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.ProductDAO;
 import com.mymarket.server.dto.ProductWithLowestPrice;
-import com.mymarket.server.dto.ProductWithPrice;
+import com.mymarket.server.dto.ProductWithOfferAndPrice;
 import com.mymarket.server.dto.model.Product;
 
 @Path("/product")
@@ -63,7 +63,7 @@ public class ProductRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/get-products-with-price/{market}/{products: .*}")
-	public List<ProductWithPrice> getProductsWithPrice(@PathParam("market") int market, @PathParam("products") String products) {		
+	public List<ProductWithOfferAndPrice> getProductsWithPrice(@PathParam("market") int market, @PathParam("products") String products) {		
 			ProductDAO dao = new ProductDAO(HibernateConfig.factory);
 			String[] tokens = products.split("/");	
 			return dao.getWithPrice(market, Arrays.stream(tokens).distinct().map(Integer::valueOf).collect(Collectors.toList()).toArray(new Integer[]{}));		

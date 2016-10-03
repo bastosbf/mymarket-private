@@ -222,17 +222,21 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 			angular.forEach($scope.shoppingListProducts, function(product) {
 				ids += "/" + product.id;
 				product.price = null;
+				product.offer = null;
 			});
 			var url = CONFIG.ROOT_URL + "/rest/product/get-products-with-price/" + $scope.market.id + ids
 			$http.get(url)
 			.then(function success(response) {			
-				var map = [];
+				var priceMap = [];
+				var offerMap = [];
 				angular.forEach(response.data, function(product) {
-					map[product.id] = product.price;
+					priceMap[product.id] = product.price;
+					offerMap[product.id] = product.offer;
 				});
 				angular.forEach($scope.shoppingListProducts, function(product) {
-					if(map[product.id]) {
-						product.price = map[product.id];
+					if(priceMap[product.id]) {
+						product.price = priceMap[product.id];
+						product.offer = offerMap[product.id];
 						$scope.shoppingListTotal += (product.price * product.quantity);
 					}
 				});
