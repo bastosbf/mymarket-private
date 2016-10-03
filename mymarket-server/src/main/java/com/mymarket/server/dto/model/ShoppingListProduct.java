@@ -3,15 +3,15 @@ package com.mymarket.server.dto.model;
 import java.io.Serializable;
 
 public class ShoppingListProduct implements Serializable {
-	private ShoppingtList list;
+	private ShoppingList list;
 	private Product product;
 	private Integer quantity;
 
-	public ShoppingtList getList() {
+	public ShoppingList getList() {
 		return list;
 	}
 
-	public void setList(ShoppingtList list) {
+	public void setList(ShoppingList list) {
 		this.list = list;
 	}
 

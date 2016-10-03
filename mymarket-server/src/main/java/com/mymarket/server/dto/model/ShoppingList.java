@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ShoppingtList implements Serializable {
+public class ShoppingList implements Serializable {
 	private Integer id;
 	private User user;
 	private String name;

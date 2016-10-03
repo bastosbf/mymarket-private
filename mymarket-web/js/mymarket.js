@@ -243,19 +243,21 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 		}
 	}
 	$scope.saveShoppingList = function() {
-		$scope.shoppingListName = $window.prompt("Qual o nome da sua lista de compras?"); 
-		var list = "";
-		angular.forEach($scope.shoppingListProducts, function(product) {
-			list += "/" + product.id + ":" + product.quantity;
-		});
-		var url = CONFIG.ROOT_URL + "/rest/shopping-list/save/" + $scope.uid +  "/" + $scope.shoppingListName + list;
-		$http.get(url)
-		.then(function success(response) {			
-			$window.alert("Lista de compras " + $scope.shoppingListName + " salva com sucesso!");
-		}, 
-		function error(failure) {
-			
-		});
+		$scope.shoppingListName = $window.prompt("Qual o nome da sua lista de compras?");
+		if($scope.shoppingListName) {
+			var list = "";
+			angular.forEach($scope.shoppingListProducts, function(product) {
+				list += "/" + product.id + ":" + product.quantity;
+			});
+			var url = CONFIG.ROOT_URL + "/rest/shopping-list/save/" + $scope.uid +  "/" + $scope.shoppingListName + list;
+			$http.get(url)
+			.then(function success(response) {			
+				$window.alert("Lista de compras " + $scope.shoppingListName + " salva com sucesso!");
+			}, 
+			function error(failure) {
+				
+			});
+		}
 	}
 	$scope.printShoppingList = function() {
 		$window.print();

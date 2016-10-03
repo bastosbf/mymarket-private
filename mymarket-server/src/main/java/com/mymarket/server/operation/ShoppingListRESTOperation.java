@@ -13,7 +13,7 @@ import com.mymarket.server.dao.impl.ShoppingListDAO;
 import com.mymarket.server.dao.impl.ShoppingListProductDAO;
 import com.mymarket.server.dto.model.Product;
 import com.mymarket.server.dto.model.ShoppingListProduct;
-import com.mymarket.server.dto.model.ShoppingtList;
+import com.mymarket.server.dto.model.ShoppingList;
 import com.mymarket.server.dto.model.User;
 
 @Path("/shopping-list")
@@ -23,7 +23,7 @@ public class ShoppingListRESTOperation {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/save/{uid}/{name}/{list: .*}")
 	public void save(@PathParam("uid") String uid, @PathParam("name") String name, @PathParam("list") String list) {
-		ShoppingtList ml = new ShoppingtList();
+		ShoppingList ml = new ShoppingList();
 		{
 			User user = new User();
 			user.setUid(uid);
@@ -53,7 +53,7 @@ public class ShoppingListRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/list/{uid}")
-	public List<ShoppingtList> list(@PathParam("uid") String uid) {
+	public List<ShoppingList> list(@PathParam("uid") String uid) {
 		ShoppingListDAO dao = new ShoppingListDAO(HibernateConfig.factory);
 		return dao.list(uid);
 	}

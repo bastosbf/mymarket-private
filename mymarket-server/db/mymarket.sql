@@ -127,7 +127,7 @@ CREATE TABLE `login_accounting` (
   `uid` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, V - Visualizado, R - Rejeitado',
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'Status = N - Novo, V - Visualizado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
@@ -138,7 +138,7 @@ CREATE TABLE `market_product_accounting` (
   `market` int(11) NOT NULL,
   `product` int(11) NOT NULL,
   `price` float NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, V - Visualizado, R - Rejeitado',
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'Status = N - Novo, V - Visualizado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`market`) REFERENCES market(`id`) ON UPDATE CASCADE,
@@ -149,7 +149,7 @@ DROP TABLE IF EXISTS `search_accounting`;
 CREATE TABLE `search_accounting` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_barcode` varchar(255) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, V - Visualizado, R - Rejeitado',
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'Status = N - Novo, V - Visualizado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
@@ -164,7 +164,7 @@ CREATE TABLE `market_suggestion` (
   `name` varchar(255) NOT NULL,
   `place` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='Status = N - Novo, A - Adicionado, R - Rejeitado',
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'Status = N - Novo, A - Adicionado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
@@ -176,7 +176,7 @@ CREATE TABLE `product_suggestion` (
   `barcode` varchar(255) NOT NULL,
   `market` int(11),
   `price` float,
-  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado',  
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'status = N - Novo, A -Adicionado, R - Rejeitado',  
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`market`) REFERENCES market(`id`)
@@ -187,7 +187,7 @@ CREATE TABLE `product_name_suggestion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product` int(11) NOT NULL,  
   `suggested_name` varchar(255) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT 'N' COMMENT='status = N - Novo, A -Adicionado, R - Rejeitado',
+  `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'status = N - Novo, A -Adicionado, R - Rejeitado',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product`) REFERENCES product(`id`) ON UPDATE CASCADE

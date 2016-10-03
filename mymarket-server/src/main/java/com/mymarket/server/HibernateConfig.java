@@ -14,7 +14,7 @@ import com.mymarket.server.dto.model.ProductBarcode;
 import com.mymarket.server.dto.model.ProductNameSuggestion;
 import com.mymarket.server.dto.model.Score;
 import com.mymarket.server.dto.model.ShoppingListProduct;
-import com.mymarket.server.dto.model.ShoppingtList;
+import com.mymarket.server.dto.model.ShoppingList;
 import com.mymarket.server.dto.model.State;
 import com.mymarket.server.dto.model.User;
 
@@ -24,7 +24,7 @@ public class HibernateConfig {
 			.configure()
 			.addClass(City.class)
 			.addClass(Market.class)
-			.addClass(ShoppingtList.class)
+			.addClass(ShoppingList.class)
 			.addClass(ShoppingListProduct.class)
 			.addClass(MarketProduct.class)
 			.addClass(MarketSuggestion.class)

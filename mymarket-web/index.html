@@ -42,7 +42,7 @@
   </div>
   <div class="row">
    <div class="col-md-12 pull-right">
-    <button type="button" class="btn btn-primary pull-right" ng-click="open()">Minha lista de compras ({{ total() }})</button>
+    <button type="button" class="btn btn-primary pull-right" ng-click="open()">Minha lista de compras ({{ totalOfProducts() }})</button>
    </div>
   </div>  
   <h3 style="text-align: center">Digite o produto que você procura: (mínimo de 3 caracteres)</h3>  
@@ -84,7 +84,7 @@
    <div class="modal-content">
     <div class="modal-body">
       <button type="button" class="close" data-dismiss="modal">&times;</button> 
-      <h1>Lista de Compras <button type="button" class="btn btn-primary" ng-click="saveShoppingList()">Salvar lista e compras</button></h1>
+      <h1>Lista de Compras <button type="button" class="btn btn-primary" ng-click="saveShoppingList()" ng-disabled="uid == null">Salvar lista e compras</button></h1>
       <div class="form-group">
           <select class="form-control" ng-model="place" ng-change="listMarkets()" ng-options="place as place.name for place in places track by place.id" ng-disabled="city == null || places == null">
           <option value="">Selecione bairro</option>      
