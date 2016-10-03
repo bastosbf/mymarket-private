@@ -1,3 +1,4 @@
 plugins/android.json
 platforms/*
 platforms/platforms.json
+/.tern-project

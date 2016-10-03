@@ -25,7 +25,7 @@ public class StateRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/get/{city}")
+	@Path("/get/{state}")
 	public State get(@PathParam("state") int state) {
 		StateDAO dao = new StateDAO(HibernateConfig.factory);
 		return dao.get(state);
