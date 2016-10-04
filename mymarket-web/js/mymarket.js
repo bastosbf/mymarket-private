@@ -152,7 +152,7 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 		$scope.loading = true;
 		url = CONFIG.ROOT_URL + "/rest/product/get-products-with-price-by-name/" + $scope.product + "/" + $scope.city.id;
 		if($scope.place) {
-			url += "/" + $scope.place;
+			url += "/" + $scope.place.id;
 		}
 		if($scope.searchWithoutPrices) {
 			url = CONFIG.ROOT_URL + "/rest/product/get-products-by-name/" + $scope.product;			
