@@ -93,6 +93,7 @@ CREATE TABLE `shopping_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`user`) REFERENCES `user`(`uid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
