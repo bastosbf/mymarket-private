@@ -8,5 +8,6 @@
 		</id>
 		<many-to-one name="user" class="com.mymarket.server.dto.model.User" fetch="select" />
 		<property name="name" />
+		<property name="date" />
 	</class>
 </hibernate-mapping>
