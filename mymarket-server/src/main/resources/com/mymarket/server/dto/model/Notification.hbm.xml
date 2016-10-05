@@ -7,6 +7,7 @@
 		<id name="id" column="id" />
 		<property name="message" />
 		<property name="kind" />
+		<property name="appVersion" column="app_version" />
 		<property name="date" />
 		<property name="status" />
 	</class>

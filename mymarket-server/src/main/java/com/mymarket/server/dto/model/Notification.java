@@ -10,6 +10,7 @@ public class Notification implements Serializable {
 	private Integer id;
 	private String message;
 	private String kind;
+	private String appVersion;
 	private Date date;
 	private String status;
 
@@ -37,6 +38,14 @@ public class Notification implements Serializable {
 		this.kind = kind;
 	}
 
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
+
 	public Date getDate() {
 		return date;
 	}
@@ -52,6 +61,5 @@ public class Notification implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
+
 }
