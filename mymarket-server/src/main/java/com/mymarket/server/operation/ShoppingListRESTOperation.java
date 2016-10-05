@@ -57,4 +57,12 @@ public class ShoppingListRESTOperation {
 		ShoppingListDAO dao = new ShoppingListDAO(HibernateConfig.factory);
 		return dao.list(uid);
 	}
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/list-products/{list}")
+	public List<ShoppingListProduct> listProducts(@PathParam("list") String list) {
+		ShoppingListProductDAO dao = new ShoppingListProductDAO(HibernateConfig.factory);
+		return dao.list(list);
+	}
 }

@@ -2,6 +2,9 @@ package com.mymarket.server.dto.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class ShoppingListProduct implements Serializable {
 	private ShoppingList list;
 	private Product product;

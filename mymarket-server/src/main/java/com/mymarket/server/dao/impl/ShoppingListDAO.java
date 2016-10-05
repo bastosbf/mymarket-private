@@ -27,4 +27,6 @@ public class ShoppingListDAO extends GenericDAO<ShoppingList> {
 		List<ShoppingList> list = criteria.list();
 		return list;
 	}
+	
+	
 }
