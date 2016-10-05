@@ -98,20 +98,20 @@
       <table class="table">
        <thead>
         <tr>
-         <td>Nome</td>
-         <td>Quantidade</td>
-         <td>Preço unitário</td>
+         <td style="white-space: nowrap;">Nome</td>
+         <td style="white-space: nowrap;">Quantidade</td>
+         <td style="white-space: nowrap;">Preço unitário</td>
         </tr>
        </thead>
         <tr ng-repeat="product in shoppingListProducts">
-         <td><img src="images/offer.png" width="5%" ng-show="product.offer"> {{ product.name }}</td>
-         <td>{{ product.quantity }}</td>
-         <td>{{ product.price ? (product.price | currency:'R$ ') : '---' }}</td>
+         <td style="white-space: nowrap;"><img src="images/offer.png" width="5%" ng-show="product.offer"> {{ product.name }}</td>
+         <td style="white-space: nowrap;">{{ product.quantity }}</td>
+         <td style="white-space: nowrap;">{{ product.price ? (product.price | currency:'R$ ') : '---' }}</td>
         </tr>
         <tfoot>
         <tr>
          <td colspan="2"><b>Total</b></td>
-         <td><b>{{ shoppingListTotal ? (shoppingListTotal | currency:'R$ ') : '---' }}</b></td>
+         <td style="white-space:nowrap;"><b>{{ shoppingListTotal ? (shoppingListTotal | currency:'R$ ') : '---' }}</b></td>
         </tr>
         </tfoot>        
       </table>
