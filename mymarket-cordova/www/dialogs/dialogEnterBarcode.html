@@ -2,7 +2,12 @@
   <h1>Digitar Código</h1>
 </div>
 <div role="main" class="ui-content">
-  <label for="productNameRenameDialog">Código:</label>
-  <input id="barcodeEnterBarcodeDialog" type="number" name="barcodeEnterBarcodeDialog">
-  <button id="enterBarcodeSendButton" type="button" data-role="none" class="btn btn-primary">Enviar</button>
+  <form name="enterBarcodeForm">
+    <label for="productNameRenameDialog">Código:</label>
+    <input id="barcodeEnterBarcodeDialog" type="tel" name="barcodeEnterBarcodeDialog" ng-model="barcode" required>
+    <div role="alert">
+      <span class="error" ng-show="enterBarcodeForm.barcodeEnterBarcodeDialog.$error.required"> Required!</span>
+    </div>
+    <button type="button" data-role="none" class="btn btn-primary" ng-click="enterBarcode()">Enviar</button>
+  </form>
 </div>

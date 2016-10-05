@@ -29,7 +29,7 @@
                     * Enable inline JS: add 'unsafe-inline' to default-src
             -->
 <meta http-equiv="Content-Security-Policy"
-  content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; child-src http://mymarket.bastosbf.com/*">
+  content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; child-src http://*/*">
 <meta name="format-detection" content="telephone=no">
 <meta name="msapplication-tap-highlight" content="no">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -41,59 +41,71 @@
 <script type="text/javascript" src="js/external/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/external/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript" src="js/external/bootstrap.js"></script>
+<script type="text/javascript" src="js/external/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/ng-cordova-oauth/dist/ng-cordova-oauth.js"></script>
 </head>
 <body>
   <div class="app" data-role="main">
     <div class="ui-loader-background"></div>
-    <div data-role="page" id="MainActivity" class="ui-responsive">
+    <div class="mymarket-page" data-role="page" id="MainActivity"  ng-controller="MainController">
       <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
         <h1 class="header-title">e-Mercado</h1>
       </div>
-      <div style="margin: 2%">
-        <select name="citiesSelect" id="citiesSelect">
+      <div class="selects-main-div">
+        <select ng-init="listCities()" ng-model="$root.city" ng-change="listPlaces()" ng-options="city as city.name for city in cities track by city.id" ng-disabled="cities == null">
+            <option  value="">Selecione a cidade</option>   
         </select>
         <br>
-        <select name="placesSelect" id="placesSelect">
+        <select ng-model="$root.place" ng-change="listMarkets()" ng-options="place as place.name for place in places track by place.id" ng-disabled="city == null || places == null">
+            <option ng-selected="places == null || city == null  || city.id < 0" value="">Selecione o bairro</option>
         </select>
         <br>
-        <select name="marketsSelect" id="marketsSelect">
+        <select ng-model="$root.market" ng-options="market as market.name for market in markets track by market.id" ng-disabled="city == null || place == null || markets == null"> 
+            <option ng-selected="(city == null  || city.id < 0) || (place == null || place.id < 0)" value="">Selecione o Mercado</option>
         </select>
       </div>
-      <div style="white-space: nowrap; margin: 5%; min-width: 100px; width: auto !important;">
-        <!--                 http://marcj.github.io/css-element-queries/ -->
-        <button class="btn btn-primary ui-responsive" id="scanBarcodeButton" type="button" data-role="none" disabled>Escanear Código</button>
-        <button class="btn btn-primary ui-responsive" id="enterBarcodeButton" type="button" data-role="none" disabled>Digitar Código</button>
+      <div class="center-block buttons-main-div" data-role="none">
+        <button class="btn btn-primary btn-lg btn-block"  type="button" data-role="none" ng-click="initScanBarcode()" ng-disabled="city == null || city.id < 0">Escanear Código</button>
+        <button class="btn btn-default btn-lg btn-block"  type="button" data-role="none" ng-click="askBarcode()" ng-disabled="city == null || city.id < 0">Digitar Código</button>
+        <button class="btn btn-primary btn-lg btn-block"  type="button" data-role="none" ng-click="suggestMarketView()">Sugerir Mercado</button>
+        <button class="btn btn-default btn-lg btn-block" data-role="none" ng-disabled="uid == null" ng-click="marketListsView()">Ver listas</button>
         <br>
       </div>
-      <button class="btn btn-primary ui-responsive" style="background-color: #008CBA; width: auto" id="suggestMarketActivityButton" type="button" data-role="none">Sugerir Mercado</button>
 
-      <div class="info-div">
-        <small> Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre
-          comprar produtos com preços justos e saber que estamos pagando o melhor preço! </small>
-      </div>
+<!--       <div class="info-div"> -->
+<!--         <small> Não esqueça de colaborar com os preços dos produtos que comprar para manter o aplicativo sempre atualizado! Com sua ajuda e a de todos os outros usuários poderemos sempre -->
+<!--           comprar produtos com preços justos e saber que estamos pagando o melhor preço! </small> -->
+<!--       </div> -->
+      
+       <div class="row">
+         <div class="col-md-12 ">
+              <a href="javascript:void(0);" class="" ng-click="facebookLogin()" ng-show="uid == null">
+                <img src="img/fblogin.png" class="" style="width: 240px" />
+              </a>
+              <a href="javascript:void(0);" class="" ng-click="facebookLogout()" ng-show="uid != null">
+                <img src="img/fblogout.png" class="" style="width: 240px" />
+              </a> 
+         </div>
+  </div>
     </div>
 
-    <div id="ProductsActivity" data-role="page">
-      <div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
-        <h1 class="header-title">Produto</h1>
-        <a class="header-back-button" href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
-      </div>
-    </div>
-    <div id="AddProductActivity" data-role="page"></div>
-    <div id="AddMarketProductActivity" data-role="page"></div>
-    <div id="AddMarketPriceActivity" data-role="page"></div>
-    <div id="SuggestMarketActivity" data-role="page"></div>
-    <div id="dialogLocation" data-role="page"></div>
+    <div id="pageSearchResults" data-role="page" ng-controller="SearchResultsController"></div>
+    <div class="mymarket-page" id="pageMarketLists" data-role="page" ng-controller="MarketListsController"></div>
+    <div id="dialogAddProduct" data-role="page"></div>
+    <div id="dialogAddMarketProduct" data-role="page"></div>
+    <div id="dialogAddMarketPrice" data-role="page"></div>
+    <div id="dialogSuggestMarket" data-role="page" ng-controller="SuggestMarketController"></div>
+    <div id="dialogAskLocation" data-role="page" ng-controller="GeolocationAskController"></div>
     <div id="dialogRenameProduct" data-role="page"></div>
     <div id="dialogUpdatePrice" data-role="page"></div>
-    <div id="dialogEnterBarcode" data-role="page"></div>
-
+    <div id="dialogEnterBarcode" data-role="page" ng-controller="EnterBarcodeController"></div>
   </div>
   <script type="text/javascript" src="cordova.js"></script>
   <script type="text/javascript" src="js/properties.js"></script>
   <script type="text/javascript" src="js/utils.js"></script>
   <script type="text/javascript" src="js/geolocation.js"></script>
   <script type="text/javascript" src="js/rest_operations.js"></script>
+  <script type="text/javascript" src="js/angular_app.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>

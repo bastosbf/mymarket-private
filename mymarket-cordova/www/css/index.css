@@ -46,7 +46,7 @@ body {
 
 /* Portrait layout (default) */
 .app {
-	/*     position:absolute;             position in the center of the screen */
+	/* 	    position:absolute;             /*position in the center of the screen */
 	/*     left:100%; */
 	/*     top:50%; */
 	/*     height:100px;                   text area height */
@@ -54,7 +54,7 @@ body {
 	/*     text-align:center; */
 	/*      padding:180px 0px 0px 0px;     image height is 200px (bottom 20px are overlapped with text) */
 	/*      margin:-50px 0px 0px -112px;  offset vertical: half of image height and text area height */
-	background: #999999 !important;
+	/* 	background: #999999 !important; */
 	/*                                    offset horizontal: half of text area width */
 	text-align: center;
 }
@@ -105,10 +105,28 @@ h1 {
 	padding-bottom: .22em !important;
 }
 
+.info-div {
+	margin: 10px;
+	position: relative !important;
+	border: dashed 2px grey !important;
+}
+
 .product-info-div {
 	margin: 10px;
 	position: relative !important;
 	border: dashed 2px grey !important;
+}
+
+.buttons-main-div {
+	margin: 20%;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
+.selects-main-div {
+	margin: 15%;
+	margin-top: 2%;
+	margin-bottom: 2%;
 }
 
 .info-div {
@@ -183,6 +201,18 @@ h1 {
 	white-space: nowrap;
 }
 
+.marketSelectedResultDiv {
+	background-color: #96EEB5 !important
+}
+
+.marketResultDiv {
+	background-color: #ADD8E6 !important
+}
+
+.marketListResultDiv {
+	background-color: #F5F5DC !important
+}
+
 /* .event { */
 /* 	border-radius: 4px; */
 /* 	-webkit-border-radius: 4px; */
@@ -255,8 +285,15 @@ h1 {
 	-webkit-animation: fade 3000ms infinite;
 }
 
+.mymarket-page {
+	background: url("images/pexels-photo.jpg") no-repeat;
+	background-size: cover;
+	min-height: 100% !important;
+}
+
 .ui-page {
 	/*     background:#009900 !important; */
+	/* 	https://www.pexels.com/photo/tomatoes-carrots-healthy-groceries-36156/ */
 	
 }
 

@@ -24,6 +24,9 @@
         },
         "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.mymarket.cordova.app"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.mymarket.cordova.app"
         }
     },
     "dependent_plugins": {

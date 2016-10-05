@@ -15,7 +15,9 @@
 	</author>
 	<content src="index.html" />
 	<plugin name="cordova-plugin-whitelist" spec="1" />
-	<allow-navigation href="http://mymarket.bastosbf.com/*" />
+	<allow-navigation href="http://*/*" />
+	<allow-navigation href="https://*/*" />
+	<allow-navigation href="data:*" />
 	<access origin="*" />
 	<allow-intent href="http://*/*" />
 	<allow-intent href="https://*/*" />
@@ -160,7 +162,7 @@
 		<preference name="SplashScreen" value="img/browser/icon-60@3x.png" /> <!-- defaults to "/img/logo.png" -->
 		<preference name="SplashScreenDelay" value="3000" /> <!-- defaults to "3000" -->
 		<preference name="SplashScreenBackgroundColor" value="white" /> <!-- defaults to "#464646" -->
-		<preference name="ShowSplashScreen" value="true" /> <!-- defaults to "true" -->
+		<preference name="ShowSplashScreen" value="false" /> <!-- defaults to "true" -->
 		<preference name="SplashScreenWidth" value="180" /> <!-- defaults to "170" -->
 		<preference name="SplashScreenHeight" value="180" /> <!-- defaults to "200" -->
 	</platform>
