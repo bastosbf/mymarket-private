@@ -105,7 +105,7 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 		    		}
 		    		var r = $window.confirm("Você está em " + $scope.cities[locationNear].name + "?");
 		    		if(r) {
-		    			$scope.city = {id: $scope.cities[locationNear].id, name: $scope.cities[locationNear].name};		    			
+		    			$scope.city = $scope.cities[locationNear];		    			
 		    			$scope.listPlaces();
 		    		}
 			      });
