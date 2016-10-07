@@ -17,7 +17,7 @@ public class ShoppingListProductDAO extends GenericDAO<ShoppingListProduct> {
 		super(factory);
 	}
 	
-	public List<ShoppingListProduct> list(String list) {
+	public List<ShoppingListProduct> list(int list) {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		try { 

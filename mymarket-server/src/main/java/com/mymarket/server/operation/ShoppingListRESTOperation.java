@@ -12,8 +12,8 @@ import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.ShoppingListDAO;
 import com.mymarket.server.dao.impl.ShoppingListProductDAO;
 import com.mymarket.server.dto.model.Product;
-import com.mymarket.server.dto.model.ShoppingListProduct;
 import com.mymarket.server.dto.model.ShoppingList;
+import com.mymarket.server.dto.model.ShoppingListProduct;
 import com.mymarket.server.dto.model.User;
 
 @Path("/shopping-list")
@@ -61,7 +61,7 @@ public class ShoppingListRESTOperation {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/list-products/{list}")
-	public List<ShoppingListProduct> listProducts(@PathParam("list") String list) {
+	public List<ShoppingListProduct> listProducts(@PathParam("list") int list) {
 		ShoppingListProductDAO dao = new ShoppingListProductDAO(HibernateConfig.factory);
 		return dao.list(list);
 	}
