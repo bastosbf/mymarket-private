@@ -7,8 +7,6 @@
 			<generator class="identity" />
 		</id>
 		<many-to-one name="product" class="com.mymarket.server.dto.model.Product" fetch="select" />
-		<property name="suggestedName" column="suggested_name"/>
-		<property name="status" />
-		<property name="date" />
+		<property name="suggestedName" column="suggested_name"/>		
 	</class>
 </hibernate-mapping>

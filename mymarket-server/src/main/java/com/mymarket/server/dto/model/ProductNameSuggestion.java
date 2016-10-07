@@ -9,9 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ProductNameSuggestion implements Serializable {
 	private Integer id;
 	private Product product;
-	private String suggestedName;
-	private String status;
-	private Date date;
+	private String suggestedName;	
 
 	public Integer getId() {
 		return id;
@@ -36,21 +34,4 @@ public class ProductNameSuggestion implements Serializable {
 	public void setSuggestedName(String suggestedName) {
 		this.suggestedName = suggestedName;
 	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 }

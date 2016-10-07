@@ -13,17 +13,23 @@ public class GenericDAO<E> {
 	public void add(E e) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		session.save(e);
-		session.getTransaction().commit();
-		session.close();
+		try {
+			session.save(e);
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
 	}
 	
 	public void update(E e) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		session.update(e);
-		session.getTransaction().commit();
-		session.close();
+		try {
+			session.update(e);
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
 	}
 
 

@@ -20,34 +20,46 @@ public class MarketDAO extends GenericDAO<Market> {
 	public List<Market> listByCity(int city) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Market.class)
-				.createAlias("place", "pl")
-				.add(Restrictions.eq("pl.city.id", city))
-				.addOrder(Order.asc("name"));
-		List<Market> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(Market.class)
+					.createAlias("place", "pl")
+					.add(Restrictions.eq("pl.city.id", city))
+					.addOrder(Order.asc("name"));
+			List<Market> list = criteria.list();
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 	
 	public List<Market> listByPlace(int place) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Market.class)
-				.createAlias("place", "pl")
-				.add(Restrictions.eq("pl.id", place))
-				.addOrder(Order.asc("name"));
-		List<Market> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(Market.class)
+					.createAlias("place", "pl")
+					.add(Restrictions.eq("pl.id", place))
+					.addOrder(Order.asc("name"));
+			List<Market> list = criteria.list();
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 
 	public Market get(int id) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Market.class)
-				.add(Restrictions.eq("id", id));
-		List<Market> list = criteria.list();
-		if (!list.isEmpty()) {
-			return list.get(0);
+		try {
+			Criteria criteria = session.createCriteria(Market.class)
+					.add(Restrictions.eq("id", id));
+			List<Market> list = criteria.list();
+			if (!list.isEmpty()) {
+				return list.get(0);
+			}
+			return null;
+		} finally {
+			session.close();
 		}
-		return null;
 	}
 }

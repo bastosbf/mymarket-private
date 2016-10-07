@@ -76,7 +76,7 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/update-price/{market}/{product}/{price}/{offer}")
+	@Path("/suggest-price/{market}/{product}/{price}/{offer}")
 	public void suggestPrice(@PathParam("market") int market, @PathParam("product") int product, @PathParam("price") float price, @PathParam("offer") boolean offer) {
 		Market m = null;
 		{

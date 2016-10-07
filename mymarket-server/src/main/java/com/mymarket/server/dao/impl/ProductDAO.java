@@ -28,20 +28,24 @@ public class ProductDAO extends GenericDAO<Product> {
 	public List<Product> listByMarket(int market) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class).add(Restrictions.eq("market.id", market));
-		List<MarketProduct> list = criteria.list();
-		List<Product> products = new ArrayList<Product>();
-		for (MarketProduct mp : list) {
-			Product product = mp.getProduct();
-			products.add(product);
+		try {
+			Criteria criteria = session.createCriteria(MarketProduct.class).add(Restrictions.eq("market.id", market));
+			List<MarketProduct> list = criteria.list();
+			List<Product> products = new ArrayList<Product>();
+			for (MarketProduct mp : list) {
+				Product product = mp.getProduct();
+				products.add(product);
+			}
+			return products;
+		} finally {
+			session.close();
 		}
-		return products;
 	}
 
 	public List<Product> listByPlace(int place) {
 		Session session = factory.openSession();
-		try {
-			session.beginTransaction();
+		session.beginTransaction();
+		try {			
 			Criteria criteria = session.createCriteria(MarketProduct.class).createAlias("market", "m").add(Restrictions.eq("m.place.id", place));
 			List<MarketProduct> list = criteria.list();
 			List<Product> products = new ArrayList<Product>();
@@ -57,8 +61,8 @@ public class ProductDAO extends GenericDAO<Product> {
 
 	public List<Product> listByName(String[] tokens) {
 		Session session = factory.openSession();
-		try {
-			session.beginTransaction();
+		session.beginTransaction();
+		try {			
 			Criteria criteria = session.createCriteria(Product.class);
 			for (String token : tokens) {
 				if (token.length() < 3) {
@@ -76,8 +80,8 @@ public class ProductDAO extends GenericDAO<Product> {
 	
 	public List<ProductWithLowestPrice> listWithLowestPriceByName(String[] tokens, int city, int place) {
 		Session session = factory.openSession();
-		try {
-			session.beginTransaction();
+		session.beginTransaction();
+		try {			
 			Criteria criteria = session.createCriteria(MarketProduct.class)
 					.createAlias("product", "p")
 					.createAlias("market", "m")
@@ -111,8 +115,8 @@ public class ProductDAO extends GenericDAO<Product> {
 	
 	public List<ProductWithOfferAndPrice> getWithPrice(int market, Integer... products) {
 		Session session = factory.openSession();
-		try {
-			session.beginTransaction();
+		session.beginTransaction();
+		try {			
 			Criteria criteria = session.createCriteria(MarketProduct.class)
 					.createAlias("product", "p")
 					.createAlias("market", "m")			
@@ -136,8 +140,8 @@ public class ProductDAO extends GenericDAO<Product> {
 
 	public Product get(int id) {
 		Session session = factory.openSession();
+		session.beginTransaction();
 		try {
-			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("id", id));
 			List<Product> list = criteria.list();
 			if (!list.isEmpty()) {
@@ -145,7 +149,6 @@ public class ProductDAO extends GenericDAO<Product> {
 			}
 			return null;
 		} finally {
-			session.flush();
 			session.close();
 		}
 	}
@@ -153,12 +156,16 @@ public class ProductDAO extends GenericDAO<Product> {
 	public void updateName(int id, String name) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("id", id));
-		List<Product> list = criteria.list();
-		if (!list.isEmpty()) {
-			Product p = list.get(0);
-			p.setName(name);
-			update(p);
+		try {
+			Criteria criteria = session.createCriteria(Product.class).add(Restrictions.eq("id", id));
+			List<Product> list = criteria.list();
+			if (!list.isEmpty()) {
+				Product p = list.get(0);
+				p.setName(name);
+				update(p);
+			}
+		} finally {
+			session.close();
 		}
 	}
 }

@@ -19,9 +19,13 @@ public class UserDAO extends GenericDAO<User> {
 	public boolean exists(String uid) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(User.class)
-				.add(Restrictions.eq("uid", uid));
-		List<User> list = criteria.list();
-		return !list.isEmpty();
+		try {
+			Criteria criteria = session.createCriteria(User.class)
+					.add(Restrictions.eq("uid", uid));
+			List<User> list = criteria.list();
+			return !list.isEmpty();
+		} finally {
+			session.close();
+		}
 	}
 }

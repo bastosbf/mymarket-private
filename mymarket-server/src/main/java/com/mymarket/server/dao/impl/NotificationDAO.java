@@ -20,8 +20,12 @@ public class NotificationDAO extends GenericDAO<Notification> {
 	public List<Notification> list() {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Notification.class).add(Restrictions.eq("status", "H")).addOrder(Order.asc("kind"));
-		List<Notification> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(Notification.class).add(Restrictions.eq("status", "H")).addOrder(Order.asc("kind"));
+			List<Notification> list = criteria.list();
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 }

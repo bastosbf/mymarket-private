@@ -27,7 +27,6 @@ public class ProductBarcodeDAO extends GenericDAO<ProductBarcode> {
 			}
 			return null;
 		} finally {
-			session.flush();
 			session.close();
 		}
 	}

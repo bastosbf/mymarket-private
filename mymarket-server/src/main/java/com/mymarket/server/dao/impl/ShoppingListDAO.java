@@ -20,12 +20,16 @@ public class ShoppingListDAO extends GenericDAO<ShoppingList> {
 	public List<ShoppingList> list(String uid) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(ShoppingList.class)
-				.createAlias("user", "u")
-				.add(Restrictions.eq("u.uid", uid))
-				.addOrder(Order.asc("name"));
-		List<ShoppingList> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(ShoppingList.class)
+					.createAlias("user", "u")
+					.add(Restrictions.eq("u.uid", uid))
+					.addOrder(Order.asc("name"));
+			List<ShoppingList> list = criteria.list();
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 	
 	

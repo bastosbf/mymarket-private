@@ -20,31 +20,43 @@ public class CityDAO extends GenericDAO<City> {
 	public List<City> list() {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(City.class)
-				.addOrder(Order.asc("name"));
-		List<City> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(City.class)
+					.addOrder(Order.asc("name"));
+			List<City> list = criteria.list();		
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 	
 	public List<City> list(int state) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(City.class)
-				.addOrder(Order.asc("name"))
-				.add(Restrictions.eq("state.id", state));
-		List<City> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(City.class)
+					.addOrder(Order.asc("name"))
+					.add(Restrictions.eq("state.id", state));
+			List<City> list = criteria.list();
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 
 	public City get(int id) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(City.class).add(Restrictions.eq("id", id));
-		List<City> list = criteria.list();
-		if (!list.isEmpty()) {
-			return list.get(0);
+		try {
+			Criteria criteria = session.createCriteria(City.class).add(Restrictions.eq("id", id));
+			List<City> list = criteria.list();
+			if (!list.isEmpty()) {
+				return list.get(0);
+			}
+			return null;
+		} finally {
+			session.close();
 		}
-		return null;
 	}
 
 }

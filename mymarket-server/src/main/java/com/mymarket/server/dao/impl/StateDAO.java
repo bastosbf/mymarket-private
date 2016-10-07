@@ -20,21 +20,29 @@ public class StateDAO extends GenericDAO<State> {
 	public List<State> list() {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(State.class)
-				.addOrder(Order.asc("acronym"));
-		List<State> list = criteria.list();
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(State.class)
+					.addOrder(Order.asc("acronym"));
+			List<State> list = criteria.list();
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 
 	public State get(int id) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(State.class).add(Restrictions.eq("id", id));
-		List<State> list = criteria.list();
-		if (!list.isEmpty()) {
-			return list.get(0);
+		try {
+			Criteria criteria = session.createCriteria(State.class).add(Restrictions.eq("id", id));
+			List<State> list = criteria.list();
+			if (!list.isEmpty()) {
+				return list.get(0);
+			}
+			return null;
+		} finally {
+			session.close();
 		}
-		return null;
 	}
 
 }

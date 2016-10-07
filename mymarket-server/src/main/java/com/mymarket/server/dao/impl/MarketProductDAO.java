@@ -10,7 +10,9 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.mymarket.server.dao.GenericDAO;
+import com.mymarket.server.dto.model.Market;
 import com.mymarket.server.dto.model.MarketProduct;
+import com.mymarket.server.dto.model.Product;
 import com.mymarket.server.dto.model.ProductBarcode;
 
 public class MarketProductDAO extends GenericDAO<MarketProduct> {
@@ -22,45 +24,69 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 	public List<MarketProduct> getByMarket(int market) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class)
-				.createAlias("product", "p")
-				.createAlias("market", "m")
-				.add(Restrictions.eq("m.id", market))
-				.addOrder(Order.asc("p.name"));
-		List<MarketProduct> list = criteria.list();		
-		return list;
+		try {
+			Criteria criteria = session.createCriteria(MarketProduct.class)
+					.createAlias("product", "p")
+					.createAlias("market", "m")
+					.add(Restrictions.eq("m.id", market))
+					.addOrder(Order.asc("p.name"));
+			List<MarketProduct> list = criteria.list();		
+			return list;
+		} finally {
+			session.close();
+		}
 	}
 	
 	public void updatePrice(int market, int product, float price, boolean offer) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class)
-				.createAlias("product", "p")
-				.createAlias("market", "m")
-				.add(Restrictions.eq("p.id", product))
-				.add(Restrictions.eq("m.id", market));
-		List<MarketProduct> list = criteria.list();
-		if(!list.isEmpty()) {
-			MarketProduct mp = list.get(0);
-			mp.setPrice(price);
-			mp.setOffer(offer);
-			update(mp);
-		}		
+		try {
+			Criteria criteria = session.createCriteria(MarketProduct.class)
+					.createAlias("product", "p")
+					.createAlias("market", "m")
+					.add(Restrictions.eq("p.id", product))
+					.add(Restrictions.eq("m.id", market));
+			List<MarketProduct> list = criteria.list();
+			if(!list.isEmpty()) {
+				MarketProduct mp = list.get(0);
+				mp.setPrice(price);
+				mp.setOffer(offer);
+				update(mp);
+			} else {
+				MarketProduct mp = new MarketProduct();
+				Market m = new Market();
+				m.setId(market);
+				mp.setMarket(m);
+				Product p = new Product();
+				p.setId(product);
+				mp.setProduct(p);
+				mp.setPrice(price);
+				mp.setOffer(offer);
+				add(mp);
+			}
+		} finally {
+			session.close();
+		}
 	}
 	
 	public void confirmPrice(int market, int product) {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(MarketProduct.class)
-				.createAlias("product", "p")
-				.createAlias("market", "m")
-				.add(Restrictions.eq("p.id", product))
-				.add(Restrictions.eq("m.id", market));
-		List<MarketProduct> list = criteria.list();
-		if(!list.isEmpty()) {
-			MarketProduct mp = list.get(0);
-			update(mp);
-		}		
+		try {
+			Criteria criteria = session.createCriteria(MarketProduct.class)
+					.createAlias("product", "p")
+					.createAlias("market", "m")
+					.add(Restrictions.eq("p.id", product))
+					.add(Restrictions.eq("m.id", market));
+			List<MarketProduct> list = criteria.list();
+			if(!list.isEmpty()) {
+				MarketProduct mp = list.get(0);
+				mp.setLastUpdate(null);
+				update(mp);
+			}		
+		} finally {
+			session.close();
+		}
 	}
 	
 	public List<MarketProduct> getByBarcodeAndPlace(String barcode, int place, int maxResults) {
