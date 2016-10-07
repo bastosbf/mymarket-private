@@ -174,10 +174,11 @@ CREATE TABLE `market_suggestion` (
 DROP TABLE IF EXISTS `product_suggestion`;
 CREATE TABLE `product_suggestion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `barcode` varchar(255) NOT NULL,
   `market` int(11),
   `price` float,
+  `offer` boolean NOT NULL DEFAULT false,
   `status` char(1) NOT NULL DEFAULT 'N' COMMENT 'status = N - Novo, A -Adicionado, R - Rejeitado',  
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

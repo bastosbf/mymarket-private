@@ -12,7 +12,7 @@ public class ProductSuggestion implements Serializable {
 	private String barcode;
 	private Market market;
 	private Float price;
-	private String status;
+	private Boolean offer;
 	private Date date;
 
 	public Integer getId() {
@@ -55,12 +55,12 @@ public class ProductSuggestion implements Serializable {
 		this.price = price;
 	}
 
-	public String getStatus() {
-		return status;
+	public Boolean getOffer() {
+		return offer;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setOffer(Boolean offer) {
+		this.offer = offer;
 	}
 
 	public Date getDate() {

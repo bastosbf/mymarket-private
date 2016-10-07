@@ -36,8 +36,8 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/suggest-product/{market}/{barcode}/{name}/{price}")
-	public void suggestProduct(@PathParam("market") int market, @PathParam("barcode") String barcode, @PathParam("name") String name, @PathParam("price") float price) {
+	@Path("/suggest-product/{market}/{barcode}/{name}/{price}/{offer}")
+	public void suggestProduct(@PathParam("market") int market, @PathParam("barcode") String barcode, @PathParam("name") String name, @PathParam("price") float price, @PathParam("offer") boolean offer) {
 		Market m = null;
 		{
 			MarketDAO dao = new MarketDAO(HibernateConfig.factory);
@@ -48,8 +48,9 @@ public class CollaborationRESTOperation {
 		suggestion.setBarcode(barcode);
 		suggestion.setName(name);
 		if (price != 0) {
-			suggestion.setPrice(price);
+			suggestion.setPrice(price);			
 		}
+		suggestion.setOffer(offer);
 		ProductSuggestionDAO dao = new ProductSuggestionDAO(HibernateConfig.factory);
 		dao.add(suggestion);
 	}
@@ -75,7 +76,7 @@ public class CollaborationRESTOperation {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/update-price/{market}/{product}/{price}/{offer : (/offer)?}")
+	@Path("/update-price/{market}/{product}/{price}/{offer}")
 	public void suggestPrice(@PathParam("market") int market, @PathParam("product") int product, @PathParam("price") float price, @PathParam("offer") boolean offer) {
 		Market m = null;
 		{
