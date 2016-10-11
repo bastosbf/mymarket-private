@@ -1,0 +1,85 @@
+
+<div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
+  <h1 class="header-title">Produto</h1>
+  <a class="header-back-button" href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
+</div>
+<div data-role="content" class="ui-responsive">
+  <p data-position="fixed">{{barcode}}</p>
+  <div ng-show="results.length > 0">
+    <legend id="productName" class="scheduler-border" data-position=fixed>
+      {{results[0].product.name}}
+      <span class="glyphicon glyphicon-pencil" data-role="none" aria-hidden="true" ng-click="showRenameProductDialog()"></span>
+    </legend>
+    <div class="list-group">
+      <div class="list-group-item" style="background-color: #FF5A5A !important" ng-show="market && market.id > 0 && selectedMarketFound == false">
+        <h4 class="list-group-item-heading">
+          <p>{{market.name}}</p>
+        </h4>
+        <div class="list-group-item-text">
+          <p>Sem registro para esse mercado!</p>
+        </div>
+        <button type="button" data-role="none" class="btn btn-success" ng-click="showUpdateMarketPriceDialog(results[0], false)">Adicionar preço</button>
+      </div>
+      <div class="marketSelectedResultDiv list-group-item product-info-div" ng-repeat="marketProduct in results track by $index" ng-show="selectedMarketFound && marketProduct.market.id == market.id">
+        <br>
+        <h4 class="list-group-item-heading">
+          <p>{{marketProduct.market.name}}</p>
+        </h4>
+        <div class="list-group-item-text">
+          <p>{{marketProduct.market.address}}</p>
+        </div>
+        <dl>
+          <dd>
+            <code>Preço</code>
+            <p>{{marketProduct.price | currency : 'R$ '}}</p>
+          </dd>
+
+          <dd>
+            <code>Última Atualização</code>
+            <p>{{marketProduct.last_update | date:'dd/MM/yyyy'}}</p>
+            <p>{{marketProduct.last_update | date:'HH:mm:ss'}}</p>
+          </dd>
+        </dl>
+        <button type="button" data-role="none" class="btn btn-primary" ng-click="confirmPrice(marketProduct)">Confirmar preço</button>
+        <button type="button" data-role="none" class="btn btn-primary" ng-click="showUpdateMarketPriceDialog(marketProduct, true)">Atualizar preço</button>
+        <br>
+        <br>
+      </div>
+      <div class="marketResultDiv list-group-item product-info-div" ng-repeat="marketProduct in results track by $index" ng-show="marketProduct.market != null && marketProduct.market.id != market.id">
+        <br>
+        <h4 class="list-group-item-heading">
+          <p>{{marketProduct.market.name}}</p>
+        </h4>
+        <div class="list-group-item-text">
+          <p>{{marketProduct.market.address}}</p>
+        </div>
+        <dl>
+          <dd>
+            <code>Preço</code>
+            <p>{{marketProduct.price | currency : 'R$ '}}</p>
+          </dd>
+
+          <dd>
+            <code>Última Atualização</code>
+            <p>{{marketProduct.last_update | date:'dd/MM/yyyy'}}</p>
+            <p>{{marketProduct.last_update | date:'HH:mm:ss'}}</p>
+          </dd>
+        </dl>
+        <br>
+      </div>
+    </div>
+  </div>
+  <div ng-show="(results != null && (results.length == 1 && results[0].price == null))">
+    <div ng-show="(market == null || market.id == 0)">
+      <h4 class='list-group-item-heading'>
+        <p>Sem registros!</p>
+      </h4>
+    </div>
+  </div>
+  <div ng-show="(results == null || results.length == 0)">
+    <legend class="scheduler-border">Não encontrado!!</legend>
+    <div ng-show="(market != null && market.id > 0)">
+      <button type="button" data-role="none" class="btn btn-success" ng-click="showAddNameAndPriceDialog()">Adicionar produto</button>
+    </div>
+  </div>
+</div>

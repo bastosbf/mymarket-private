@@ -100,30 +100,30 @@
 <!-- 		<splash src="img/android/mipmap-xxhdpi/logo_144w_144h.png" -->
 <!-- 			density="port-xhdpi" /> -->
 
-<splash src="img/android/mipmap-xxhdpi/logo_144w_144h.png"
-			density="land-hdpi" />
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="land-ldpi" />
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="land-mdpi" />
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="land-xhdpi" />
+<!-- <splash src="img/android/mipmap-xxhdpi/logo_144w_144h.png" -->
+<!-- 			density="land-hdpi" /> -->
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="land-ldpi" /> -->
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="land-mdpi" /> -->
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="land-xhdpi" /> -->
 
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="port-hdpi" />
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="port-ldpi" />
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="port-mdpi" />
-		<splash src="www/img/browser/icon-60@3x.png"
-			density="port-xhdpi" />
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="port-hdpi" /> -->
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="port-ldpi" /> -->
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="port-mdpi" /> -->
+<!-- 		<splash src="www/img/browser/icon-60@3x.png" -->
+<!-- 			density="port-xhdpi" /> -->
 
 
 
-		<preference name="SplashScreen" value="screen" />
-		<preference name="SplashScreenDelay" value="6000" /> <!-- defaults to "3000" -->
-		<preference name="SplashScreenBackgroundColor" value="white" /> <!-- defaults to "#464646" -->
-		<preference name="ShowSplashScreen" value="true" /> <!-- defaults to "true" -->
+<!-- 		<preference name="SplashScreen" value="screen" /> -->
+<!-- 		<preference name="SplashScreenDelay" value="6000" /> defaults to "3000" -->
+<!-- 		<preference name="SplashScreenBackgroundColor" value="white" /> defaults to "#464646" -->
+<!-- 		<preference name="ShowSplashScreen" value="true" /> defaults to "true" -->
 <!-- 		<preference name="SplashScreenWidth" value="144" /> defaults to "170" -->
 <!-- 		<preference name="SplashScreenHeight" value="144" /> defaults to "200" -->
 

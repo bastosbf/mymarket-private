@@ -1,0 +1,22 @@
+<div data-role="header" class="ui-header ui-bar-a">
+  <h1>Adicionar</h1>
+  <!--   <a href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a> -->
+</div>
+<div data-role="content" class="ui-responsive">
+  <label for="barcodeAddMarketPrice">Barcode:</label>
+  <strong>{{barcode}}</strong>
+  <label for="nameAddMarketPrice">Nome:</label>
+  <strong>{{marketProduct.product.name}}</strong>
+  <label for="marketAddMarketPrice">Mercado:</label>
+  <strong>{{market.name}}</strong>
+  <label for="priceAddMarketPrice">Preço:</label>
+  <div class="priceDiv">
+    <div data-role="controlgroup" data-type="horizontal" style="display: inline">
+      <button>R$</button>
+      <input id="priceAddMarketPrice" type="number"  data-wrapper-class="controlgroup-textinput ui-btn" ng-model="price">
+    </div>
+  </div>
+  <label for="offerAddMarketPrice"><img src="img/offer.png" width="10%">Produto em oferta!</label>
+  <input id="offerAddMarketPrice" type="checkbox" ng-model="offer">
+  <button id="addMarketPriceButton" type="button" data-role="none" class="btn btn-primary" ng-click="updateMarketPrice()">Enviar</button>
+</div>
