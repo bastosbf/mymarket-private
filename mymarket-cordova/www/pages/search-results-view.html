@@ -23,7 +23,7 @@
       <div class="marketSelectedResultDiv list-group-item product-info-div" ng-repeat="marketProduct in results track by $index" ng-show="selectedMarketFound && marketProduct.market.id == market.id">
         <br>
         <h4 class="list-group-item-heading">
-          <p>{{marketProduct.market.name}}</p>
+          <p><img src="img/offer.png" width="8%" ng-show="marketProduct.offer"> {{marketProduct.market.name}}</p>
         </h4>
         <div class="list-group-item-text">
           <p>{{marketProduct.market.address}}</p>
@@ -40,7 +40,7 @@
             <p>{{marketProduct.last_update | date:'HH:mm:ss'}}</p>
           </dd>
         </dl>
-        <button type="button" data-role="none" class="btn btn-primary" ng-click="confirmPrice(marketProduct)">Confirmar preço</button>
+        <button type="button" data-role="none" class="btn btn-primary" ng-click="confirmPrice(marketProduct)" ng-disabled="!confirmPriceActived">Confirmar preço</button>
         <button type="button" data-role="none" class="btn btn-primary" ng-click="showUpdateMarketPriceDialog(marketProduct, true)">Atualizar preço</button>
         <br>
         <br>
@@ -48,7 +48,7 @@
       <div class="marketResultDiv list-group-item product-info-div" ng-repeat="marketProduct in results track by $index" ng-show="marketProduct.market != null && marketProduct.market.id != market.id">
         <br>
         <h4 class="list-group-item-heading">
-          <p>{{marketProduct.market.name}}</p>
+          <p><img src="img/offer.png" width="8%" ng-show="marketProduct.offer"> {{marketProduct.market.name}}</p>
         </h4>
         <div class="list-group-item-text">
           <p>{{marketProduct.market.address}}</p>
@@ -82,4 +82,5 @@
       <button type="button" data-role="none" class="btn btn-success" ng-click="showAddNameAndPriceDialog()">Adicionar produto</button>
     </div>
   </div>
+  <label for="offerAddMarketProduct"><img src="img/offer.png" width="8%">Produto em oferta!</label> 
 </div>

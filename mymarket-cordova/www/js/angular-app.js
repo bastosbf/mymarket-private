@@ -1,5 +1,5 @@
 var CONFIG = {
-	ROOT_URL : "http://mymarket.bastosbf.com/mymarket_server_new"
+	ROOT_URL : "http://mymarket.bastosbf.com/mymarket-server-new"
 };
 
 var mymarketAngularApp = angular.module('mymarketAngularApp', ["ngCordova", "ngCordovaOauth", "ui.bootstrap.modal"]);
@@ -133,12 +133,12 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	};
 	
 	$scope.initScanBarcode = function() {
+		        $scope.barcode = '';
 				cordova.plugins.barcodeScanner
 				.scan(
 						function(result) {
 							if (!result.cancelled) {
-								localStorage.setItem(
-										"confirmActived", true);
+								$scope.confirmPriceActived = true;
 								$scope.barcode = result.text;
 								$scope.searchProduct();
 							}
@@ -263,8 +263,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	$scope.barcode = null;
 	$scope.enterBarcode = function() {
 		if($scope.barcode != "" && $scope.barcode != null){
-			localStorage.setItem("confirmActived", true);
-			$scope.barcode = $scope.barcode;			
+			$scope.confirmPriceActived = true;
 			$scope.searchProduct();
 		}
 	};
@@ -338,35 +337,33 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	
 	$scope.searchProduct = function (){
 		$scope.selectedMarketFound = false;
+		$scope.confirmPriceActived = true;
 		
 		if ($scope.barcode == null) {
 			return;
 	    }
 		$scope.loading = true;
 		
-		var url = CONFIG.ROOT_URL + '/rest/search/prices-by-city/' + $scope.barcode + '/'
-		+ $scope.city.id;
+		var url = CONFIG.ROOT_URL + '/rest/search/prices-by-city/' + $scope.barcode + '/' + $scope.city.id;
 		
-		$.ajax({ url : url,
-					dataType : 'json',
-					async : false,
-					type : "GET",
-					success : function(data) {
-						$scope.results = data;
-						
-						angular.forEach($scope.results, function(r) {
-							if(r.market != null){
-								if(r.market.id == $scope.market.id){
-									$scope.selectedMarketFound = true; 
-								}
-							}
-						});
-							
-						$.mobile.pageContainer.pagecontainer("change",
-								"#pageSearchResults", null);
-						$scope.loading = false;
+		$http.get(url)
+		.then(function success(result) {
+			$scope.results = result.data;
+			angular.forEach($scope.results, function(r) {
+				if(r.market != null){
+					if(r.market.id == $scope.market.id){
+						$scope.selectedMarketFound = true; 
 					}
-		 });	
+				}
+			});
+				
+			$.mobile.pageContainer.pagecontainer("change",
+					"#pageSearchResults", null);
+			$scope.loading = false;
+		}, 
+		function error(failure) {
+			
+		});
 	};
 	
 	$scope.showRenameProductDialog = function() {
@@ -377,13 +374,12 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	
 	$scope.confirmPrice = function (marketProduct) {
 		$scope.loading = true;
-		localStorage.setItem("confirmActived", false);
+		$scope.confirmPriceActived = false;
 		
 		var url = CONFIG.ROOT_URL + '/rest/collaboration/confirm-price/' + $scope.market.id + '/' + marketProduct.product.id;
 		$http.get(url)
 		.then(function success(result) {
-			navigator.notification.alert("Obrigado pela colaboração!",null, "e-Mercado",null);
-			marketProduct.last_update = new Date();
+			marketProduct.last_update = new Date ();
 		}, 
 		function error(failure) {
 		});	
@@ -400,6 +396,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	};
 	
 	$scope.showAddNameAndPriceDialog = function() {
+		$scope.newProduct = null;
 		$.mobile.changePage('#dialogAddMarketProduct', {
 			role : 'dialog'
 		});
@@ -409,6 +406,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	$scope.showUpdateMarketPriceDialog = function(marketProduct, existsOnMarket) {
 		$scope.marketProduct = marketProduct;
 		$scope.existsOnMarket = existsOnMarket;
+		$scope.price = null;
 		if($scope.existsOnMarket){
 			$scope.price = $scope.marketProduct.price; 
 		}
@@ -420,15 +418,17 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	
 	$scope.updateMarketPrice = function(){
 		$scope.loading = true;
-		localStorage.setItem("confirmActived", false);
 		
 		var url = CONFIG.ROOT_URL + '/rest/collaboration/suggest-price/' + $scope.market.id + '/' + $scope.marketProduct.product.id + '/' + $scope.price + '/' + $scope.offer;
+		console.log(url);
 		$http.get(url)
 		.then(function success(result) {
 			navigator.notification.alert("Obrigado pela colaboração!",null, "e-Mercado",null);
 			$('[data-role=dialog]').dialog("close");
+			$scope.marketProduct.last_update = new Date ();
 			$scope.offer = false;
 			$scope.searchProduct();
+			$scope.confirmPriceActived = false;
 			$scope.loading = false;
 		}, 
 		function error(failure) {
@@ -437,25 +437,23 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	
 	 $scope.addMarketProduct = function() {
 		$scope.loading = true;
+		$scope.confirmPriceActived = false;
+		
 		if (($scope.barcode == null || $scope.barcode == "") || ($scope.market.id == null || $scope.market.id == "") || ($scope.newProduct.name == null || $scope.newProduct.name  == "") || ($scope.newProduct.price == null || $scope.newProduct.price == "")) {
 			return;
 		}
 
-		localStorage.setItem("confirmActived", false);
-
-		$.ajax({
-			url : CONFIG.ROOT_URL + '/rest/collaboration/suggest-product/' + $scope.market.id + '/' + $scope.barcode + '/' + $scope.newProduct.name + '/' + $scope.newProduct.price + '/' + $scope.newProduct.offer,
-			dataType : 'json',
-			async : false,
-			type : "GET",
-			success : function(data) {
-				$scope.loading = false;
-				navigator.notification.alert("Obrigado pela colaboração! O produto será adicionado em breve.",null, "e-Mercado",null);
-				$('[data-role=dialog]').dialog("close");
-				$scope.newProduct = null;
-				//TODO: Voltar para tela inicial
-			}
-		});
+		var url = CONFIG.ROOT_URL + '/rest/collaboration/suggest-product/' + $scope.market.id + '/' + $scope.barcode + '/' + $scope.newProduct.name + '/' + $scope.newProduct.price + '/' + $scope.newProduct.offer;
+		$http.get(url).then(function success(result) {
+		}, 
+		function error(failure) {
+		});	
+		
+		$scope.loading = false;
+		navigator.notification.alert("Obrigado pela colaboração! O produto será adicionado em breve.",null, "e-Mercado",null);
+		$('[data-role=dialog]').dialog("close");
+		$scope.newProduct = null;
+		//TODO: Voltar para tela inicial
 	}
 	 
 	$scope.renameProduct = function () {
@@ -463,12 +461,12 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 			var url = CONFIG.ROOT_URL + '/rest/collaboration/suggest-name/' + $scope.results[0].product.id + '/' + $scope.newName;
 			$http.get(url)
 			.then(function success(result) {
-				navigator.notification.alert("Obrigado pela colaboração!",null, "e-Mercado",null);
-				$scope.newName = null;
-				$('[data-role=dialog]').dialog("close");
 			}, 
 			function error(failure) {
 			});	
 			$scope.loading = false;
+			navigator.notification.alert("Obrigado pela colaboração!",null, "e-Mercado",null);
+			$scope.newName = null;
+			$('[data-role=dialog]').dialog("close");
 		}
 } ]);

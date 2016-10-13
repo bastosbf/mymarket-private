@@ -169,13 +169,19 @@ h1 {
 
 .ui-loader-background {
 	width: 100%;
-	height: 100%;
-	top: 0;
-	margin: 0;
-	background: rgba(0, 0, 0, 0.3);
-	display: none;
-	position: fixed;
-	z-index: 100;
+    height: 100%;
+    top: 0;
+    margin: 0;
+    background: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    z-index: 100;
+}
+
+.ui-loader-background img{
+   top: 50%;
+    left: 50%;
+    margin-top: 50%;
+    margin-left: -5%;
 }
 
 .ui-loading .ui-loader-background {
