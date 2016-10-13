@@ -51,6 +51,7 @@ public class MarketProductDAO extends GenericDAO<MarketProduct> {
 				MarketProduct mp = list.get(0);
 				mp.setPrice(price);
 				mp.setOffer(offer);
+				mp.setLastUpdate(null);
 				update(mp);
 			} else {
 				MarketProduct mp = new MarketProduct();
