@@ -1,0 +1,14 @@
+<div data-role="header" class="ui-header ui-bar-a" data-position="fixed">
+  <h1 class="header-title">Suas Listas</h1>
+  <a class="header-back-button" href="#" data-iconpos="notext" data-rel="back" data-icon="carat-l"></a>
+</div>
+<div data-role="content" class="ui-responsive">
+  <div class="info-div" ng-show="showShoppingListMsg">
+    <small> Para criar suas listas, entre no site. :)</small>
+  </div>
+  <div class="info-div marketListResultDiv" ng-repeat="list in marketLists track by $index" ng-click="viewMarketList(list)">
+    <h4>
+      <p>{{list.name}}</p>
+    </h4>
+  </div>
+</div>

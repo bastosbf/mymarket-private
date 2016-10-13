@@ -47,20 +47,18 @@ var app = {
 
 			showLoading();
 			
-			$("#pageSearchResults").load("pages/searchResultsView.html");
-			$("#pageMarketLists").load("pages/marketListsView.html");
-			$("#dialogAddProduct").load("dialogs/dialogAddProduct.html");
-			$("#dialogAddMarketProduct").load(
-					"dialogs/dialogAddMarketProduct.html");
-			$("#dialogAddMarketPrice").load(
-					"dialogs/dialogAddMarketPrice.html");
-
-			$("#dialogSuggestMarket").load(
-					"dialogs/dialogSuggestMarket.html");
-			$("#dialogAskLocation").load("dialogs/dialogAskLocation.html");
-			$("#dialogRenameProduct").load("dialogs/dialogRenameProduct.html");
-			$("#dialogUpdatePrice").load("dialogs/dialogUpdatePrice.html");
-			$("#dialogEnterBarcode").load("dialogs/dialogEnterBarcode.html");
+			$("#pageSearchResults").load("pages/search-results-view.html");
+			$("#pageMarketLists").load("pages/market-lists-view.html");
+			$("#pageShoppingListProducts").load("pages/shopping-list-products-view.html");
+			
+			
+			$("#dialogAddProductName").load("dialogs/dialog-add-product-name.html");
+			$("#dialogAddMarketProduct").load("dialogs/dialog-add-market-product.html");
+			$("#dialogSuggestMarket").load("dialogs/dialog-suggest-market.html");
+			$("#dialogAskLocation").load("dialogs/dialog-ask-location.html");
+			$("#dialogRenameProduct").load("dialogs/dialog-rename-product.html");
+			$("#dialogUpdateMarketPrice").load("dialogs/dialog-update-market-price.html");
+			$("#dialogEnterBarcode").load("dialogs/dialog-enter-barcode.html");
 
 			if (device.platform == "iOS") {
 				$('.header-title').each(function() {
@@ -77,8 +75,6 @@ var app = {
 				var longitude = position.coords.longitude;
 				localStorage.setItem("latitude", latitude);
 				localStorage.setItem("longitude", longitude);
-//				/getCities();
-				checkForMessages();
 				angular.bootstrap($(".app"), [ "mymarketAngularApp" ]);
 				hideLoading();
 			}
@@ -87,8 +83,6 @@ var app = {
 				navigator.notification.alert(
 						"Não foi possível adquirir localização por GPS!", null,
 						"e-Mercado", null);
-				//getCities();
-				checkForMessages();
 				angular.bootstrap($(".app"), [ "mymarketAngularApp" ]);
 				hideLoading();
 			}

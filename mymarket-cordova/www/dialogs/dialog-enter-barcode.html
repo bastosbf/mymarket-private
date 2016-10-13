@@ -1,0 +1,10 @@
+<div data-role="header" class="ui-header ui-bar-a">
+  <h1>Digitar Código</h1>
+</div>
+<div role="main" class="ui-content">
+  <form name="enterBarcodeForm">
+    <label for="productNameRenameDialog">Código:</label>
+    <input id="barcodeEnterBarcodeDialog" type="tel" name="barcodeEnterBarcodeDialog" ng-model="barcode">
+    <button type="button" data-role="none" class="btn btn-primary" ng-click="enterBarcode()" ng-disabled="barcode == null || barcode == ''">Enviar</button>
+  </form>
+</div>
