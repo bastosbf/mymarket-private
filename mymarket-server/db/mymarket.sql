@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `kind` char(1) NOT NULL DEFAULT 'U' COMMENT 'S - Sempre (sempre que o usuário ligar o APP) U - Única (só será mostrada uma vez para o usuário) F - Mensagem Fatal',
   `app_version` varchar(255),
   `message` varchar(255) NOT NULL,
-  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` char(1) NOT NULL DEFAULT 'H' COMMENT 'H - Habilitada; D - Desabilitada',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=latin1 ;
