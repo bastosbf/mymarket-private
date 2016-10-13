@@ -65,6 +65,7 @@ public class SearchRESTOperation {
 			price.setProduct(result.getProduct());
 			price.setMarket(result.getMarket());
 			price.setPrice(result.getPrice());
+			price.setOffer(result.getOffer());
 			price.setLastUpdate(result.getLastUpdate());
 
 			searchList.add(price);

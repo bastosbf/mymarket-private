@@ -7,7 +7,7 @@
  }(document, 'script', 'facebook-jssdk'));
 
 var CONFIG = {
-		ROOT_URL: "http://146.134.100.70:8080/mymarket-server"
+		ROOT_URL: "http://mymarket.bastosbf.com/mymarket-server-new"
 };
 
 function getDistanceFromLocations(lat1, lon1, lat2, lon2) {
