@@ -45,7 +45,6 @@ var app = {
 				$.mobile.loader.prototype.options.theme = "a";
 			});
 
-			showLoading();
 			
 			$("#pageSearchResults").load("pages/search-results-view.html");
 			$("#pageMarketLists").load("pages/market-lists-view.html");
@@ -76,7 +75,7 @@ var app = {
 				localStorage.setItem("latitude", latitude);
 				localStorage.setItem("longitude", longitude);
 				angular.bootstrap($(".app"), [ "mymarketAngularApp" ]);
-				hideLoading();
+				
 			}
 
 			var onErrorGetUserLocation = function(error) {
@@ -84,7 +83,7 @@ var app = {
 						"Não foi possível adquirir localização por GPS!", null,
 						"e-Mercado", null);
 				angular.bootstrap($(".app"), [ "mymarketAngularApp" ]);
-				hideLoading();
+				
 			}
 
 			$.mobile.loading("show");
