@@ -38,14 +38,7 @@ var app = {
 	// Update DOM on a Received Event
 	receivedEvent : function(id) {
 
-		if (id == 'deviceready') {
-			$(document).bind('mobileinit', function() {
-				$.mobile.loader.prototype.options.text = "Aguarde";
-				$.mobile.loader.prototype.options.textVisible = true;
-				$.mobile.loader.prototype.options.theme = "a";
-			});
-
-			
+		if (id == 'deviceready') {		
 			$("#pageSearchResults").load("pages/search-results-view.html");
 			$("#pageMarketLists").load("pages/market-lists-view.html");
 			$("#pageShoppingListProducts").load("pages/shopping-list-products-view.html");

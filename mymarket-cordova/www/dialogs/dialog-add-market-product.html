@@ -16,7 +16,7 @@
         <input id="priceAddMarketProduct" type="number" data-wrapper-class="controlgroup-textinput ui-btn" ng-model="newProduct.price">
       </div>
     </div>
-    <label for="offerAddMarketProduct"><img src="img/offer.png" width="10%">Produto em oferta!</label> 
-    <input id="offerAddMarketProduct" type="checkbox" ng-model="newProduct.offer">   
+    <input data-role="none" id="offerAddMarketProduct" type="checkbox" ng-model="newProduct.offer"><img src="img/offer.png" width="5%">Produto em oferta!
+    <br>
     <button id="addMarketProductButton" type="button" data-role="none" class="btn btn-primary" ng-click="addMarketProduct()">Enviar</button>
 </div>
