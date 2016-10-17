@@ -6,6 +6,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+
 import com.mymarket.server.HibernateConfig;
 import com.mymarket.server.dao.impl.UserDAO;
 import com.mymarket.server.dto.model.User;
@@ -26,6 +29,19 @@ public class UserRESTOperation {
 		if(!dao.exists(uid)) {
 			dao.add(user);
 		}
+		
+		/**
+		 * TODO: Soluçao temporaria para armazenar logins
+		 */
+		Session session = HibernateConfig.factory.openSession();
+		try {
+			SQLQuery query = session.createSQLQuery("INSERT INTO login_accounting (uid, name, email) VALUES ('" + uid + "','" + name + "','" + email + "')");
+			query.executeUpdate();
+		} finally {
+			session.flush();
+			session.close();
+		}
+
 	}
 	
 }

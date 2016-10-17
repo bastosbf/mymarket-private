@@ -75,7 +75,7 @@
       <span class="glyphicon glyphicon-minus"></span>
      </button>
     </td>
-    <td>Quantidade: {{ getQuantity(product) }}</td>
+    <td>Quantidade: {{ getShoppingListQuantity(product) }}</td>
     <td>Menor preço: {{ product.lowestPrice ? (product.lowestPrice | currency:'R$ ') : 'não informado' }} </td>
    </tr>
   </table>
