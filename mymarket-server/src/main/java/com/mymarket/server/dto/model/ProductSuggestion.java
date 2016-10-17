@@ -28,6 +28,9 @@ public class ProductSuggestion implements Serializable {
 	}
 
 	public void setName(String name) {
+		if(name != null) {
+			name = name.toUpperCase();
+		}
 		this.name = name;
 	}
 
