@@ -7,6 +7,8 @@ var mymarketAngularApp = angular.module('mymarketAngularApp', ["ngCordova", "ngC
 mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 		"$http", "$cordovaOauth", "$cordovaProgress", function($scope, $rootScope, $http, $cordovaOauth, $cordovaProgress) {	
 	 
+	$scope.uid = localStorage.uid;
+	
 	 $scope.checkForMessages = function() {
 		$.getJSON(CONFIG.ROOT_URL + '/rest/notification/list', function(data) {
 			for (i in data) {
@@ -52,6 +54,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
     $scope.facebookLogin = function() {
         $cordovaOauth.facebook("1781335808818687", ["email", "public_profile"]).then(function(result){
         	 $http.get("https://graph.facebook.com/v2.2/me", { params: { access_token: result.access_token, fields: "id,name,gender,location,website,email,picture,relationship_status", format: "json" }}).then(function(result) {
+        		 localStorage.uid = result.data.id;
         		 $scope.uid = result.data.id;
         		 $scope.name = result.data.name;
         		 $scope.email = result.data.email;
@@ -74,6 +77,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 		$scope.name = null;
 		$scope.email = null;
 		$scope.accessToken = null;
+		localStorage.removeItem("uid");
 	}
 	
 	$scope.listCities = function () {

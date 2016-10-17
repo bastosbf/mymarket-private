@@ -68,6 +68,7 @@
         <br>
       </div>
     </div>
+      <label for="offerAddMarketProduct"><img src="img/offer.png" width="8%">Produto em oferta!</label> 
   </div>
   <div ng-show="(results != null && (results.length == 1 && results[0].price == null))">
     <div ng-show="(market == null || market.id == 0)">
@@ -82,5 +83,4 @@
       <button type="button" data-role="none" class="btn btn-success" ng-click="showAddNameAndPriceDialog()">Adicionar produto</button>
     </div>
   </div>
-  <label for="offerAddMarketProduct"><img src="img/offer.png" width="8%">Produto em oferta!</label> 
 </div>
