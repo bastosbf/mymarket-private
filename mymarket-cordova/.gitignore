@@ -4,7 +4,7 @@
 .tern-project
 
 bin/*
-plugins/android.json
+plugins/*
 platforms/*
 platforms/platforms.json
 www/bower_components
