@@ -1,4 +1,10 @@
+.settings
+.vs
+.project
+.tern-project
+
+bin/*
 plugins/android.json
 platforms/*
 platforms/platforms.json
-/.tern-project
+www/bower_components
