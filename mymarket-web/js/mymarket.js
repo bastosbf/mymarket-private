@@ -55,21 +55,22 @@ app.controller('myMarketController', function($scope, $rootScope, $window, $http
 					  $scope.$apply(function() {
 						  $scope.uid = response.authResponse.userID;						  
 						  $scope.accessToken = response.authResponse.accessToken;
-						  FB.api('/me', function(response) {
+						  FB.api('/me?fields=name,email', function(response) {
 							  $scope.name = response.name;
-							  $scope.email = response.email;
+							  $scope.email = response.email;							  
 							  var url = CONFIG.ROOT_URL + "/rest/user/add/" + $scope.uid + "/" + $scope.name + "/" + $scope.email;						
 							  $http.get(url);								
 						  });						  
 					  });
 			      }, {scope:'public_profile,email'});
-			  } else {				  
+			  } else {
 				 $scope.uid = response.authResponse.userID;				 
-				 $scope.accessToken = response.authResponse.accessToken;				 
-			  } 
+				 $scope.accessToken = response.authResponse.accessToken;
+				 alert($scope.uid);
+			  }			  
 		});        
     }
-	$scope.logout = function() {
+	$scope.logout = function() {		
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				FB.logout(function(response) {
