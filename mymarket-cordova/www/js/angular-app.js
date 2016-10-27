@@ -80,25 +80,33 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 		localStorage.removeItem("uid");
 	}
 	
-	$scope.listCities = function () {
-		$scope.loading = true;
-		latitude = localStorage.getItem("latitude");
-		longitude = localStorage.getItem("longitude");
-		
-		$http.get(CONFIG.ROOT_URL + "/rest/city/list")
-		.then(function success(response) {			
-			$scope.cities = response.data;
-			
-			if (latitude != null && longitude != null && $scope.cities != null) {
-				$scope.askForLocation();
-			}
-			$scope.loading = false;
-		}, 
-		function error(failure) {
-			$scope.loading = false;
-		});			
-	}
-	
+        $scope.listCities = function () {
+                $scope.loading = true;
+                latitude = localStorage.getItem("latitude");
+                longitude = localStorage.getItem("longitude");
+
+                $http.get(CONFIG.ROOT_URL + "/rest/city/list")
+                .then(function success(response) {
+                        $scope.cities = response.data;
+
+                        if ($scope.cities != null) {
+                                if (latitude != null && longitude != null) {
+                                        $scope.askForLocation();
+                                }
+
+                                localStorage.setItem("cityList", JSON.stringify($scope.cities));
+                        }
+
+                        $scope.loading = false;
+                },
+                function error(failure) {
+                        if ("cityList" in localStorage) {
+                                $scope.cities = JSON.parse(localStorage.getItem("cityList"));
+                        }
+                        $scope.loading = false;
+                });
+        }
+
 	$scope.listPlaces = function() {
 		latitude = localStorage.getItem("latitude");
 		longitude = localStorage.getItem("longitude");
