@@ -20,7 +20,7 @@
     <plugin name="cordova-plugin-geolocation" version="2.2.0" />
     <plugin name="phonegap-plugin-barcodescanner" version="5.0.0" />
     <plugin name="cordova-plugin-splashscreen" version="3.2.2" />
-    <plugin name="cordova-plugin-inappbrowser" spec="~1.5.1-dev" />
+    <plugin name="cordova-plugin-inappbrowser" spec="1.5.0" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
