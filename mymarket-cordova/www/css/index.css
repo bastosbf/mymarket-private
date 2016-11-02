@@ -297,6 +297,10 @@ h1 {
 	min-height: 100% !important;
 }
 
+.terms-of-use p {
+	text-transform: none;
+}
+
 .ui-page {
 	/*     background:#009900 !important; */
 	/* 	https://www.pexels.com/photo/tomatoes-carrots-healthy-groceries-36156/ */

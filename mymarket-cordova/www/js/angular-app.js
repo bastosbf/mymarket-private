@@ -9,6 +9,24 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	 
 	$scope.uid = localStorage.uid;
 	
+	$scope.checkTermsOfUse = function() {
+		if ("termsOfUseAcceptedd" in localStorage) {
+			$scope.checkForMessages();
+			$scope.listCities();
+		} else {
+			$.mobile.pageContainer.pagecontainer("change",
+					"#pageTermsOfUse", {reverse: false, changeHash: false});
+		}
+	};
+	
+	$scope.acceptTerms = function(){
+		localStorage.setItem("termsOfUseAccepted", $scope.termsCheckbox);
+		$.mobile.pageContainer.pagecontainer("change",
+				"#MainActivity", null);
+		$scope.checkForMessages();
+		$scope.listCities();
+	}
+	
 	 $scope.checkForMessages = function() {
 		$.getJSON(CONFIG.ROOT_URL + '/rest/notification/list', function(data) {
 			for (i in data) {
@@ -465,7 +483,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 		navigator.notification.alert("Obrigado pela colaboração! O produto será adicionado em breve.",null, "e-Mercado",null);
 		$('[data-role=dialog]').dialog("close");
 		$scope.newProduct = null;
-		//TODO: Voltar para tela inicial
+		// TODO: Voltar para tela inicial
 	}
 	 
 	$scope.renameProduct = function () {

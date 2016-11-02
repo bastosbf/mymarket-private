@@ -38,7 +38,8 @@ var app = {
 	// Update DOM on a Received Event
 	receivedEvent : function(id) {
 
-		if (id == 'deviceready') {		
+		if (id == 'deviceready') {
+			$("#pageTermsOfUse").load("pages/terms-of-use.html");
 			$("#pageSearchResults").load("pages/search-results-view.html");
 			$("#pageMarketLists").load("pages/market-lists-view.html");
 			$("#pageShoppingListProducts").load("pages/shopping-list-products-view.html");
