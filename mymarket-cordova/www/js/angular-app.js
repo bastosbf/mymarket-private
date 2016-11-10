@@ -10,7 +10,7 @@ mymarketAngularApp.controller('MainController', [ "$scope", "$rootScope",
 	$scope.uid = localStorage.uid;
 	
 	$scope.checkTermsOfUse = function() {
-		if ("termsOfUseAcceptedd" in localStorage) {
+		if ("termsOfUseAccepted" in localStorage) {
 			$scope.checkForMessages();
 			$scope.listCities();
 		} else {
