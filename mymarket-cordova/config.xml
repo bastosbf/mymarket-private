@@ -93,11 +93,6 @@
 		<splash height="2208" src="res/icon/ios/icon-60@3x.png" width="1242" />
 		<splash height="1242" src="res/icon/ios/icon-60@3x.png" width="2208" />
 	</platform>
-	<platform name="windows">
-		<splash height="300" src="res/icon/ios/icon-60@3x.png" width="620" />
-		<splash height="1920" src="res/icon/ios/icon-60@3x.png" width="1152" />
-		<preference name="SplashScreenDelay" value="3000" />
-	</platform>
 	<platform name="browser">
 		<preference name="SplashScreen" value="img/browser/icon-60@3x.png" />
 		<preference name="SplashScreenDelay" value="3000" />
