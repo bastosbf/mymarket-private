@@ -1,112 +1,120 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mymarket.cordova.app" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>e-Mercado</name>
-    <description>
-		Veja se o preço do produto é o mesmo em todos os mercados
-		da região e colabore com seus amigos informando os preços mais atuais.
-		Usuários podem sugerir mercados e produtos que ainda não estejam
-		cadastrados, assim como atualizar preços de produtos que estejam
-		desatualizados.
+<widget id="com.mymarket.cordova.app" version="0.0.8"
+	xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	<name>e-Mercado</name>
+	<description>
+		Veja se o preço do produto é o mesmo em todos os mercados da região e colabore com seus amigos informando os preços mais atuais. Usuários podem sugerir mercados e produtos que ainda não estejam cadastrados, assim como atualizar preços de produtos que estejam desatualizados.
 	</description>
-    <author email="edson1galdino@gmail.com" href="">
-		Edson Galdino da
-		Silva Alves
+	<author email="edson1galdino@gmail.com" href="">
+		Edson Galdino da Silva Alves
 	</author>
-    <content src="index.html" />
-    <plugin name="cordova-plugin-whitelist" spec="1" />
-    <plugin name="cordova-plugin-compat" version="1.0.0" />
-    <plugin name="cordova-plugin-device" version="1.1.2" />
-    <plugin name="cordova-plugin-dialogs" version="1.0.0" />
-    <plugin name="cordova-plugin-geolocation" version="2.2.0" />
-    <plugin name="phonegap-plugin-barcodescanner" version="5.0.0" />
-    <plugin name="cordova-plugin-splashscreen" version="3.2.2" />
-    <plugin name="cordova-plugin-inappbrowser" spec="1.5.0" />
-    <allow-navigation href="http://*/*" />
-    <allow-navigation href="https://*/*" />
-    <allow-navigation href="data:*" />
-    <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-    <platform name="windows">
-        <preference name="windows-phone-target-version" value="8.1" />
-        <preference name="windows-target-version" value="8.1" />
-        <preference name="Windows.Universal" value="10.0.10240.0" />
-        <preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
-        <preference name="Windows.Mobile-MaxVersionTested" value="10.0.10031.0" />
-        <preference name="Windows.Universal-MinVersion" value="10.0.0.0" />
-        <preference name="WindowsStoreIdentityName" value="com.emercado.cordova.windows" />
-        <preference name="WindowsStorePublisherName" value="CN=Contoso Corp, O=Contoso Corp, L=Redmond, S=Washington, C=US" />
-        <preference name="WindowsToastCapable" value="true" />
-        <preference name="uap-target-min-version" value="10.0.10586.0" />
-        <preference name="WindowsStoreDisplayName" value="e-Mercado" />
-    </platform>
-    <platform name="android">
-        <preference name="DisallowOverscroll" value="true" />
-        <preference name="android-minSdkVersion" value="19" />
-        <icon density="hdpi" src="img/android/mipmap-hdpi/logo_72w_72h.png" />
-        <icon density="mdpi" src="img/android/mipmap-mdpi/logo_48w_48h.png" />
-        <icon density="xhdpi" src="img/android/mipmap-xhdpi/logo_96w_96h.png" />
-        <icon density="xxhdpi" src="img/android/mipmap-xxhdpi/logo_144w_144h.png" />
-        <allow-intent href="market:*" />
-    </platform>
-    <platform name="ios">
-        <preference name="DisallowOverscroll" value="true" />
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-        <icon height="180" src="img/ios/icon-60@3x.png" width="180" />
-        <icon height="60" src="img/ios/icon-60.png" width="60" />
-        <icon height="120" src="img/ios/icon-60@2x.png" width="120" />
-        <icon height="76" src="img/ios/icon-76.png" width="76" />
-        <icon height="152" src="img/ios/icon-76@2x.png" width="152" />
-        <icon height="40" src="img/ios/icon-40.png" width="40" />
-        <icon height="80" src="img/ios/icon-40@2x.png" width="80" />
-        <icon height="57" src="img/ios/icon.png" width="57" />
-        <icon height="114" src="img/ios/icon@2x.png" width="114" />
-        <icon height="72" src="img/ios/icon-72.png" width="72" />
-        <icon height="144" src="img/ios/icon-72@2x.png" width="144" />
-        <icon height="29" src="img/ios/icon-small.png" width="29" />
-        <icon height="58" src="img/ios/icon-small@2x.png" width="58" />
-        <icon height="50" src="img/ios/icon-50.png" width="50" />
-        <icon height="100" src="img/ios/icon-50@2x.png" width="100" />
-    </platform>
-    <platform name="android">
-    </platform>
-    <platform name="ios">
-        <splash height="480" src="img/ios/icon-60@3x.png" width="320" />
-        <splash height="960" src="img/ios/icon-60@3x.png" width="640" />
-        <splash height="1024" src="img/ios/icon-60@3x.png" width="768" />
-        <splash height="2048" src="img/ios/icon-60@3x.png" width="1536" />
-        <splash height="768" src="img/ios/icon-60@3x.png" width="1024" />
-        <splash height="1536" src="img/ios/icon-60@3x.png" width="2048" />
-        <splash height="1136" src="img/ios/icon-60@3x.png" width="640" />
-        <splash height="1334" src="img/ios/icon-60@3x.png" width="750" />
-        <splash height="2208" src="img/ios/icon-60@3x.png" width="1242" />
-        <splash height="1242" src="img/ios/icon-60@3x.png" width="2208" />
-    </platform>
-    <platform name="windows">
-        <splash height="300" src="img/ios/icon-60@3x.png" width="620" />
-        <splash height="1920" src="img/ios/icon-60@3x.png" width="1152" />
-        <preference name="SplashScreenDelay" value="3000" />
-    </platform>
-    <platform name="browser">
-        <preference name="SplashScreen" value="img/browser/icon-60@3x.png" />
-        <preference name="SplashScreenDelay" value="3000" />
-        <preference name="SplashScreenBackgroundColor" value="white" />
-        <preference name="ShowSplashScreen" value="false" />
-        <preference name="SplashScreenWidth" value="180" />
-        <preference name="SplashScreenHeight" value="180" />
-    </platform>
-    <feature name="Device">
-        <param name="android-package" value="com.mymarket.cordova.app" />
-        <param name="ios-package" value="eMercado" />
-        <param name="osx-package" value="eMercado" />
-        <param name="onload" value="true" />
-    </feature>
-    <vs:platformSpecificValues xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
-        <vs:platformSpecificWidget id="com.emercado.cordova.windows" platformName="windows" />
-    </vs:platformSpecificValues>
+	<content src="index.html" />
+	<plugin name="cordova-plugin-whitelist" spec="1" />
+	<plugin name="cordova-plugin-compat" version="1.0.0" />
+	<plugin name="cordova-plugin-device" version="1.1.2" />
+	<plugin name="cordova-plugin-dialogs" version="1.0.0" />
+	<plugin name="cordova-plugin-geolocation" version="2.2.0" />
+	<plugin name="phonegap-plugin-barcodescanner" version="5.0.0" />
+	<plugin name="cordova-plugin-splashscreen" version="3.2.2" />
+	<plugin name="cordova-plugin-inappbrowser" spec="1.5.0" />
+	<allow-navigation href="http://*/*" />
+	<allow-navigation href="https://*/*" />
+	<allow-navigation href="data:*" />
+	<access origin="*" />
+	<allow-intent href="http://*/*" />
+	<allow-intent href="https://*/*" />
+	<allow-intent href="tel:*" />
+	<allow-intent href="sms:*" />
+	<allow-intent href="mailto:*" />
+	<allow-intent href="geo:*" />
+	<platform name="windows">
+		<preference name="windows-phone-target-version" value="8.1" />
+		<preference name="windows-target-version" value="8.1" />
+		<preference name="Windows.Universal" value="10.0.10240.0" />
+		<preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
+		<preference name="Windows.Mobile-MaxVersionTested" value="10.0.10031.0" />
+		<preference name="Windows.Universal-MinVersion" value="10.0.0.0" />
+		<preference name="WindowsStoreIdentityName" value="com.emercado.cordova.windows" />
+		<preference name="WindowsStorePublisherName"
+			value="CN=Contoso Corp, O=Contoso Corp, L=Redmond, S=Washington, C=US" />
+		<preference name="WindowsToastCapable" value="true" />
+		<preference name="uap-target-min-version" value="10.0.10586.0" />
+		<preference name="WindowsStoreDisplayName" value="e-Mercado" />
+	</platform>
+	<platform name="android">
+		<preference name="DisallowOverscroll" value="true" />
+		<preference name="android-minSdkVersion" value="19" />
+		<icon density="hdpi" src="res/icon/android/mipmap-hdpi/logo_72w_72h.png" />
+		<icon density="mdpi" src="res/icon/android/mipmap-mdpi/logo_48w_48h.png" />
+		<icon density="xhdpi" src="res/icon/android/mipmap-xhdpi/logo_96w_96h.png" />
+		<icon density="xxhdpi" src="res/icon/android/mipmap-xxhdpi/logo_144w_144h.png" />
+		<allow-intent href="market:*" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="land-hdpi" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="land-ldpi" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="land-mdpi" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="land-xhdpi" />
+
+		<splash src="res/screen/android/logo_144w_144h.png" density="port-hdpi" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="port-ldpi" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="port-mdpi" />
+		<splash src="res/screen/android/logo_144w_144h.png" density="port-xhdpi" />
+	</platform>
+	<platform name="ios">
+		<preference name="DisallowOverscroll" value="true" />
+		<allow-intent href="itms:*" />
+		<allow-intent href="itms-apps:*" />
+		<icon height="180" src="res/icon/ios/icon-60@3x.png" width="180" />
+		<icon height="60" src="res/icon/ios/icon-60.png" width="60" />
+		<icon height="120" src="res/icon/ios/icon-60@2x.png" width="120" />
+		<icon height="76" src="res/icon/ios/icon-76.png" width="76" />
+		<icon height="152" src="res/icon/ios/icon-76@2x.png" width="152" />
+		<icon height="40" src="res/icon/ios/icon-40.png" width="40" />
+		<icon height="80" src="res/icon/ios/icon-40@2x.png" width="80" />
+		<icon height="57" src="res/icon/ios/icon.png" width="57" />
+		<icon height="114" src="res/icon/ios/icon@2x.png" width="114" />
+		<icon height="72" src="res/icon/ios/icon-72.png" width="72" />
+		<icon height="144" src="res/icon/ios/icon-72@2x.png" width="144" />
+		<icon height="29" src="res/icon/ios/icon-small.png" width="29" />
+		<icon height="58" src="res/icon/ios/icon-small@2x.png" width="58" />
+		<icon height="50" src="res/icon/ios/icon-50.png" width="50" />
+		<icon height="100" src="res/icon/ios/icon-50@2x.png" width="100" />
+	</platform>
+	<platform name="android">
+	</platform>
+	<platform name="ios">
+		<splash height="480" src="res/icon/ios/icon-60@3x.png" width="320" />
+		<splash height="960" src="res/icon/ios/icon-60@3x.png" width="640" />
+		<splash height="1024" src="res/icon/ios/icon-60@3x.png" width="768" />
+		<splash height="2048" src="res/icon/ios/icon-60@3x.png" width="1536" />
+		<splash height="768" src="res/icon/ios/icon-60@3x.png" width="1024" />
+		<splash height="1536" src="res/icon/ios/icon-60@3x.png" width="2048" />
+		<splash height="1136" src="res/icon/ios/icon-60@3x.png" width="640" />
+		<splash height="1334" src="res/icon/ios/icon-60@3x.png" width="750" />
+		<splash height="2208" src="res/icon/ios/icon-60@3x.png" width="1242" />
+		<splash height="1242" src="res/icon/ios/icon-60@3x.png" width="2208" />
+	</platform>
+	<platform name="windows">
+		<splash height="300" src="res/icon/ios/icon-60@3x.png" width="620" />
+		<splash height="1920" src="res/icon/ios/icon-60@3x.png" width="1152" />
+		<preference name="SplashScreenDelay" value="3000" />
+	</platform>
+	<platform name="browser">
+		<preference name="SplashScreen" value="img/browser/icon-60@3x.png" />
+		<preference name="SplashScreenDelay" value="3000" />
+		<preference name="SplashScreenBackgroundColor" value="white" />
+		<preference name="ShowSplashScreen" value="false" />
+		<preference name="SplashScreenWidth" value="180" />
+		<preference name="SplashScreenHeight" value="180" />
+	</platform>
+	<feature name="Device">
+		<param name="android-package" value="com.mymarket.cordova.app" />
+		<param name="ios-package" value="eMercado" />
+		<param name="osx-package" value="eMercado" />
+		<param name="onload" value="true" />
+	</feature>
+	<vs:platformSpecificValues
+		xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
+		<vs:platformSpecificWidget id="com.emercado.cordova.windows"
+			platformName="windows" />
+	</vs:platformSpecificValues>
 </widget>
