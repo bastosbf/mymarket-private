@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mymarket.cordova.app" version="0.0.9"
+<widget id="com.mymarket.cordova.app" version="0.1.0" android-versionCode="100"
 	xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 	<name>e-Mercado</name>
 	<description>
@@ -49,15 +49,15 @@
 		<icon density="xhdpi" src="res/icon/android/mipmap-xhdpi/logo_96w_96h.png" />
 		<icon density="xxhdpi" src="res/icon/android/mipmap-xxhdpi/logo_144w_144h.png" />
 		<allow-intent href="market:*" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="land-hdpi" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="land-ldpi" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="land-mdpi" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="land-xhdpi" />
+		<splash src="res/screen/android/logo_hdpi.png" density="land-hdpi" />
+		<splash src="res/screen/android/logo_ldpi.png" density="land-ldpi" />
+		<splash src="res/screen/android/logo_mdpi.png" density="land-mdpi" />
+		<splash src="res/screen/android/logo_xhdpi.png" density="land-xhdpi" />
 
-		<splash src="res/screen/android/logo_144w_144h.png" density="port-hdpi" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="port-ldpi" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="port-mdpi" />
-		<splash src="res/screen/android/logo_144w_144h.png" density="port-xhdpi" />
+		<splash src="res/screen/android/logo_hdpi.png" density="port-hdpi" />
+		<splash src="res/screen/android/logo_ldpi.png" density="port-ldpi" />
+		<splash src="res/screen/android/logo_mdpi.png" density="port-mdpi" />
+		<splash src="res/screen/android/logo_xhdpi.png" density="port-xhdpi" />
 	</platform>
 	<platform name="ios">
 		<preference name="DisallowOverscroll" value="true" />
